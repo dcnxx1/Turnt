@@ -13,6 +13,7 @@ function Flex({children, style}: FlexProps): JSX.Element {
 const Style = StyleSheet.create({
   container: {
     width: '100%',
+    flex: 1,
   },
 });
 

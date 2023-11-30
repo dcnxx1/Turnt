@@ -1,12 +1,20 @@
-import {NavigationContainer} from '@react-navigation/native';
+import {
+  NavigationContainer,
+  ParamListBase,
+  RouteProp,
+} from '@react-navigation/native';
 
 import {
   StackNavigationOptions,
   createStackNavigator,
 } from '@react-navigation/stack';
-import {createMaterialBottomTabNavigator} from 'react-native-paper/react-navigation';
+import {
+  MaterialBottomTabNavigationOptions,
+  createMaterialBottomTabNavigator,
+} from 'react-native-paper/react-navigation';
 import {Editor, Home, Profile, Welcome} from '../screens';
 import {NavNames, RootNavNames} from './types';
+
 const HomeStack = createMaterialBottomTabNavigator();
 const RootStack = createStackNavigator();
 const WelcomeStack = createStackNavigator();
@@ -59,12 +67,15 @@ function EditorStackNavigator() {
 export default function Navigation() {
   return (
     <NavigationContainer>
-      <RootStack.Navigator initialRouteName={RootNavNames.HomeScreen}>
+      <RootStack.Navigator initialRouteName={RootNavNames.WelcomeScreen}>
         <RootStack.Screen
           name={RootNavNames.WelcomeScreen}
           component={WelcomeStackNavigator}
         />
         <RootStack.Screen
+          options={{
+            headerShown: false,
+          }}
           name={RootNavNames.HomeScreen}
           component={HomeStackNavigator}
         />
