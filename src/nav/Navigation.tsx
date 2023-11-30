@@ -1,12 +1,12 @@
 import {NavigationContainer} from '@react-navigation/native';
 
-import {createMaterialBottomTabNavigator} from 'react-native-paper/react-navigation';
-import {Home, Welcome, Profile, Editor} from '../screens';
 import {
   StackNavigationOptions,
   createStackNavigator,
 } from '@react-navigation/stack';
-
+import {createMaterialBottomTabNavigator} from 'react-native-paper/react-navigation';
+import {Editor, Home, Profile, Welcome} from '../screens';
+import {NavNames, RootNavNames} from './types';
 const HomeStack = createMaterialBottomTabNavigator();
 const RootStack = createStackNavigator();
 const WelcomeStack = createStackNavigator();
@@ -19,12 +19,18 @@ const screenOptions: StackNavigationOptions = {
 
 function HomeStackNavigator() {
   return (
-    <HomeStack.Navigator screenOptions={screenOptions} initialRouteName="Home">
-      <HomeStack.Screen options={screenOptions} component={Home} name="Home" />
+    <HomeStack.Navigator
+      screenOptions={screenOptions}
+      initialRouteName={NavNames.Home}>
+      <HomeStack.Screen
+        options={screenOptions}
+        component={Home}
+        name={NavNames.Home}
+      />
       <HomeStack.Screen
         options={screenOptions}
         component={Profile}
-        name="Profile"
+        name={NavNames.Profile}
       />
     </HomeStack.Navigator>
   );
@@ -33,15 +39,19 @@ function HomeStackNavigator() {
 function WelcomeStackNavigator() {
   return (
     <WelcomeStack.Navigator>
-      <WelcomeStack.Screen component={Welcome} name="Welcome" />
+      <WelcomeStack.Screen component={Welcome} name={NavNames.Welcome} />
     </WelcomeStack.Navigator>
   );
 }
 
 function EditorStackNavigator() {
   return (
-    <EditorStack.Navigator initialRouteName="Editor">
-      <EditorStack.Screen component={Editor} name="Editor" />
+    <EditorStack.Navigator initialRouteName={NavNames.Editor}>
+      <EditorStack.Screen
+        options={{detachPreviousScreen: true}}
+        component={Editor}
+        name={NavNames.Editor}
+      />
     </EditorStack.Navigator>
   );
 }
@@ -49,18 +59,17 @@ function EditorStackNavigator() {
 export default function Navigation() {
   return (
     <NavigationContainer>
-      <RootStack.Navigator initialRouteName="HomeScreen">
+      <RootStack.Navigator initialRouteName={RootNavNames.HomeScreen}>
         <RootStack.Screen
-          name="WelcomeScreen"
+          name={RootNavNames.WelcomeScreen}
           component={WelcomeStackNavigator}
         />
         <RootStack.Screen
-          options={screenOptions}
-          name="HomeScreen"
+          name={RootNavNames.HomeScreen}
           component={HomeStackNavigator}
         />
         <RootStack.Screen
-          name="EditorScreen"
+          name={RootNavNames.EditoScreen}
           component={EditorStackNavigator}
         />
       </RootStack.Navigator>
