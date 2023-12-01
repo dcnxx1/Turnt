@@ -15,7 +15,7 @@ export interface WelcomeScreenPartProps {
     text: string;
     button: boolean;
   };
-  onPressButton: () => void;
+  onPressButton?: () => void;
 }
 
 function WelcomeScreenPart({
@@ -40,13 +40,15 @@ function WelcomeScreenPart({
       </Flex>
     </>
   );
+
   return <SkeletonScreen style={Style.container} key={id} content={content} />;
 }
+
 const Style = StyleSheet.create({
   container: {
     width: '100%',
     height: '100%',
-    backgroundColor: 'orange'
   },
 });
+
 export default WelcomeScreenPart;

@@ -9,3 +9,5 @@ export const theme = {
     gray: '#8E8E8E',
   },
 };
+
+const welcomeScreenPartData = [{}, {},{}];

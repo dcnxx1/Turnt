@@ -4,7 +4,7 @@ import {ReactNode} from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 export interface ScreenSectionProps {
-  children: React.ReactElement;
+  children: ReactNode;
   style?: StyleProp<ViewStyle>;
 }
 
