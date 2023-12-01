@@ -1,57 +1,66 @@
-import {ReactNode} from 'react';
+import {ComponentType, ReactElement, ReactNode} from 'react';
 import Flex from '../Misc/Flex';
 import {LinearGradient} from 'react-native-linear-gradient';
 import {Dimensions, StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import {capitalizeFirstLetter} from '../../helpers';
-import ScreenSection, {ScreenSectionProps} from '../Misc/ScreenSection';
+import SectionScreen, {ScreenSectionProps} from '../Misc/SectionScreen';
 
 interface SkeletonScreenProps {
   useInsetsPadding?: boolean;
-  withHeader?: boolean;
-  gradient?: (string | number)[];
   content: ReactNode;
   applyPaddingTo?: PaddingAreas;
-  header?: ReactNode;
   withSafeAreaView?: boolean;
   style?: StyleProp<ViewStyle>;
-  sectionProps?: ScreenSectionProps;
-  withFooter?: boolean;
+
+  header?: ReactElement;
+  footer?: ReactElement;
+  headerStyle?: ScreenSectionProps['style'];
+  footerStyle?: ScreenSectionProps['style'];
 }
 type PaddingAreas = 'top' | 'bottom' | 'left' | 'right';
 
 function SkeletonScreen({
-  withHeader,
-  gradient = [],
+  header,
   content,
   style,
   withSafeAreaView = false,
   applyPaddingTo,
-  sectionProps,
-  withFooter,
+  footer,
+  footerStyle,
+  headerStyle,
 }: SkeletonScreenProps) {
-  const padding = useSafeAreaInsets();
-
-  const paddingBlock = withSafeAreaView
-    ? {
-        paddingTop: padding.top,
-        paddingBottom: padding.bottom,
-      }
-    : null;
-
   return (
     <>
-      {gradient.length >= 1 && (
-        <LinearGradient
-          style={[Style.container, paddingBlock]}
-          colors={gradient}>
-          {withHeader && <ScreenSection  />}
-          <View style={style}>{content}</View>
-          {withFooter && <ScreenSection {...sectionProps} />}
-        </LinearGradient>
-      )}
+      <View style={[style, Style.container]}>{content}</View>
     </>
   );
+}
+
+interface LinearGradientProps {
+  gradient: (string | number)[];
+}
+
+export const withLinearGradient = (
+  Component: ComponentType<SkeletonScreenProps>,
+) => {
+  return ({gradient, ...props}: SkeletonScreenProps & LinearGradientProps) => {
+    return (
+      <LinearGradient style={Style.container} colors={gradient}>
+        <Component {...props} />
+      </LinearGradient>
+    );
+  };
+};
+
+export const withSafeAreaView = (
+  Component: ComponentType<SkeletonScreenProps>
+) => {
+  return ({...props} : SkeletonScreenProps) => {
+    return <SafeAreaView style={{flex: 1}}>
+      <Component {...props} />
+    </SafeAreaView>
+  }
 }
 
 const Style = StyleSheet.create({
@@ -59,6 +68,9 @@ const Style = StyleSheet.create({
     flex: 1,
     height: Dimensions.get('screen').height,
     width: '100%',
+  },
+  linearGradient: {
+    flex: 1,
   },
 });
 

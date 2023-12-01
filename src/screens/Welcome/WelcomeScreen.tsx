@@ -1,40 +1,41 @@
-import {useNavigation} from '@react-navigation/native';
-import {ListRenderItem} from '@shopify/flash-list';
 import React from 'react';
-import {Flex, SkeletonScreen} from '../../components';
-import SkeletonFlashList from '../../components/List/SkeletonFlashList';
-import WelcomeScreenPart, {WelcomeScreenPartProps} from './WelcomeScreenPart';
-import {Dimensions, StyleSheet, View} from 'react-native';
-import {Text} from 'react-native-paper';
+import { Image, StyleSheet } from 'react-native';
+import { Text } from 'react-native-paper';
+import { Flex, SkeletonScreen } from '../../components';
+import { withLinearGradient, withSafeAreaView } from '../../components/SkeletonScreen/SkeletonScreen';
+import theme from '../../theme';
+
+const LinearGradientScreen = withLinearGradient(withSafeAreaView(SkeletonScreen));
 
 export default function WelcomeScreen() {
   const content = (
     <>
-      <Flex borderWidth={2}>
-        <Text style={{fontSize: 24, color: 'black'}}>Yo</Text>
+      <Flex style={[Style.imageContainer, Style.flexCenter]}>
+        <Image
+          style={Style.image}
+          width={25}
+          height={25}
+          source={{uri: 'https://unsplash.it/200/200'}}
+        />
+        <Text style={Style.text}>Yo</Text>
       </Flex>
-
-      <Flex borderWidth={2} borderColor={'yellow'}>
-        <Text style={{fontSize: 24, color: 'black'}}>Text</Text>
+      <Flex style={Style.flexCenter}>
+        <Text style={Style.text}>NewText now!</Text>
       </Flex>
     </>
   );
 
   const footer = (
-    <Flex>
-      <Text>Hi</Text>
+    <Flex backgroundColor={'green'}>
+      <Text style={{color: 'white', fontSize: 25}}>H545454i</Text>
     </Flex>
   );
 
   return (
-    <SkeletonScreen
-      withFooter
-      sectionProps={{
-        sectionLeft: footer
-      }}
-      gradient={['#333', '#444']}
-      withSafeAreaView
+    <LinearGradientScreen
       style={Style.container}
+      footer={footer}
+      gradient={[theme.color.turnerPurple, '#000']}
       content={content}
     />
   );
@@ -44,7 +45,25 @@ const Style = StyleSheet.create({
   container: {
     width: '100%',
     height: '100%',
+  },
+  imageContainer: {
+    width: '100%',
+    flex: 1,
     borderWidth: 2,
     borderColor: 'white',
+  },
+  flexCenter: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 10,
+  },
+  image: {
+    width: 100,
+    height: 100,
+    borderRadius: 100 / 2,
+  },
+  text: {
+    color: 'white',
+    fontSize: 25,
   },
 });
