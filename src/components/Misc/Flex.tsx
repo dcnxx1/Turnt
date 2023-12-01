@@ -1,13 +1,13 @@
-import {StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
+import {Dimensions, StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
 import {FC, ReactNode} from 'react';
 
-interface FlexProps {
+type FlexProps = {
   children: ReactNode;
   style?: StyleProp<ViewStyle>;
-}
+} & ViewStyle
 
-function Flex({children, style}: FlexProps): JSX.Element {
-  return <View style={[Style.container, style]}>{children}</View>;
+function Flex({children, style, ...styleProp}: FlexProps): JSX.Element {
+  return <View {...styleProp} style={[Style.container, style]}>{children}</View>;
 }
 
 const Style = StyleSheet.create({

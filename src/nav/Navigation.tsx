@@ -46,7 +46,7 @@ function HomeStackNavigator() {
 
 function WelcomeStackNavigator() {
   return (
-    <WelcomeStack.Navigator>
+    <WelcomeStack.Navigator screenOptions={screenOptions}>
       <WelcomeStack.Screen component={Welcome} name={NavNames.Welcome} />
     </WelcomeStack.Navigator>
   );
@@ -55,11 +55,7 @@ function WelcomeStackNavigator() {
 function EditorStackNavigator() {
   return (
     <EditorStack.Navigator initialRouteName={NavNames.Editor}>
-      <EditorStack.Screen
-        options={{detachPreviousScreen: true}}
-        component={Editor}
-        name={NavNames.Editor}
-      />
+      <EditorStack.Screen component={Editor} name={NavNames.Editor} />
     </EditorStack.Navigator>
   );
 }
@@ -67,15 +63,14 @@ function EditorStackNavigator() {
 export default function Navigation() {
   return (
     <NavigationContainer>
-      <RootStack.Navigator initialRouteName={RootNavNames.WelcomeScreen}>
+      <RootStack.Navigator
+        screenOptions={screenOptions}
+        initialRouteName={RootNavNames.WelcomeScreen}>
         <RootStack.Screen
           name={RootNavNames.WelcomeScreen}
           component={WelcomeStackNavigator}
         />
         <RootStack.Screen
-          options={{
-            headerShown: false,
-          }}
           name={RootNavNames.HomeScreen}
           component={HomeStackNavigator}
         />

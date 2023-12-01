@@ -1,11 +1,10 @@
 import {ReactNode} from 'react';
 import Flex from '../Misc/Flex';
 import {LinearGradient} from 'react-native-linear-gradient';
-import {Dimensions, StyleProp, StyleSheet, ViewStyle} from 'react-native';
+import {Dimensions, StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
-
 import {capitalizeFirstLetter} from '../../helpers';
-import ScreenHeader, {ScreenHeaderProps} from '../Header/ScreenHeader';
+import ScreenSection, {ScreenSectionProps} from '../Misc/ScreenSection';
 
 interface SkeletonScreenProps {
   useInsetsPadding?: boolean;
@@ -16,7 +15,8 @@ interface SkeletonScreenProps {
   header?: ReactNode;
   withSafeAreaView?: boolean;
   style?: StyleProp<ViewStyle>;
-  headerProps?: ScreenHeaderProps;
+  sectionProps?: ScreenSectionProps;
+  withFooter?: boolean;
 }
 type PaddingAreas = 'top' | 'bottom' | 'left' | 'right';
 
@@ -25,65 +25,39 @@ function SkeletonScreen({
   gradient = [],
   content,
   style,
-  withSafeAreaView = true,
+  withSafeAreaView = false,
   applyPaddingTo,
-  headerProps,
+  sectionProps,
+  withFooter,
 }: SkeletonScreenProps) {
-  const padding =
-    applyPaddingTo && !withSafeAreaView ? useSafeAreaInsets() : undefined;
+  const padding = useSafeAreaInsets();
 
-  const applyPadding = {
-    [`padding${applyPaddingTo ? capitalizeFirstLetter(applyPaddingTo) : null}`]:
-      applyPaddingTo ? padding?.[applyPaddingTo] : null,
-  };
-  if (withHeader && headerProps) {
-    const hasDefinedProps = Object.values(headerProps).some(
-      prop => prop !== undefined,
-    );
-
-    if (!hasDefinedProps) {
-      throw new Error(
-        "At least one property in 'headerProps' must be defined when 'withHeader' is true.",
-      );
-    }
-  }
+  const paddingBlock = withSafeAreaView
+    ? {
+        paddingTop: padding.top,
+        paddingBottom: padding.bottom,
+      }
+    : null;
 
   return (
     <>
-      {gradient.length >= 2 ? (
-        <LinearGradient style={[Style.containers, style]} colors={gradient}>
-          {withSafeAreaView ? (
-            <SafeAreaView style={Style.containers}>
-              {withHeader && <ScreenHeader {...headerProps} />}
-              <Flex style={style}>{content}</Flex>
-            </SafeAreaView>
-          ) : (
-            <Flex style={[style, applyPadding]}>
-              {withHeader && <ScreenHeader {...headerProps} />}
-              <Flex style={style}>{content}</Flex>
-            </Flex>
-          )}
+      {gradient.length >= 1 && (
+        <LinearGradient
+          style={[Style.container, paddingBlock]}
+          colors={gradient}>
+          {withHeader && <ScreenSection  />}
+          <View style={style}>{content}</View>
+          {withFooter && <ScreenSection {...sectionProps} />}
         </LinearGradient>
-      ) : withSafeAreaView ? (
-        <SafeAreaView style={[style, Style.containers]}>
-          {withHeader && <ScreenHeader {...headerProps} />}
-          <Flex style={style}>{content}</Flex>
-        </SafeAreaView>
-      ) : (
-        <Flex style={[style, applyPadding]}>
-          {withHeader && <ScreenHeader {...headerProps} />}
-          <Flex style={style}>{content}</Flex>
-        </Flex>
       )}
     </>
   );
 }
 
 const Style = StyleSheet.create({
-  containers: {
+  container: {
     flex: 1,
     height: Dimensions.get('screen').height,
-
     width: '100%',
   },
 });

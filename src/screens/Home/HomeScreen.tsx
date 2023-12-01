@@ -33,7 +33,7 @@ function HomeScreen(): JSX.Element {
     <SkeletonScreen
       style={Style.container}
       content={content}
-      headerProps={headerContent}
+      sectionProps={headerContent}
     />
   );
 }
