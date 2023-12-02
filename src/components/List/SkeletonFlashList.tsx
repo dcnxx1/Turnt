@@ -8,19 +8,18 @@ import {
 import {Dimensions} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
-export interface SkeletonFlashListProps extends Partial<FlashListProps<any>> {
+export type SkeletonFlashListProps<T> = {
   onViewableItemsChanged?: (info: {
     changed: ViewToken[];
     viewableItems: ViewToken[];
   }) => void;
-  renderItem: ListRenderItem<any>;
-  keyExtractor: ((item: any, index: number) => string) | undefined;
+  renderItem: ListRenderItem<T>;
+  keyExtractor: (item: T, index: number) => string;
   estimatedItemSize: number;
   estimatedListSize: {
     width: number;
     height: number;
   };
-
   contentContainerStyle?: ContentStyle | undefined;
   enableSnap?: boolean;
   snapToInterval?: number | undefined;
@@ -30,9 +29,7 @@ export interface SkeletonFlashListProps extends Partial<FlashListProps<any>> {
   hasSafeAreaInsets?: boolean;
   decelerationRate: number | 'fast' | 'normal' | undefined;
   showScroll?: boolean;
-}
-
-const config: Partial<FlashListProps<any>> = {};
+} & FlashListProps<T>;
 
 function SkeletonFlashList<T>({
   onViewableItemsChanged,
@@ -47,16 +44,13 @@ function SkeletonFlashList<T>({
   snapToAlignment,
   data,
   snapToInterval,
-  style,
   showScroll = false,
   hasSafeAreaInsets,
-}: SkeletonFlashListProps) {
+}: SkeletonFlashListProps<T>) {
   const padding = useSafeAreaInsets();
 
   return (
     <FlashList
-      {...config}
-      style={style}
       data={data}
       onViewableItemsChanged={onViewableItemsChanged}
       showsHorizontalScrollIndicator={showScroll}
@@ -65,10 +59,8 @@ function SkeletonFlashList<T>({
       decelerationRate={decelerationRate}
       estimatedItemSize={estimatedItemSize}
       renderItem={renderItem}
-    
       contentContainerStyle={{
         paddingTop: hasSafeAreaInsets ? padding.top : 0,
-        paddingBottom: hasSafeAreaInsets ? padding.bottom : 0,
       }}
       snapToAlignment={snapToAlignment}
       snapToInterval={snapToInterval}

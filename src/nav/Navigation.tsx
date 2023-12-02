@@ -1,23 +1,20 @@
-import {
-  NavigationContainer,
-  ParamListBase,
-  RouteProp,
-} from '@react-navigation/native';
+import {NavigationContainer} from '@react-navigation/native';
 
 import {
   StackNavigationOptions,
+  StackNavigationProp,
   createStackNavigator,
 } from '@react-navigation/stack';
-import {
-  MaterialBottomTabNavigationOptions,
-  createMaterialBottomTabNavigator,
-} from 'react-native-paper/react-navigation';
-import {Editor, Home, Profile, Welcome} from '../screens';
+import {createMaterialBottomTabNavigator} from 'react-native-paper/react-navigation';
+import {Editor, Home, Profile, OnBoardScreen} from '../screens';
 import {NavNames, RootNavNames} from './types';
+import {AccountSetupParams} from './navparams';
+import AuthScreen from '../screens/Auth/AuthScreen';
+import AccountSetupScreen from '../screens/AccountSetup/AccountSetupScreen';
 
 const HomeStack = createMaterialBottomTabNavigator();
 const RootStack = createStackNavigator();
-const WelcomeStack = createStackNavigator();
+const SetupStack = createStackNavigator<AccountSetupParams>();
 const EditorStack = createStackNavigator();
 
 const screenOptions: StackNavigationOptions = {
@@ -44,11 +41,19 @@ function HomeStackNavigator() {
   );
 }
 
-function WelcomeStackNavigator() {
+function SetupScreenStackNavigator() {
   return (
-    <WelcomeStack.Navigator screenOptions={screenOptions}>
-      <WelcomeStack.Screen component={Welcome} name={NavNames.Welcome} />
-    </WelcomeStack.Navigator>
+    <SetupStack.Navigator screenOptions={screenOptions}>
+      <SetupStack.Screen
+        component={OnBoardScreen}
+        name={NavNames.OnBoardScreen}
+      />
+      <SetupStack.Screen name={NavNames.AuthScreen} component={AuthScreen} />
+      <SetupStack.Screen
+        name={NavNames.AccountSetupScreen}
+        component={AccountSetupScreen}
+      />
+    </SetupStack.Navigator>
   );
 }
 
@@ -65,10 +70,10 @@ export default function Navigation() {
     <NavigationContainer>
       <RootStack.Navigator
         screenOptions={screenOptions}
-        initialRouteName={RootNavNames.WelcomeScreen}>
+        initialRouteName={RootNavNames.SetupScreen}>
         <RootStack.Screen
-          name={RootNavNames.WelcomeScreen}
-          component={WelcomeStackNavigator}
+          name={RootNavNames.SetupScreen}
+          component={SetupScreenStackNavigator}
         />
         <RootStack.Screen
           name={RootNavNames.HomeScreen}

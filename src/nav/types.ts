@@ -2,11 +2,14 @@ export enum NavNames {
   Home = 'Home',
   Editor = 'Editor',
   Profile = 'Profile',
-  Welcome = 'Welcome',
+  OnBoardScreen = 'OnBoardScreen',
+  AuthScreen = 'AuthScreen',
+  AccountSetupScreen = 'AccountSetupScreen',
 }
 
 export enum RootNavNames {
-  WelcomeScreen = 'WelcomeScreen',
-  EditoScreen = "EditorScreen",
-  HomeScreen = "HomeScreen"
+  SetupScreen = 'SetupSecreen',
+  EditoScreen = 'EditorScreen',
+  HomeScreen = 'HomeScreen',
+  AuthScreen = 'AuthScreen',
 }
