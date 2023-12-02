@@ -13,8 +13,8 @@ interface SkeletonScreenProps {
   footer?: ReactElement;
   headerStyle?: ScreenSectionProps['style'];
   footerStyle?: ScreenSectionProps['style'];
+  hasSafeAreaInsets?: boolean;
 }
-type PaddingAreas = 'top' | 'bottom' | 'left' | 'right';
 
 function SkeletonScreen({
   header,
@@ -22,12 +22,19 @@ function SkeletonScreen({
   style,
   footer,
   footerStyle,
+  hasSafeAreaInsets,
   headerStyle,
 }: SkeletonScreenProps) {
+  const padding = useSafeAreaInsets();
+
+  const optionalPadding = {
+    paddingTop: hasSafeAreaInsets ? padding.top : 0,
+    paddingBottom: hasSafeAreaInsets ? padding.bottom : 0,
+  };
   return (
     <>
       {header && <SectionScreen style={headerStyle} children={header} />}
-      <View style={[style, Style.container]}>{content}</View>
+      <View style={[style, Style.container, optionalPadding]}>{content}</View>
       {footer && <SectionScreen style={footerStyle} children={footer} />}
     </>
   );
