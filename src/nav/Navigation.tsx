@@ -43,7 +43,9 @@ function HomeStackNavigator() {
 
 function SetupScreenStackNavigator() {
   return (
-    <SetupStack.Navigator screenOptions={screenOptions}>
+    <SetupStack.Navigator
+      initialRouteName={NavNames.AuthScreen}
+      screenOptions={screenOptions}>
       <SetupStack.Screen
         component={OnBoardScreen}
         name={NavNames.OnBoardScreen}

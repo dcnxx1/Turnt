@@ -1,5 +1,89 @@
-import {View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
+import {Button, Text, TextInput} from 'react-native-paper';
+import SkeletonScreen, {
+  withLinearGradient,
+} from '../../components/SkeletonScreen/SkeletonScreen';
+import theme from '../../theme';
+import {Flex} from '../../components';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {AccountSetupParams} from '../../nav/navparams';
+import {useState} from 'react';
+import useValidate from '../../shared/hooks/useValidate';
+
+const LinearGradientScreen = withLinearGradient(SkeletonScreen);
 
 export default function AuthScreen() {
-  return <View></View>;
+  const navigation = useNavigation<StackNavigationProp<AccountSetupParams>>();
+  const [code, setCode] = useState<string>('');
+  const result = useValidate(code);
+
+  const onPressNext = async () => {};
+
+  const onChangeCode = (value: string) => {
+    setCode(value);
+  };
+
+  const content = (
+    <>
+      <Flex style={Style.contentContainer}>
+        <Text style={Style.text}>
+          Voer hieronder de code in die u heeft gekregen om verder te gaan.
+        </Text>
+        <TextInput
+          value={code}
+          onChangeText={onChangeCode}
+          style={Style.textInput}
+          label={'Code'}
+          placeholder="TRN - 225TRT"
+        />
+      </Flex>
+      <Flex>
+        <Text style={Style.text}>
+          De code kan je hergebruiken om in te loggen.
+        </Text>
+
+        <Button
+          onPress={onPressNext}
+          style={Style.button}
+          textColor={theme.color.white}>
+          Doorgaan
+        </Button>
+      </Flex>
+    </>
+  );
+
+  return (
+    <LinearGradientScreen
+      hasSafeAreaInsets
+      style={Style.container}
+      gradient={[theme.color.turner, theme.color.turnerPurpleBright]}
+      content={content}
+    />
+  );
 }
+
+const Style = StyleSheet.create({
+  container: {
+    width: '100%',
+    paddingHorizontal: 10,
+  },
+  contentContainer: {
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    borderWidth: 2,
+    borderColor: 'white',
+  },
+  textInput: {
+    width: '90%',
+  },
+  text: {
+    color: theme.color.white,
+    fontSize: 18,
+  },
+  button: {
+    width: '50%',
+    borderColor: theme.color.white,
+    borderWidth: 2,
+  },
+});

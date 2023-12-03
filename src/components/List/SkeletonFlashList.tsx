@@ -8,6 +8,9 @@ import {
 import {Dimensions} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
+const screenWidth = Dimensions.get('screen').width;
+const screenHeight = Dimensions.get('screen').height;
+
 export type SkeletonFlashListProps<T> = {
   onViewableItemsChanged?: (info: {
     changed: ViewToken[];
@@ -15,8 +18,8 @@ export type SkeletonFlashListProps<T> = {
   }) => void;
   renderItem: ListRenderItem<T>;
   keyExtractor: (item: T, index: number) => string;
-  estimatedItemSize: number;
-  estimatedListSize: {
+  estimatedItemSize?: number;
+  estimatedListSize?: {
     width: number;
     height: number;
   };
@@ -35,15 +38,18 @@ function SkeletonFlashList<T>({
   onViewableItemsChanged,
   renderItem,
   keyExtractor,
-  estimatedItemSize,
-  estimatedListSize,
+  estimatedItemSize = screenWidth,
+  estimatedListSize = {
+    width: screenHeight,
+    height: screenHeight,
+  },
   contentContainerStyle,
   enableSnap,
   bounces = false,
   decelerationRate,
   snapToAlignment,
   data,
-  snapToInterval,
+  snapToInterval = screenHeight,
   showScroll = false,
   hasSafeAreaInsets,
 }: SkeletonFlashListProps<T>) {

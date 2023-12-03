@@ -1,34 +1,28 @@
-import {ListRenderItem} from '@shopify/flash-list';
+import { ListRenderItem } from '@shopify/flash-list';
 import React from 'react';
-import {Dimensions, Image, StyleSheet} from 'react-native';
-import {Flex, SkeletonScreen} from '../../components';
+import { Dimensions, Image, StyleSheet } from 'react-native';
+import { Flex, SkeletonScreen } from '../../components';
 import SkeletonFlashList from '../../components/List/SkeletonFlashList';
-import {withLinearGradient} from '../../components/SkeletonScreen/SkeletonScreen';
-import {IOnBoardProps, onBoardingText} from '../../constants';
+import { withLinearGradient } from '../../components/SkeletonScreen/SkeletonScreen';
+import { IOnBoardProps, onBoardingText } from '../../constants';
 import theme from '../../theme';
 
-import {Button, Text} from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { Button, Text } from 'react-native-paper';
 import {
-  SafeAreaProvider,
-  useSafeAreaFrame,
-  useSafeAreaInsets,
+  useSafeAreaInsets
 } from 'react-native-safe-area-context';
-import {useNavigation} from '@react-navigation/native';
+import { AccountSetupParams } from '../../nav/navparams';
 const LinearGradientScreen = withLinearGradient(SkeletonScreen);
 
 export default function OnBoardScreen() {
   const padding = useSafeAreaInsets();
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<AccountSetupParams>>();
 
-
-  const estimatedListSize = {
-    width: Dimensions.get('screen').width,
-    height: Dimensions.get('screen').height,
+  const onPressNext = () => {
+    navigation.replace('AuthScreen');
   };
-  
-  const estimatedItemSize = Dimensions.get('screen').height;
-
-  const onPressNext = () => {};
 
   const renderItem: ListRenderItem<IOnBoardProps> = ({item, index}) => {
     return (
@@ -66,14 +60,13 @@ export default function OnBoardScreen() {
 
   const content = (
     <SkeletonFlashList
-      snapToInterval={estimatedItemSize}
+    
       decelerationRate={'fast'}
       snapToAlignment={'start'}
       snapToStart
       showsHorizontalScrollIndicator={false}
       disableIntervalMomentum
-      estimatedItemSize={estimatedItemSize}
-      estimatedListSize={estimatedListSize}
+      
       keyExtractor={keyExtractor}
       data={onBoardingText}
       renderItem={renderItem}
