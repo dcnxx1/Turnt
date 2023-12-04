@@ -1,19 +1,17 @@
-import { ListRenderItem } from '@shopify/flash-list';
+import {ListRenderItem} from '@shopify/flash-list';
 import React from 'react';
-import { Dimensions, Image, StyleSheet } from 'react-native';
-import { Flex, SkeletonScreen } from '../../components';
+import {Dimensions, Image, StyleSheet} from 'react-native';
+import {Flex, SkeletonScreen} from '../../components';
 import SkeletonFlashList from '../../components/List/SkeletonFlashList';
-import { withLinearGradient } from '../../components/SkeletonScreen/SkeletonScreen';
-import { IOnBoardProps, onBoardingText } from '../../constants';
+import {withLinearGradient} from '../../components/SkeletonScreen/SkeletonScreen';
+import {IOnBoardProps, onBoardingText} from '../../constants';
 import theme from '../../theme';
 
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { Button, Text } from 'react-native-paper';
-import {
-  useSafeAreaInsets
-} from 'react-native-safe-area-context';
-import { AccountSetupParams } from '../../nav/navparams';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {Button, Text} from 'react-native-paper';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {AccountSetupParams} from '../../nav/navparams';
 const LinearGradientScreen = withLinearGradient(SkeletonScreen);
 
 export default function OnBoardScreen() {
@@ -60,13 +58,11 @@ export default function OnBoardScreen() {
 
   const content = (
     <SkeletonFlashList
-    
       decelerationRate={'fast'}
       snapToAlignment={'start'}
       snapToStart
       showsHorizontalScrollIndicator={false}
       disableIntervalMomentum
-      
       keyExtractor={keyExtractor}
       data={onBoardingText}
       renderItem={renderItem}

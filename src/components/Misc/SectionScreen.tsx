@@ -12,7 +12,6 @@ export default function SectionScreen({
   style,
   children,
 }: ScreenSectionProps): JSX.Element {
-
   return <View style={[style, Style.container]}>{children}</View>;
 }
 

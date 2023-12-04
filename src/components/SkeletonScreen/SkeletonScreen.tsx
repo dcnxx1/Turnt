@@ -32,11 +32,11 @@ function SkeletonScreen({
     paddingBottom: hasSafeAreaInsets ? padding.bottom : 0,
   };
   return (
-    <>
+    <View style={[optionalPadding, {flex: 1}]}>
       {header && <SectionScreen style={headerStyle} children={header} />}
-      <View style={[style, Style.container, optionalPadding]}>{content}</View>
+      <View style={[style, Style.container]}>{content}</View>
       {footer && <SectionScreen style={footerStyle} children={footer} />}
-    </>
+    </View>
   );
 }
 

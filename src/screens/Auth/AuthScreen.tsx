@@ -9,19 +9,24 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {AccountSetupParams} from '../../nav/navparams';
 import {useState} from 'react';
-import useValidate from '../../shared/hooks/useValidate';
+import useFindCode from '../../shared/hooks/useFindCode';
 
 const LinearGradientScreen = withLinearGradient(SkeletonScreen);
 
 export default function AuthScreen() {
   const navigation = useNavigation<StackNavigationProp<AccountSetupParams>>();
-  const [code, setCode] = useState<string>('');
-  const result = useValidate(code);
+  const [authCode, setAuthCode] = useState<string>('');
+  const {refetch} = useFindCode(authCode);
 
-  const onPressNext = async () => {};
+  const onPressNext = async () => {
+    const {data: codeIdentity} = await refetch();
+    if (codeIdentity && 'code' in codeIdentity) {
+      navigation.navigate('AccountSetupScreen', codeIdentity);
+    }
+  };
 
-  const onChangeCode = (value: string) => {
-    setCode(value);
+  const onChangeText = (value: string) => {
+    setAuthCode(value);
   };
 
   const content = (
@@ -31,8 +36,8 @@ export default function AuthScreen() {
           Voer hieronder de code in die u heeft gekregen om verder te gaan.
         </Text>
         <TextInput
-          value={code}
-          onChangeText={onChangeCode}
+          value={authCode}
+          onChangeText={onChangeText}
           style={Style.textInput}
           label={'Code'}
           placeholder="TRN - 225TRT"

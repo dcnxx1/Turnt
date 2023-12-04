@@ -2,15 +2,14 @@ import {NavigationContainer} from '@react-navigation/native';
 
 import {
   StackNavigationOptions,
-  StackNavigationProp,
   createStackNavigator,
 } from '@react-navigation/stack';
 import {createMaterialBottomTabNavigator} from 'react-native-paper/react-navigation';
-import {Editor, Home, Profile, OnBoardScreen} from '../screens';
-import {NavNames, RootNavNames} from './types';
-import {AccountSetupParams} from './navparams';
-import AuthScreen from '../screens/Auth/AuthScreen';
+import {Editor, Home, OnBoardScreen, Profile} from '../screens';
 import AccountSetupScreen from '../screens/AccountSetup/AccountSetupScreen';
+import AuthScreen from '../screens/Auth/AuthScreen';
+import {AccountSetupParams} from './navparams';
+import {NavNames, RootNavNames} from './types';
 
 const HomeStack = createMaterialBottomTabNavigator();
 const RootStack = createStackNavigator();
@@ -44,7 +43,7 @@ function HomeStackNavigator() {
 function SetupScreenStackNavigator() {
   return (
     <SetupStack.Navigator
-      initialRouteName={NavNames.AuthScreen}
+      initialRouteName={NavNames.AccountSetupScreen}
       screenOptions={screenOptions}>
       <SetupStack.Screen
         component={OnBoardScreen}
