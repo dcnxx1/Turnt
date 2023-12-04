@@ -6,6 +6,7 @@ import theme from '../../theme';
 import EditableAvatar from '../../components/Images/EditableAvatar';
 import {useState} from 'react';
 import {Button, Text, TextInput} from 'react-native-paper';
+import AccountSetupFormScreen from './AccountSetupFormScreen';
 
 const LinearGradientSkeletonScreen = withLinearGradient(SkeletonScreen);
 
@@ -31,37 +32,38 @@ export default function AccountSetupScreen() {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={Style.keyboardAvoidViewStyle}>
         <Flex style={Style.container}>
-          <EditableAvatar
-            handleOnAvatarChange={handleOnAvatarChange}
-            source={source}
-            size={150}
-          />
+          <AccountSetupFormScreen>
+            <EditableAvatar
+              handleOnAvatarChange={handleOnAvatarChange}
+              source={source}
+              size={150}
+            />
 
-          <TextInput
-            value={name}
-            label={'Gebruikersnaam'}
-            style={Style.input}
-            onChangeText={handleOnChangeName}
-          />
-          <TextInput
-            value={name}
-            label={'Wachtwoord'}
-            style={Style.input}
-            onChangeText={handleOnChangeName}
-          />
-          <TextInput
-            value={name}
-            label={'Herhaal wachtwoord'}
-            style={Style.input}
-            onChangeText={handleOnChangeName}
-          />
-
-          <TextInput
-            value={name}
-            label={'Locatie'}
-            style={Style.input}
-            onChangeText={handleOnChangeName}
-          />
+            <TextInput
+              value={name}
+              label={'Gebruikersnaam'}
+              style={Style.input}
+              onChangeText={handleOnChangeName}
+            />
+            <TextInput
+              value={name}
+              label={'Wachtwoord'}
+              style={Style.input}
+              onChangeText={handleOnChangeName}
+            />
+            <TextInput
+              value={name}
+              label={'Herhaal wachtwoord'}
+              style={Style.input}
+              onChangeText={handleOnChangeName}
+            />
+            <TextInput
+              value={name}
+              label={'Locatie'}
+              style={Style.input}
+              onChangeText={handleOnChangeName}
+            />
+          </AccountSetupFormScreen>
         </Flex>
       </KeyboardAvoidingView>
     </>

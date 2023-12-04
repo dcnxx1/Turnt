@@ -1,7 +1,7 @@
 import {Role} from '../models/user';
 import {API} from './api';
 
-export default async function validateCode(code: string): Promise<
+export default async function findCode(code: string): Promise<
   | {
       code: string;
       role: Role;
