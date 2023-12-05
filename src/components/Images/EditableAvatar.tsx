@@ -30,7 +30,7 @@ export default function EditableAvatar({
   }, [source]);
 
   return (
-    <Pressable style={Style.pressable} onPress={askMediaPermission}>
+    <Pressable style={Style.container} onPress={askMediaPermission}>
       <Avatar source={source} size={size} />
       <Image
         style={Style.plusIconImage}
@@ -42,8 +42,11 @@ export default function EditableAvatar({
 }
 
 const Style = StyleSheet.create({
-  pressable: {
+  container: {
     position: 'relative',
+    borderColor: 'white',
+    alignSelf: 'center',
+  
   },
   plusIconImage: {
     position: 'absolute',

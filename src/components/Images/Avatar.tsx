@@ -8,7 +8,7 @@ type Props = {
   editable?: boolean;
 };
 
-export default function Avatar({size = 50, source}: Props) {
+export default function Avatar({size = 100, source}: Props) {
   const resizeStyle = {
     width: size,
     height: size,
@@ -26,8 +26,6 @@ export default function Avatar({size = 50, source}: Props) {
 
 const Style = StyleSheet.create({
   image: {
-    width: 50,
-    height: 50,
     resizeMode: 'cover',
     borderRadius: 50 / 2,
   },

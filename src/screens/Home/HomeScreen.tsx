@@ -1,7 +1,6 @@
 import {Dimensions, ScrollView, StyleSheet, View} from 'react-native';
 import {Icon, Text} from 'react-native-paper';
 import {Flex, SkeletonScreen} from '../../components';
-import {ScreenHeaderProps} from '../../components/Header/ScreenHeader';
 
 function HomeScreen(): JSX.Element {
   const content = (
@@ -18,24 +17,7 @@ function HomeScreen(): JSX.Element {
     </>
   );
 
-  const headerContent: ScreenHeaderProps = {
-    headerLeft: <Icon size={25} source={'camera'} />,
-    headerRight: (
-      <Flex>
-        <Flex>
-          <Text>Booboo</Text>
-        </Flex>
-      </Flex>
-    ),
-  };
-
-  return (
-    <SkeletonScreen
-      style={Style.container}
-      content={content}
-      sectionProps={headerContent}
-    />
-  );
+  return <SkeletonScreen style={Style.container} content={content} />;
 }
 
 const Style = StyleSheet.create({

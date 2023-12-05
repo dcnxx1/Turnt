@@ -18,8 +18,9 @@ export default function AuthScreen() {
   const [authCode, setAuthCode] = useState<string>('');
   const {refetch} = useFindCode(authCode);
 
-  const onPressNext = async () => {
+  const onSubmit = async () => {
     const {data: codeIdentity} = await refetch();
+
     if (codeIdentity && 'code' in codeIdentity) {
       navigation.navigate('AccountSetupScreen', codeIdentity);
     }
@@ -49,7 +50,7 @@ export default function AuthScreen() {
         </Text>
 
         <Button
-          onPress={onPressNext}
+          onPress={onSubmit}
           style={Style.button}
           textColor={theme.color.white}>
           Doorgaan

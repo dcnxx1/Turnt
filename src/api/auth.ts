@@ -9,9 +9,10 @@ export default async function findCode(code: string): Promise<
   | undefined
 > {
   try {
-    return await API.post('/auth/validate', {
+    const codeIdentity = await API.post('/auth/validate', {
       code,
     });
+    return codeIdentity.data;
   } catch (err) {
     console.log('ERR POST CODE ', err);
   }
