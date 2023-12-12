@@ -4,7 +4,7 @@ import {queryKey} from '../../api/api';
 
 export default function useFindCode(code: string) {
   return useQuery({
-    queryKey: [queryKey.validate, {code}],
+    queryKey: [queryKey.findCode, {code}],
     queryFn: () => findCode(code),
     enabled: false,
   });

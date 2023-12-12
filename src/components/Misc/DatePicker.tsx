@@ -1,13 +1,20 @@
-import {StyleSheet} from 'react-native';
 import RNDatePicker from 'react-native-date-picker';
 
 type DatePickerProps = {
-  date: Date;
+  date?: Date;
   onChange: (date: Date) => void;
-  isOpen: boolean;
+  isOpen?: boolean;
+  handleOpenDatePicker: () => void;
 };
-export default function DatePicker({date, onChange, isOpen}: DatePickerProps) {
-  const onCancel = (): void => {};
+export default function DatePicker({
+  date = new Date(),
+  handleOpenDatePicker,
+  onChange: onConfirm,
+  isOpen = false,
+}: DatePickerProps) {
+  const onCancel = (): void => {
+    handleOpenDatePicker();
+  };
 
   return (
     <RNDatePicker
@@ -19,7 +26,10 @@ export default function DatePicker({date, onChange, isOpen}: DatePickerProps) {
       open={isOpen}
       theme={'dark'}
       mode={'date'}
-      onConfirm={onChange}
+      onConfirm={date => {
+        onConfirm(date);
+        handleOpenDatePicker();
+      }}
       date={date}
     />
   );

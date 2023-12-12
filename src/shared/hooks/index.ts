@@ -1,2 +1,1 @@
-export {default as useFindCode} from './useFindCode';
-
+export {default as useFindCode} from '../../screens/Auth/useFindCode';

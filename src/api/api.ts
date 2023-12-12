@@ -5,10 +5,11 @@ const urls = {
   default: 'http://192.168.2.23:3000',
 };
 export const API = axios.create({
-  baseURL: urls.default,
+  baseURL: urls.zaandam,
 });
 
 export const queryKey = {
-  validate: 'validate',
+  findCode: 'findCode',
+  findUsername: 'findUsername',
   createAccount: 'createAccount',
 };

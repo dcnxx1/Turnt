@@ -10,7 +10,7 @@ export const theme = {
   },
 };
 
-export const onBoardingText = [
+export const onBoardingText: Readonly<IOnBoardProps[]> = [
   {
     id: 1,
     header: {

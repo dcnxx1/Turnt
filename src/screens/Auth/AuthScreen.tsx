@@ -9,7 +9,7 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {AccountSetupParams} from '../../nav/navparams';
 import {useState} from 'react';
-import useFindCode from '../../shared/hooks/useFindCode';
+import useFindCode from './useFindCode';
 
 const LinearGradientScreen = withLinearGradient(SkeletonScreen);
 

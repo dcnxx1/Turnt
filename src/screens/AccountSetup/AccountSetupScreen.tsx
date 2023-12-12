@@ -1,11 +1,11 @@
 import {RouteProp, useRoute} from '@react-navigation/native';
 import {KeyboardAvoidingView, Platform, StyleSheet} from 'react-native';
-import {Text} from 'react-native-paper';
+import {Button, Text} from 'react-native-paper';
 import {Flex, SkeletonScreen} from '../../components';
 import {withLinearGradient} from '../../components/SkeletonScreen/SkeletonScreen';
 import {AccountSetupParams} from '../../nav/navparams';
 import theme from '../../theme';
-import AccountSetupScreenForm from './AccountSetupScreenForm';
+import AccountSetupForm from './AccountSetupForm';
 
 const LinearGradientSkeletonScreen = withLinearGradient(SkeletonScreen);
 
@@ -18,16 +18,15 @@ export default function AccountSetupScreen() {
     </Flex>
   );
 
-  const onSubmitCreateAccountWithoutErrors = (data: any) => {};
+  const onSubmitCreateAccountWithoutErrors = (onValid : any, onInvalid: any) => {
+    console.log("on submit called:D")
+  };
 
   const content = (
     <KeyboardAvoidingView
-      keyboardVerticalOffset={18}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={Style.keyboardAvoidViewStyle}>
-      <AccountSetupScreenForm
-        onSubmitCreateAccountWithoutErrors={onSubmitCreateAccountWithoutErrors}
-      />
+      <AccountSetupForm onSubmit={onSubmitCreateAccountWithoutErrors} />
     </KeyboardAvoidingView>
   );
 
@@ -44,9 +43,7 @@ export default function AccountSetupScreen() {
 
 const Style = StyleSheet.create({
   container: {
-    justifyContent: 'flex-start',
     alignItems: 'center',
-   
   },
   text: {
     color: theme.color.white,

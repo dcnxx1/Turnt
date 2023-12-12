@@ -1,36 +1,43 @@
-import {useCallback, useEffect} from 'react';
+import {useCallback} from 'react';
 import Avatar from './Avatar';
-import {Pressable, StyleSheet} from 'react-native';
+import {Pressable, StyleProp, StyleSheet, ViewStyle} from 'react-native';
 import {Avatar as RNAvatar} from 'react-native-paper';
 import {askPermission, selectLibraryImageWithCropper} from '../../helpers';
 
 const Image = RNAvatar.Image;
 
-interface EditableAvatarProps {
+export interface EditableAvatarProps {
   size?: number;
-  source?: string;
-  handleOnAvatarChange: (source: string) => void;
+  source: string | undefined;
+  setAvatarPath: (source: string) => void;
+  style?: StyleProp<ViewStyle>;
 }
 
 export default function EditableAvatar({
   size,
   source,
-  handleOnAvatarChange,
+  setAvatarPath,
+  style,
 }: EditableAvatarProps) {
-  const askMediaPermission = useCallback(async () => {
-    const permissionResponse = await askPermission(
-      'ios.permission.PHOTO_LIBRARY',
-    );
-    if (permissionResponse === 'granted') {
-      const imageSource = await selectLibraryImageWithCropper();
-      if (imageSource) {
-        handleOnAvatarChange(imageSource);
+  const handleOnAvatarChange = useCallback(async () => {
+    try {
+      const permissionResponse = await askPermission(
+        'ios.permission.PHOTO_LIBRARY',
+      );
+
+      if (permissionResponse === 'granted') {
+        const imageSource = await selectLibraryImageWithCropper();
+        if (imageSource) {
+          setAvatarPath(imageSource);
+        }
       }
+    } catch (err) {
+      console.log('ERR GET LOCAL_AVATAR_PATH =>>', err);
     }
   }, [source]);
 
   return (
-    <Pressable style={Style.container} onPress={askMediaPermission}>
+    <Pressable style={[Style.container, style]} onPress={handleOnAvatarChange}>
       <Avatar source={source} size={size} />
       <Image
         style={Style.plusIconImage}
@@ -46,7 +53,6 @@ const Style = StyleSheet.create({
     position: 'relative',
     borderColor: 'white',
     alignSelf: 'center',
-  
   },
   plusIconImage: {
     position: 'absolute',
