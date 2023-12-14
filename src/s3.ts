@@ -1,5 +1,6 @@
 import {S3} from 'aws-sdk';
 import RNFS from 'react-native-fs';
+import {getFileExtension} from './helpers';
 
 export const TURN_IMPRESSION_TIME_LIMIT = 30;
 export const TURN_KEY = 'uploads/turns/';
@@ -17,26 +18,26 @@ const bucket = new S3({
 });
 
 export async function uploadProfilePic(
-    filePath: string,
-    username: string,
-  ): Promise<string | undefined> {
-    try {
-      const fileData = await fetch(filePath);
-      const blob = await fileData.blob();
-      const lowerCaseUsername = username.toLowerCase();
-      const key = `${PF_USER_KEY}/${lowerCaseUsername}.jpg`;
-  
-      await bucket
-        .putObject({
-          Bucket: 'turnerapp',
-          Body: blob,
-          Key: key,
-          ContentType: 'image/jpg',
-        })
-        .promise();
-      return key;
-    } catch (err) {
-      console.log('Err occured while trying to upload picture :>>', err);
-    }
+  filePath: string,
+  username: string,
+): Promise<string | undefined> {
+  try {
+    const fileData = await fetch(filePath);
+    const blob = await fileData.blob();
+    const lowerCaseUsername = username.toLowerCase();
+    const extension = getFileExtension(filePath);
+    const key = `${PF_USER_KEY}/${lowerCaseUsername}.${extension}`;
+
+    await bucket
+      .putObject({
+        Bucket: 'turnerapp',
+        Body: blob,
+        Key: key,
+        ContentType: `image/${extension}`,
+      })
+      .promise();
+    return key;
+  } catch (err) {
+    console.log('Err occured while trying to upload picture :>>', err);
   }
-  
+}

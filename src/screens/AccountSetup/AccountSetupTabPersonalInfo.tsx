@@ -4,6 +4,7 @@ import {Control, FieldErrors, Controller} from 'react-hook-form';
 import {ValidationSchema} from './AccountSetupForm';
 import {StyleSheet} from 'react-native';
 import DatePicker from '../../components/Misc/DatePicker';
+import {useState} from 'react';
 
 interface AccountSetupTabPersonalInfoProps {
   control: Control<{
@@ -21,9 +22,15 @@ export default function AccountSetupTabCredentials({
   control,
   errors,
 }: AccountSetupTabPersonalInfoProps) {
+  const [isOpenDatePicker, setIsOpenDatePicker] = useState(false);
+
+  const handleShowDatePicker = () => {
+    setIsOpenDatePicker(!isOpenDatePicker);
+  };
+
   return (
-    <>
-      <Flex flex={2} style={Style.inputContainers}>
+    <Flex style={Style.container}>
+      <Flex flex={2} style={Style.inputContainerLocation}>
         <Controller
           control={control}
           name="location"
@@ -45,7 +52,17 @@ export default function AccountSetupTabCredentials({
           name="birthday"
           render={({field: {onChange, value}}) => (
             <>
-              <DatePicker handleOpenDatePicker={() => null} date={value} onChange={onChange} />
+              <TextInput
+                editable={false}
+                onPressIn={handleShowDatePicker}
+                label={'Geboortedatum'}
+              />
+              <DatePicker
+                onClose={handleShowDatePicker}
+                isOpen={isOpenDatePicker}
+                date={value}
+                onChange={onChange}
+              />
               <Text style={Style.textStyle}>
                 {errors.username ? errors.username.message : ''}
               </Text>
@@ -53,13 +70,21 @@ export default function AccountSetupTabCredentials({
           )}
         />
       </Flex>
-    </>
+    </Flex>
   );
 }
 
 const Style = StyleSheet.create({
+  container: {
+    borderWidth: 2,
+    borderColor: 'white',
+  },
+  inputContainerLocation: {
+    justifyContent: 'flex-end',
+  },
   inputContainers: {
-    justifyContent: 'center',
+    borderWidth: 2,
+    alignContent: 'flex-end',
   },
   textStyle: {
     color: 'white',

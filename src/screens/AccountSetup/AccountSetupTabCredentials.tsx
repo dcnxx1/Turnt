@@ -1,9 +1,15 @@
 import {Flex} from '../../components';
-import {Controller, Control, FieldErrors} from 'react-hook-form';
+import {
+  Controller,
+  Control,
+  FieldErrors,
+  UseFormSetError,
+} from 'react-hook-form';
 import EditableAvatar from '../../components/Images/EditableAvatar';
 import {Text, TextInput} from 'react-native-paper';
 import {StyleSheet} from 'react-native';
 import {ValidationSchema} from './AccountSetupForm';
+import findUsername from '../../api/findUsername';
 
 interface AccountSetupTabCredentialsProps {
   control: Control<{
@@ -15,11 +21,13 @@ interface AccountSetupTabCredentialsProps {
     location: string;
   }>;
   errors: FieldErrors<ValidationSchema>;
+  isSubmitted: boolean;
 }
 
 export default function AccountSetupTabCredentials({
   control,
   errors,
+  isSubmitted,
 }: AccountSetupTabCredentialsProps) {
   return (
     <>
@@ -45,9 +53,13 @@ export default function AccountSetupTabCredentials({
           name="username"
           render={({field: {onChange, value}}) => (
             <>
-              <TextInput value={value} onChangeText={onChange} />
+              <TextInput
+                label={'Gebruikersnaam'}
+                value={value}
+                onChangeText={onChange}
+              />
               <Text style={Style.textStyle}>
-                {errors.username ? errors.username.message : ''}
+                {errors.username?.message ? errors.username.message : ''}
               </Text>
             </>
           )}
@@ -59,7 +71,16 @@ export default function AccountSetupTabCredentials({
           name="password"
           render={({field: {onChange, value}}) => (
             <>
-              <TextInput value={value} onChangeText={onChange} />
+              <TextInput
+                clearTextOnFocus={
+                  isSubmitted && (!errors.password?.message?.length ?? true)
+                }
+                autoCapitalize={'none'}
+                secureTextEntry
+                label={'Wachtwoord'}
+                value={value}
+                onChangeText={onChange}
+              />
               <Text style={Style.textStyle}>
                 {errors.password && errors.password.message}
               </Text>
@@ -73,7 +94,13 @@ export default function AccountSetupTabCredentials({
           name="repeatPassword"
           render={({field: {onChange, value}}) => (
             <>
-              <TextInput value={value} onChangeText={onChange} />
+              <TextInput
+                autoCapitalize={'none'}
+                secureTextEntry
+                label={'Herhaal Wachtwoord'}
+                value={value}
+                onChangeText={onChange}
+              />
               <Text style={Style.textStyle}>
                 {errors.repeatPassword && errors.repeatPassword.message}
               </Text>

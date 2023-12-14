@@ -1,25 +1,40 @@
 import {RouteProp, useRoute} from '@react-navigation/native';
 import {KeyboardAvoidingView, Platform, StyleSheet} from 'react-native';
-import {Button, Text} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import {Flex, SkeletonScreen} from '../../components';
 import {withLinearGradient} from '../../components/SkeletonScreen/SkeletonScreen';
 import {AccountSetupParams} from '../../nav/navparams';
 import theme from '../../theme';
-import AccountSetupForm from './AccountSetupForm';
+import AccountSetupForm, {ValidationSchema} from './AccountSetupForm';
+import useCreateAccount from './hooks/useCreateAccount';
 
 const LinearGradientSkeletonScreen = withLinearGradient(SkeletonScreen);
 
 export default function AccountSetupScreen() {
   const route = useRoute<RouteProp<AccountSetupParams, 'AccountSetupScreen'>>();
+  const createAccountMutation = useCreateAccount();
 
   const header = (
     <Flex style={Style.container}>
-      <Text style={Style.text}>Profiel Aanmaken</Text>
+      <Text style={Style.text}>Profiel opzetten</Text>
     </Flex>
   );
 
-  const onSubmitCreateAccountWithoutErrors = (onValid : any, onInvalid: any) => {
-    console.log("on submit called:D")
+  const onSubmitCreateAccountWithoutErrors = (
+    fieldValues: ValidationSchema,
+  ) => {
+    if (fieldValues) {
+      createAccountMutation(
+        {
+          fieldValues,
+          code: route.params.code,
+          role: route.params.role,
+        },
+        {
+          onSettled: createdUserResponse => {},
+        },
+      );
+    }
   };
 
   const content = (
