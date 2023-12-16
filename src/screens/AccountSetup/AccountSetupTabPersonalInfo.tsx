@@ -1,7 +1,7 @@
 import {Text, TextInput} from 'react-native-paper';
 import {Flex} from '../../components';
 import {Control, FieldErrors, Controller} from 'react-hook-form';
-import {ValidationSchema} from './AccountSetupForm';
+import {TCreateAccountFields} from './AccountSetupForm';
 import {StyleSheet} from 'react-native';
 import DatePicker from '../../components/Misc/DatePicker';
 import {useState} from 'react';
@@ -15,7 +15,7 @@ interface AccountSetupTabPersonalInfoProps {
     birthday: Date;
     location: string;
   }>;
-  errors: FieldErrors<ValidationSchema>;
+  errors: FieldErrors<TCreateAccountFields>;
 }
 
 export default function AccountSetupTabCredentials({

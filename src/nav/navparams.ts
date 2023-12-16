@@ -7,4 +7,10 @@ export type AccountSetupParams = {
     code: string;
     role: Role;
   };
+  HomeScreen: undefined;
+};
+
+export type HomeParams = {
+  Home: undefined;
+  Profile: undefined;
 };

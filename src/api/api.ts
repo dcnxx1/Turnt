@@ -5,7 +5,7 @@ const urls = {
   default: 'http://192.168.2.23:3000',
 };
 export const API = axios.create({
-  baseURL: urls.zaandam,
+  baseURL: urls.default,
 });
 
 export const queryKey = {

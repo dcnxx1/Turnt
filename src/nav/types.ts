@@ -9,7 +9,7 @@ export enum NavNames {
 
 export enum RootNavNames {
   SetupScreen = 'SetupSecreen',
-  EditoScreen = 'EditorScreen',
+  EditorScreen = 'EditorScreen',
   HomeScreen = 'HomeScreen',
   AuthScreen = 'AuthScreen',
 }

@@ -5,7 +5,7 @@ import {getFileExtension} from './helpers';
 export const TURN_IMPRESSION_TIME_LIMIT = 30;
 export const TURN_KEY = 'uploads/turns/';
 export const COVER_KEY = 'uploads/covers/';
-export const PF_USER_KEY = 'users/pf/';
+export const PF_USER_KEY = 'users/pf';
 export const BUCKET = 'turnerapp';
 
 const bucket = new S3({

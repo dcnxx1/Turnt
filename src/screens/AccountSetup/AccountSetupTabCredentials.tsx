@@ -8,7 +8,7 @@ import {
 import EditableAvatar from '../../components/Images/EditableAvatar';
 import {Text, TextInput} from 'react-native-paper';
 import {StyleSheet} from 'react-native';
-import {ValidationSchema} from './AccountSetupForm';
+import {TCreateAccountFields} from './AccountSetupForm';
 import findUsername from '../../api/findUsername';
 
 interface AccountSetupTabCredentialsProps {
@@ -20,7 +20,7 @@ interface AccountSetupTabCredentialsProps {
     birthday: Date;
     location: string;
   }>;
-  errors: FieldErrors<ValidationSchema>;
+  errors: FieldErrors<TCreateAccountFields>;
   isSubmitted: boolean;
 }
 

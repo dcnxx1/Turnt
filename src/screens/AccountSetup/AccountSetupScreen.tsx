@@ -1,27 +1,25 @@
-import {RouteProp, useRoute} from '@react-navigation/native';
+import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import {KeyboardAvoidingView, Platform, StyleSheet} from 'react-native';
 import {Text} from 'react-native-paper';
 import {Flex, SkeletonScreen} from '../../components';
 import {withLinearGradient} from '../../components/SkeletonScreen/SkeletonScreen';
-import {AccountSetupParams} from '../../nav/navparams';
+import {AccountSetupParams, HomeParams} from '../../nav/navparams';
 import theme from '../../theme';
-import AccountSetupForm, {ValidationSchema} from './AccountSetupForm';
+import AccountSetupForm, {TCreateAccountFields} from './AccountSetupForm';
 import useCreateAccount from './hooks/useCreateAccount';
+import useLocalUserProfile from '../../shared/hooks/useLocalUserProfile';
+import {StackNavigationProp} from '@react-navigation/stack';
 
 const LinearGradientSkeletonScreen = withLinearGradient(SkeletonScreen);
 
 export default function AccountSetupScreen() {
   const route = useRoute<RouteProp<AccountSetupParams, 'AccountSetupScreen'>>();
+  const navigation = useNavigation<StackNavigationProp<AccountSetupParams>>();
   const createAccountMutation = useCreateAccount();
-
-  const header = (
-    <Flex style={Style.container}>
-      <Text style={Style.text}>Profiel opzetten</Text>
-    </Flex>
-  );
+  const me = useLocalUserProfile();
 
   const onSubmitCreateAccountWithoutErrors = (
-    fieldValues: ValidationSchema,
+    fieldValues: TCreateAccountFields,
   ) => {
     if (fieldValues) {
       createAccountMutation(
@@ -31,11 +29,21 @@ export default function AccountSetupScreen() {
           role: route.params.role,
         },
         {
-          onSettled: createdUserResponse => {},
+          onSettled: createdUserResponse => {
+            if (createdUserResponse) {
+              me.setLocalUserProfile(createdUserResponse);
+              
+            }
+          },
         },
       );
     }
   };
+  const header = (
+    <Flex style={Style.container}>
+      <Text style={Style.text}>Profiel opzetten</Text>
+    </Flex>
+  );
 
   const content = (
     <KeyboardAvoidingView

@@ -8,10 +8,11 @@ import {createMaterialBottomTabNavigator} from 'react-native-paper/react-navigat
 import {Editor, Home, OnBoardScreen, Profile} from '../screens';
 import AccountSetupScreen from '../screens/AccountSetup/AccountSetupScreen';
 import AuthScreen from '../screens/Auth/AuthScreen';
-import {AccountSetupParams} from './navparams';
+import {AccountSetupParams, HomeParams} from './navparams';
 import {NavNames, RootNavNames} from './types';
+import useLocalUserProfile from '../shared/hooks/useLocalUserProfile';
 
-const HomeStack = createMaterialBottomTabNavigator();
+const HomeStack = createMaterialBottomTabNavigator<HomeParams>();
 const RootStack = createStackNavigator();
 const SetupStack = createStackNavigator<AccountSetupParams>();
 const EditorStack = createStackNavigator();
@@ -43,7 +44,7 @@ function HomeStackNavigator() {
 function SetupScreenStackNavigator() {
   return (
     <SetupStack.Navigator
-      initialRouteName={NavNames.AccountSetupScreen}
+      initialRouteName={NavNames.AuthScreen}
       screenOptions={screenOptions}>
       <SetupStack.Screen
         component={OnBoardScreen}
@@ -67,21 +68,27 @@ function EditorStackNavigator() {
 }
 
 export default function Navigation() {
+  const me = useLocalUserProfile();
+
   return (
     <NavigationContainer>
       <RootStack.Navigator
         screenOptions={screenOptions}
         initialRouteName={RootNavNames.SetupScreen}>
+        {me.profile ? (
+          <RootStack.Screen
+            name={RootNavNames.HomeScreen}
+            component={HomeStackNavigator}
+          />
+        ) : (
+          <RootStack.Screen
+            name={RootNavNames.SetupScreen}
+            component={SetupScreenStackNavigator}
+          />
+        )}
+
         <RootStack.Screen
-          name={RootNavNames.SetupScreen}
-          component={SetupScreenStackNavigator}
-        />
-        <RootStack.Screen
-          name={RootNavNames.HomeScreen}
-          component={HomeStackNavigator}
-        />
-        <RootStack.Screen
-          name={RootNavNames.EditoScreen}
+          name={RootNavNames.EditorScreen}
           component={EditorStackNavigator}
         />
       </RootStack.Navigator>

@@ -1,6 +1,7 @@
 import {Dimensions, ScrollView, StyleSheet, View} from 'react-native';
 import {Icon, Text} from 'react-native-paper';
 import {Flex, SkeletonScreen} from '../../components';
+import useLocalUserProfile from '../../shared/hooks/useLocalUserProfile';
 
 function HomeScreen(): JSX.Element {
   const content = (

@@ -1,10 +1,10 @@
 import {API} from './api';
 import {uploadProfilePic} from '../s3';
 import {Role} from '../models/user';
-import {ValidationSchema} from '../screens/AccountSetup/AccountSetupForm';
+import {TCreateAccountFields} from '../screens/AccountSetup/AccountSetupForm';
 
 type CreateAccountRequest = {
-  fieldValues: ValidationSchema;
+  fieldValues: TCreateAccountFields;
   role: Role;
   code: string;
 };
@@ -21,19 +21,23 @@ export async function createAccount({
     }
   | undefined
 > {
+  const dateToLocaleDateString =
+    fieldValues.birthday.toLocaleDateString('en-GB');
+
   try {
     const key = await uploadProfilePic(
       fieldValues.avatar,
       fieldValues.username,
     );
     if (key) {
-      return await API.post('/setup', {
+      const createdUserResponse = await API.post('/setup', {
         avatar: key,
         username: fieldValues.username,
         role,
         code,
-        dob: fieldValues.birthday.toLocaleDateString(),
+        birthday: JSON.stringify(dateToLocaleDateString),
       });
+      return createdUserResponse.data;
     }
   } catch (err) {
     console.log('ERR CREATE ACCOUNT :>>', err);

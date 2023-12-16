@@ -7,9 +7,8 @@ import {z} from 'zod';
 import {Flex} from '../../components';
 import EditableAvatar from '../../components/Images/EditableAvatar';
 import DatePicker from '../../components/Misc/DatePicker';
-import useFindUsername from './hooks/useFindUsername';
 
-export interface ValidationSchema {
+export interface TCreateAccountFields {
   avatar: string;
   username: string;
   password: string;
@@ -22,7 +21,7 @@ const schema = z
     avatar: z.string().min(2, 'Kies een profiel foto'),
     username: z
       .string({
-        errorMap: (issue, ctx) => {
+        errorMap: issue => {
           console.log(issue);
           return {message: 'Veld mag niet leeg zijn'};
         },
@@ -34,14 +33,14 @@ const schema = z
       }),
     password: z
       .string({
-        errorMap: (issue, ctx) => {
+        errorMap: () => {
           return {message: 'Veld mag niet leeg zijn'};
         },
       })
       .min(5, {message: 'Wachtwoord moet minstens 5 karakters bevatten'})
       .max(20, {message: 'Wachtwoord mag maximaal 20 karakters bevatten'}),
     repeatPassword: z.string({
-      errorMap: (issue, ctx) => {
+      errorMap: () => {
         return {message: 'Veld mag niet leeg zijn'};
       },
     }),
@@ -55,7 +54,7 @@ const schema = z
 type ValidationSchemaType = z.infer<typeof schema>;
 
 type AccountSetupScreenFormProps = {
-  onSubmit: (onValid: any, onInvalid: any) => void;
+  onSubmit: (onValid: TCreateAccountFields) => void;
 };
 
 export default function AccountSetupForm({
@@ -69,9 +68,6 @@ export default function AccountSetupForm({
   const {
     control,
     handleSubmit,
-    watch,
-    clearErrors,
-    setError,
     formState: {errors, isSubmitted, isSubmitting},
   } = useForm<ValidationSchemaType>({
     resolver: zodResolver(schema),
@@ -86,25 +82,8 @@ export default function AccountSetupForm({
     },
   });
 
-  const [oldUsername, setOldUsername] = useState('');
-
-  const username = watch('username');
-  const {refetch} = useFindUsername(username);
-
   const handleOnPressNext = async (): Promise<void> => {
-    if (username !== oldUsername) {
-      const {data: doesUsernameAlreadyExist} = await refetch();
-      setOldUsername(username);
-      if (doesUsernameAlreadyExist) {
-        setError('username', {
-          message: 'Gebruikersnaam bestaat al',
-        });
-        return;
-      }
-
-      clearErrors('username');
-      handleSubmit(onSubmit)();
-    }
+    handleSubmit(onSubmit)();
   };
 
   return (
