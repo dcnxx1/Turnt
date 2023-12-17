@@ -23,8 +23,6 @@ const screenOptions: StackNavigationOptions = {
   gestureEnabled: false,
 };
 
-const homeTabOptions = {};
-const profileTabOptions = {};
 function HomeStackNavigator() {
   return (
     <HomeStack.Navigator

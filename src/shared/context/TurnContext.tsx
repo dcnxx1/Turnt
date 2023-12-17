@@ -34,9 +34,6 @@ export default function TurnContextProvider({
   const handleSetActiveTurnId = (activeTurnId: number) =>
     setActiveTurnId(activeTurnId);
 
-    useEffect(() => {
-        console.log("activeTurnId changed inside context : >D:>>", activeTurnId)
-    }, [activeTurnId])
 
   return (
     <ContextTurn.Provider

@@ -1,11 +1,11 @@
 import {ListRenderItem, ViewToken} from '@shopify/flash-list';
-import {useEffect, useRef, useState} from 'react';
+import {useRef} from 'react';
 import {Dimensions, StyleSheet, ViewabilityConfig} from 'react-native';
 import {TestData} from '../../screens/Home/HomeScreen';
+import {useTurnContext} from '../../shared/context/TurnContext';
 import SkeletonScreen from '../SkeletonScreen/SkeletonScreen';
 import Turn from '../Turn/Turn';
 import SkeletonFlashList from './SkeletonFlashList';
-import {useTurnContext} from '../../shared/context/TurnContext';
 
 type CollectionTurnProps = {
   data: TestData[];
@@ -63,7 +63,5 @@ export default function CollectionTurn({data}: CollectionTurnProps) {
 }
 
 const Style = StyleSheet.create({
-  container: {
-    
-  },
+  container: {},
 });

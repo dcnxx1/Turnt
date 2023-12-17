@@ -25,7 +25,7 @@ export default function useLocalUserProfile() {
   };
 
   const user = storage.getString('user') ?? '';
-  const me = JSON.parse(user) as unknown as UserStorage;
+
 
   return {
     profile: getUser(),

@@ -1,8 +1,7 @@
-import {Dimensions, StyleSheet, View} from 'react-native';
-import SkeletonScreen from '../SkeletonScreen/SkeletonScreen';
+import {Dimensions, StyleSheet} from 'react-native';
 import Video from 'react-native-video';
-import {useEffect} from 'react';
 import {useTurnContext} from '../../shared/context/TurnContext';
+import SkeletonScreen from '../SkeletonScreen/SkeletonScreen';
 
 interface TurnProps {
   source: string;
@@ -16,6 +15,11 @@ export default function Turn({source, id}: TurnProps) {
     <Video
       source={{uri: source}}
       resizeMode={'cover'}
+      ignoreSilentSwitch={'ignore'}
+      playInBackground
+      progressUpdateInterval={1000}
+      pictureInPicture={false}
+      playWhenInactive
       paused={activeTurnId !== id}
       style={{
         width: Dimensions.get('screen').width,
