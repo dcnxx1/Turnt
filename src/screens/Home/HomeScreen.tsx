@@ -1,43 +1,44 @@
-import {Dimensions, ScrollView, StyleSheet, View} from 'react-native';
-import {Icon, Text} from 'react-native-paper';
+import {Dimensions, ScrollView, StyleSheet} from 'react-native';
+import {Text} from 'react-native-paper';
 import {Flex, SkeletonScreen} from '../../components';
-import useLocalUserProfile from '../../shared/hooks/useLocalUserProfile';
+import SkeletonFlashList from '../../components/List/SkeletonFlashList';
+import Turn from '../../components/Turn/Turn';
+import CollectionTurn from '../../components/List/CollectionTurn';
+
+const estimatedItemListSize = {
+  width: Dimensions.get('screen').width,
+  height: Dimensions.get('screen').height,
+};
+
+export type TestData  ={
+  source: string,
+  id: number,
+}
 
 function HomeScreen(): JSX.Element {
-  const content = (
-    <>
-      <ScrollView contentContainerStyle={Style.scrollView}>
-        <Flex style={Style.upperText}>
-          <Text>Yo</Text>
-
-          <Flex style={Style.upperText}>
-            <Text>bozhoe</Text>
-          </Flex>
-        </Flex>
-      </ScrollView>
-    </>
-  );
+  const data: TestData[] = [
+    {
+      id: 1,
+      source:
+        'https://dxhr72btgprfv.cloudfront.net/uploads/turns/5116-4a4c2c6f72c3-61f96261-1795-48ac-9f48-4a4c2c6f72c3.mp4',
+    },
+    {
+      id:2,
+      source:
+        'https://dxhr72btgprfv.cloudfront.net/uploads/turns/fxwk-4a4c2c6f72c3-61f96261-1795-48ac-9f48-4a4c2c6f72c3.mp4',
+    },
+  ];
+  const content = <CollectionTurn data={data} />;
 
   return <SkeletonScreen style={Style.container} content={content} />;
 }
 
 const Style = StyleSheet.create({
   container: {
-    justifyContent: 'center',
-    alignItems: 'center',
     width: '100%',
-  },
-  upperText: {
-    borderWidth: 2,
-    borderColor: 'green',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  scrollView: {
     flex: 1,
+    height: '100%',
     borderWidth: 2,
-    borderColor: 'green',
-    width: Dimensions.get('screen').width,
   },
 });
 

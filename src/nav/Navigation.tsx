@@ -11,6 +11,7 @@ import AuthScreen from '../screens/Auth/AuthScreen';
 import {AccountSetupParams, HomeParams} from './navparams';
 import {NavNames, RootNavNames} from './types';
 import useLocalUserProfile from '../shared/hooks/useLocalUserProfile';
+import theme from '../theme';
 
 const HomeStack = createMaterialBottomTabNavigator<HomeParams>();
 const RootStack = createStackNavigator();
@@ -22,9 +23,15 @@ const screenOptions: StackNavigationOptions = {
   gestureEnabled: false,
 };
 
+const homeTabOptions = {};
+const profileTabOptions = {};
 function HomeStackNavigator() {
   return (
     <HomeStack.Navigator
+      barStyle={{
+        height: '10%',
+        backgroundColor: theme.color.turnerDark,
+      }}
       screenOptions={screenOptions}
       initialRouteName={NavNames.Home}>
       <HomeStack.Screen

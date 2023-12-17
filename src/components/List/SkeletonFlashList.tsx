@@ -5,7 +5,7 @@ import {
   ListRenderItem,
   ViewToken,
 } from '@shopify/flash-list';
-import {Dimensions} from 'react-native';
+import {Dimensions, ViewabilityConfig} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const screenWidth = Dimensions.get('screen').width;
@@ -28,11 +28,14 @@ export type SkeletonFlashListProps<T> = {
   snapToInterval?: number | undefined;
   snapToAlignment?: 'start' | 'center' | 'end' | undefined;
   bounces?: boolean;
-  data?: readonly any[] | null | undefined;
+  data?: readonly T[];
   hasSafeAreaInsets?: boolean;
-  decelerationRate: number | 'fast' | 'normal' | undefined;
+  decelerationRate?: number | 'fast' | 'normal' | undefined;
   showScroll?: boolean;
-} & FlashListProps<T>;
+  FULL_SCREEN?: boolean;
+  viewabilityConfig?: ViewabilityConfig | null | undefined;
+  extraData?: T;
+};
 
 function SkeletonFlashList<T>({
   onViewableItemsChanged,
@@ -48,10 +51,12 @@ function SkeletonFlashList<T>({
   bounces = false,
   decelerationRate,
   snapToAlignment,
+  viewabilityConfig,
   data,
   snapToInterval = screenHeight,
   showScroll = false,
   hasSafeAreaInsets,
+  extraData,
 }: SkeletonFlashListProps<T>) {
   const padding = useSafeAreaInsets();
 
@@ -63,6 +68,8 @@ function SkeletonFlashList<T>({
       keyExtractor={keyExtractor}
       estimatedListSize={estimatedListSize}
       decelerationRate={decelerationRate}
+      viewabilityConfig={viewabilityConfig}
+      extraData={extraData}
       estimatedItemSize={estimatedItemSize}
       renderItem={renderItem}
       contentContainerStyle={{
