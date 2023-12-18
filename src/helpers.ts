@@ -1,6 +1,11 @@
 import ImageCropPicker from 'react-native-image-crop-picker';
 import RNPermission, {Permission} from 'react-native-permissions';
 
+export type Prettify<T> = {
+  [P in keyof T]: T[P]
+} & {}
+
+
 export function capitalizeFirstLetter(value: string) {
   return value.charAt(0).toUpperCase() + value.slice(1);
 }

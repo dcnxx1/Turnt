@@ -1,19 +1,19 @@
 import {NavigationContainer} from '@react-navigation/native';
 
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {
   StackNavigationOptions,
   createStackNavigator,
 } from '@react-navigation/stack';
-import {createMaterialBottomTabNavigator} from 'react-native-paper/react-navigation';
+import Tabbar from '../components/Tabbar/Tabbar';
 import {Editor, Home, OnBoardScreen, Profile} from '../screens';
 import AccountSetupScreen from '../screens/AccountSetup/AccountSetupScreen';
 import AuthScreen from '../screens/Auth/AuthScreen';
+import useLocalUserProfile from '../shared/hooks/useLocalUserProfile';
 import {AccountSetupParams, HomeParams} from './navparams';
 import {NavNames, RootNavNames} from './types';
-import useLocalUserProfile from '../shared/hooks/useLocalUserProfile';
-import theme from '../theme';
 
-const HomeStack = createMaterialBottomTabNavigator<HomeParams>();
+const HomeStack = createBottomTabNavigator<HomeParams>();
 const RootStack = createStackNavigator();
 const SetupStack = createStackNavigator<AccountSetupParams>();
 const EditorStack = createStackNavigator();
@@ -26,22 +26,14 @@ const screenOptions: StackNavigationOptions = {
 function HomeStackNavigator() {
   return (
     <HomeStack.Navigator
-      barStyle={{
-        height: '10%',
-        backgroundColor: theme.color.turnerDark,
+      detachInactiveScreens={false}
+      tabBar={props => <Tabbar {...props} />}
+      screenOptions={{
+        headerShown: false,
       }}
-      screenOptions={screenOptions}
       initialRouteName={NavNames.Home}>
-      <HomeStack.Screen
-        options={screenOptions}
-        component={Home}
-        name={NavNames.Home}
-      />
-      <HomeStack.Screen
-        options={screenOptions}
-        component={Profile}
-        name={NavNames.Profile}
-      />
+      <HomeStack.Screen component={Home} name={NavNames.Home} />
+      <HomeStack.Screen component={Profile} name={NavNames.Profile} />
     </HomeStack.Navigator>
   );
 }

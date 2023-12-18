@@ -1,6 +1,7 @@
 import {useState} from 'react';
 import {MMKV} from 'react-native-mmkv';
 import {Role} from '../../models/user';
+import {Prettify} from '../../helpers';
 
 type UserStorage = {
   user_id: string;
@@ -18,14 +19,13 @@ export default function useLocalUserProfile() {
     storage.set('user', JSON.stringify(user));
   };
 
-  const getUser = (): UserStorage => {
+  const getUser = (): Prettify<UserStorage> => {
     const myAccountInfo = storage.getString('user') ?? '';
     const parsedUser = JSON.parse(myAccountInfo);
     return parsedUser as UserStorage;
   };
 
   const user = storage.getString('user') ?? '';
-
 
   return {
     profile: getUser(),

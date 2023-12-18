@@ -7,5 +7,6 @@ export default {
     turnerPurpleDark: '#5D005E',
     turnerDark: '#1B0031',
     gray: '#8E8E8E',
+    transparent: '#00000000'
   },
 };
