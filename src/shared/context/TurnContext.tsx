@@ -1,11 +1,8 @@
 import {ReactNode, createContext, useContext, useEffect, useState} from 'react';
-import {ITurn} from '../../models/turn';
-import { TestData } from '../../screens/Home/HomeScreen';
+import {TestData} from '../../screens/Home/HomeScreen';
+import {useActiveTurn} from '../../store/';
 
 type TurnContext = {
-  activeTurnId: number;
-  handleSetActiveTurnId: (activeTurnId: number) => void;
-
   activeTurn: TestData;
   handleSetActiveTurn: (activeTurn: TestData) => void;
 };
@@ -27,19 +24,19 @@ type TurnContextProviderProps = {
 export default function TurnContextProvider({
   children,
 }: TurnContextProviderProps) {
-  const [activeTurnId, setActiveTurnId] = useState(0);
   const [activeTurn, setActiveTurn] = useState({} as TestData);
+  const {setActiveTurn: storeSetActiveTurn} = useActiveTurn();
 
-  const handleSetActiveTurn = (activeTurn: TestData) => setActiveTurn(activeTurn);
-  const handleSetActiveTurnId = (activeTurnId: number) =>
-    setActiveTurnId(activeTurnId);
+  const handleSetActiveTurn = (activeTurn: TestData) =>
+    setActiveTurn(activeTurn);
 
+  useEffect(() => {
+    storeSetActiveTurn(activeTurn);
+  }, [activeTurn]);
 
   return (
     <ContextTurn.Provider
       value={{
-        activeTurnId,
-        handleSetActiveTurnId,
         activeTurn,
         handleSetActiveTurn,
       }}>

@@ -1,34 +1,19 @@
 import {Dimensions, StyleSheet} from 'react-native';
-import Video from 'react-native-video';
+import VideoPlayer from '../Video/VideoPlayer';
 import {useTurnContext} from '../../shared/context/TurnContext';
-import SkeletonScreen from '../SkeletonScreen/SkeletonScreen';
 
 interface TurnProps {
   source: string;
   id: number;
+  onEndTurn: () => void;
 }
 
-export default function Turn({source, id}: TurnProps) {
-  const {activeTurnId} = useTurnContext();
+export default function Turn({source, id, onEndTurn}: TurnProps) {
+  const {activeTurn} = useTurnContext();
 
-  const content = (
-    <Video
-      source={{uri: source}}
-      resizeMode={'cover'}
-      ignoreSilentSwitch={'ignore'}
-      playInBackground
-      progressUpdateInterval={1000}
-      pictureInPicture={false}
-      playWhenInactive
-      paused={activeTurnId !== id}
-      style={{
-        width: Dimensions.get('screen').width,
-        height: Dimensions.get('screen').height,
-      }}
-    />
+  return (
+    <VideoPlayer onEnd={onEndTurn} paused={activeTurn.id !== id} source={source} />
   );
-
-  return <SkeletonScreen style={Style.container} content={content} />;
 }
 
 const Style = StyleSheet.create({

@@ -1,11 +1,9 @@
-import {Text} from 'react-native-paper';
-import Flex from '../Misc/Flex';
 import {StyleSheet} from 'react-native';
-import MediaControllerView from './MediaControllerView';
-import { useState } from 'react';
+import MediaControllerView from './components/MediaControllerView';
+import {useActiveTurn} from '../../store';
 
 export default function MediaController() {
-  const [progress, setProgress] = useState(0)
+  const {activeTurn} = useActiveTurn();
 
   return <MediaControllerView />;
 }

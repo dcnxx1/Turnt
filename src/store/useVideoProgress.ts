@@ -1,12 +1,13 @@
 import {create} from 'zustand';
 
-interface MediaProgress {
+interface VideoProgress {
   progress: number;
   setProgress: (progress: number) => void;
 }
 
-const useMediaProgress = create<MediaProgress>(set => ({
+const useVideoProgress = create<VideoProgress>(set => ({
   progress: 0,
   setProgress: (progress: number) => set({progress}),
 }));
 
+export default useVideoProgress;

@@ -9,8 +9,7 @@ type TabbarProps = {
 
 export default function Tabbar(props: TabbarProps) {
   const [tabHeight, setTabHeight] = useState(0);
-  const onLayoutBottomTab = () => {};
-
+  
   return (
     <>
       <MediaController />

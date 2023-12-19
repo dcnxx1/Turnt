@@ -1,5 +1,10 @@
-import {ListRenderItem, ViewToken} from '@shopify/flash-list';
-import {useRef} from 'react';
+import {
+  FlashList,
+  FlashListProps,
+  ListRenderItem,
+  ViewToken,
+} from '@shopify/flash-list';
+import {useRef, useState} from 'react';
 import {Dimensions, StyleSheet, ViewabilityConfig} from 'react-native';
 import {TestData} from '../../screens/Home/HomeScreen';
 import {useTurnContext} from '../../shared/context/TurnContext';
@@ -12,10 +17,20 @@ type CollectionTurnProps = {
 };
 
 export default function CollectionTurn({data}: CollectionTurnProps) {
-  const {handleSetActiveTurnId} = useTurnContext();
+  const {handleSetActiveTurn} = useTurnContext();
+  const [activeTurnIndex, setActiveTurnIndex] = useState(0);
+  const ref = useRef<FlashList<TestData>>(null);
+
+  const onEndTurn = () => {
+    ref.current?.scrollToOffset({
+      animated: true,
+      offset: activeTurnIndex + 1,
+    });
+  };
+
 
   const renderItem: ListRenderItem<TestData> = ({item, index}) => {
-    return <Turn id={item.id} source={item.source} />;
+    return <Turn onEndTurn={onEndTurn} id={item.id} source={item.source} />;
   };
 
   const keyExtractor = (item: TestData) => {
@@ -30,10 +45,13 @@ export default function CollectionTurn({data}: CollectionTurnProps) {
       info.viewableItems.length &&
       info.viewableItems[0].index !== undefined
     ) {
-      const {item} = info.viewableItems[0];
+      const {item, index} = info.viewableItems[0];
       if (item !== null) {
         const currentActiveTurn = item as TestData;
-        handleSetActiveTurnId(currentActiveTurn.id);
+        handleSetActiveTurn(currentActiveTurn);
+      }
+      if (index !== null) {
+        setActiveTurnIndex(index);
       }
     }
   };
@@ -59,9 +77,6 @@ export default function CollectionTurn({data}: CollectionTurnProps) {
     />
   );
 
-  return <SkeletonScreen style={Style.container} content={content} />;
+  return <SkeletonScreen content={content} />;
 }
 
-const Style = StyleSheet.create({
-  container: {},
-});

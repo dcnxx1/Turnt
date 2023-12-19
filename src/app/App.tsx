@@ -1,12 +1,15 @@
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {Navigation} from '../nav';
+import {StrictMode} from 'react';
 
 const queryClient = new QueryClient();
 
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Navigation />
+      <StrictMode>
+        <Navigation />
+      </StrictMode>
     </QueryClientProvider>
   );
 }
