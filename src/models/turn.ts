@@ -10,7 +10,6 @@ export interface ITurn {
   artist_id: string;
   impressionSource: string;
   genre: string;
-  // TGenre;
   user: {alias?: string};
   created_at?: string;
 }

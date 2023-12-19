@@ -6,15 +6,18 @@ import {useTurnContext} from '../../shared/context/TurnContext';
 import SkeletonScreen from '../SkeletonScreen/SkeletonScreen';
 import VideoPlayerManager from '../Video/VideoPlayerManager';
 import SkeletonFlashList from './SkeletonFlashList';
+import useDispatchVideoTurn from '../../store/useDispatchVideoTurn';
+import {ITurn} from '../../models/turn';
 
 type CollectionTurnProps = {
-  data: TestData[];
+  data: ITurn[];
 };
 
 export default function CollectionTurn({data}: CollectionTurnProps) {
   const {handleSetActiveTurn} = useTurnContext();
   const [activeTurnIndex, setActiveTurnIndex] = useState(0);
-  const ref = useRef<FlashList<TestData>>(null);
+  const ref = useRef<FlashList<ITurn>>(null);
+  const {type} = useDispatchVideoTurn();
 
   const onEndTurn = () => {
     if (ref.current) {
@@ -25,11 +28,31 @@ export default function CollectionTurn({data}: CollectionTurnProps) {
     }
   };
 
-  const renderItem: ListRenderItem<TestData> = ({item, index}) => {
+  useEffect(() => {
+    switch (type) {
+      case 'PLAY_NEXT':
+        ref.current?.scrollToIndex({
+          animated: true,
+          index: activeTurnIndex + 1,
+        });
+        break;
+      case 'PLAY_PREVIOUS':
+        ref.current?.scrollToIndex({
+          animated: true,
+          index: activeTurnIndex - 1,
+        });
+        break;
+      default:
+        null;
+        break;
+    }
+  }, [type]);
+
+  const renderItem: ListRenderItem<ITurn> = ({item}) => {
     return (
       <VideoPlayerManager
         source={item.source}
-        videoId={item.id}
+        videoId={item.turn_id}
         onEnd={onEndTurn}
       />
     );
@@ -39,8 +62,8 @@ export default function CollectionTurn({data}: CollectionTurnProps) {
     handleSetActiveTurn(data[0]);
   }, []);
 
-  const keyExtractor = (item: TestData) => {
-    return String(item.id);
+  const keyExtractor = ({turn_id}: ITurn) => {
+    return String(turn_id);
   };
 
   const onViewableItemsChanged = (info: {
@@ -53,7 +76,7 @@ export default function CollectionTurn({data}: CollectionTurnProps) {
     ) {
       const {item, index} = info.viewableItems[0];
       if (item !== null) {
-        const currentActiveTurn = item as TestData;
+        const currentActiveTurn = item as ITurn;
         handleSetActiveTurn(currentActiveTurn);
       }
       if (index !== null) {

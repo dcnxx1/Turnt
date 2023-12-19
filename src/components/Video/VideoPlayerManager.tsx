@@ -3,10 +3,11 @@ import {TestData} from '../../screens/Home/HomeScreen';
 import {useTurnContext} from '../../shared/context/TurnContext';
 import {useSeek, useVideoStore} from '../../store';
 import VideoPlayer from './VideoPlayer';
-import {useEffect, useRef, useState} from 'react';
+import {useEffect, useRef} from 'react';
+import { ITurn } from '../../models/turn';
 
 type Props = {
-  videoId: TestData['id'];
+  videoId: ITurn['turn_id'];
   onEnd: () => void;
   source: string;
 };
@@ -16,7 +17,7 @@ export default function VideoPlayerManager({videoId, source, onEnd}: Props) {
   const {isPlaying, setIsPlaying} = useVideoStore();
   const setProgress = useVideoStore(state => state.setProgress);
   const ref = useRef<Video>(null);
-  const isVideoOnScreen = activeTurn.id === videoId;
+  const isVideoOnScreen = activeTurn.turn_id === videoId;
   const {seekTo, setSeekTo} = useSeek();
 
   const onProgress = ({currentTime}: OnProgressData) => {

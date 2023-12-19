@@ -4,8 +4,13 @@ import {secondsToDisplayTime} from '../../../helpers';
 import {useSeek, useVideoStore} from '../../../store';
 import Flex from '../../Misc/Flex';
 import MediaControllerSlider from './MediaControllerSlider';
+import {ITurn} from '../../../models/turn';
 
-export default function TimelineSliderBar() {
+type Props = {
+  turnDuration: ITurn['duration'];
+};
+
+export default function TimelineSliderBar({turnDuration}: Props) {
   const {progress} = useVideoStore();
   const {setSeekTo} = useSeek();
   const {setProgress} = useVideoStore();
@@ -21,10 +26,16 @@ export default function TimelineSliderBar() {
         <Text style={Style.text}>{secondsToDisplayTime(progress)}</Text>
       </Flex>
       <Flex flex={4}>
-        <MediaControllerSlider seekVideoTo={seekVideoTo} progress={progress} />
+        <MediaControllerSlider
+          maximumValue={turnDuration}
+          seekVideoTo={seekVideoTo}
+          progress={progress}
+        />
       </Flex>
       <Flex style={Style.videoProgress}>
-        <Text style={{color: 'white'}}>3:14</Text>
+        <Text style={{color: 'white'}}>
+          {secondsToDisplayTime(turnDuration)}
+        </Text>
       </Flex>
     </>
   );

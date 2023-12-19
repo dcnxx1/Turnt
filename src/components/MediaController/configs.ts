@@ -45,5 +45,6 @@ export const sliderConfig: Partial<SliderProps> = {
   containerStyle: {
     width: '100%',
     justifyContent: 'center',
+    overflow: 'hidden',
   },
 };

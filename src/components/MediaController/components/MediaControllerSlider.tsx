@@ -6,11 +6,13 @@ import {useVideoStore} from '../../../store';
 type SliderProps = {
   progress: number;
   seekVideoTo: (value: number) => void;
+  maximumValue: number;
 };
 
 export default function MediaControllerSlider({
   progress,
   seekVideoTo,
+  maximumValue,
 }: SliderProps) {
   const [isSeeking, setSeeking] = useState(false);
   const [seekProgress, setSeekProgress] = useState(0);
@@ -31,7 +33,7 @@ export default function MediaControllerSlider({
     <Slider
       onSlidingStart={onSlidingStart}
       onValueChange={onValueChange}
-      maximumValue={314}
+      maximumValue={maximumValue}
       value={isSeeking ? seekProgress : progress}
       onSlidingComplete={onSlideComplete}
       {...sliderConfig}

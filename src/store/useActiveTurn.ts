@@ -1,15 +1,15 @@
 import {create} from 'zustand';
-import {useShallow} from 'zustand/react/shallow';
 import {TestData} from '../screens/Home/HomeScreen';
+import {ITurn} from '../models/turn';
 
 type ActiveTurn = {
-  activeTurn: TestData;
-  setActiveTurn: (turn: TestData) => void;
+  activeTurn: ITurn;
+  setActiveTurn: (turn: ITurn) => void;
 };
 
- const useActiveTurn = create<ActiveTurn>(set => ({
-  activeTurn: {} as TestData,
-  setActiveTurn: (turn: TestData) => set({activeTurn: turn}),
+const useActiveTurn = create<ActiveTurn>(set => ({
+  activeTurn: {} as ITurn,
+  setActiveTurn: (turn: ITurn) => set({activeTurn: turn}),
 }));
 
-export default useActiveTurn
+export default useActiveTurn;

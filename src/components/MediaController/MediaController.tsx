@@ -6,7 +6,6 @@ type MediaControllerProps = {
 };
 
 export default function MediaController({tabHeight}: MediaControllerProps) {
-  const {activeTurn} = useActiveTurn();
 
   return <MediaControllerView tabHeight={tabHeight} />;
 }

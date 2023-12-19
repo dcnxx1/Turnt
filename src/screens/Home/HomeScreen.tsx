@@ -2,6 +2,9 @@ import {StyleSheet} from 'react-native';
 import {SkeletonScreen} from '../../components';
 import CollectionTurn from '../../components/List/CollectionTurn';
 import TurnContextProvider from '../../shared/context/TurnContext';
+import {useQuery} from '@tanstack/react-query';
+import {getCollection} from '../../api/collection';
+import {Text} from 'react-native-paper';
 
 export type TestData = {
   source: string;
@@ -9,22 +12,17 @@ export type TestData = {
 };
 
 function HomeScreen(): JSX.Element {
-  const data: TestData[] = [
-    {
-      id: 1,
-      source:
-        'https://dxhr72btgprfv.cloudfront.net/uploads/turns/5116-4a4c2c6f72c3-61f96261-1795-48ac-9f48-4a4c2c6f72c3.mp4',
-    },
-    {
-      id: 2,
-      source:
-        'https://dxhr72btgprfv.cloudfront.net/uploads/turns/fxwk-4a4c2c6f72c3-61f96261-1795-48ac-9f48-4a4c2c6f72c3.mp4',
-    },
-  ];
-  const content = (
+  const {data: turns} = useQuery({
+    queryKey: ['content'],
+    queryFn: () => getCollection(),
+  });
+
+  const content = turns ? (
     <TurnContextProvider>
-      <CollectionTurn data={data} />
+      <CollectionTurn data={turns} />
     </TurnContextProvider>
+  ) : (
+    <Text>Loading...</Text>
   );
 
   return <SkeletonScreen style={Style.container} content={content} />;

@@ -12,7 +12,8 @@ import {
   PlayPreviousButton,
   TogglePlayPauseButton,
 } from './MediaControllerButtons';
-import {useVideoStore} from '../../../store';
+import {useActiveTurn, useVideoStore} from '../../../store';
+import useDispatchVideoTurn from '../../../store/useDispatchVideoTurn';
 
 type MediaControllerView = {
   tabHeight: number;
@@ -21,28 +22,36 @@ type MediaControllerView = {
 export default function MediaControllerView({tabHeight}: MediaControllerView) {
   const snapPoints = useMemo(() => ['4%', '35%'], []);
   const {isPlaying, setIsPlaying} = useVideoStore();
-
-  const onPressPrevious = () => {};
+  const {dispatch} = useDispatchVideoTurn();
+  const {activeTurn} = useActiveTurn();
 
   const onPressTogglePlayPause = () => {
     setIsPlaying(!isPlaying);
   };
 
-  const onPressNext = () => {};
+  const onPressPrevious = () => {
+    dispatch('PLAY_PREVIOUS');
+  };
+  const onPressNext = () => {
+    dispatch('PLAY_NEXT');
+  };
 
   return (
     <BottomSheet
-      bottomInset={tabHeight}
       {...bottomSheetConfig}
+      bottomInset={tabHeight}
       containerStyle={Style.container}
       snapPoints={snapPoints}>
       <BlurView style={Style.blurView} {...blurViewConfig}>
         <View style={Style.content}>
           <View style={Style.mediaController}>
-            <MediaControllerArtistSong />
+            <MediaControllerArtistSong
+              artist={'someone'}
+              title={activeTurn.title}
+            />
           </View>
           <Flex style={Style.timelineSideBarContainer}>
-            <TimelineSliderBar />
+            <TimelineSliderBar turnDuration={activeTurn.duration} />
           </Flex>
           <Flex style={Style.buttonContainer}>
             <PlayPreviousButton onPress={onPressPrevious} />

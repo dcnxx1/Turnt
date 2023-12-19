@@ -1,6 +1,7 @@
 import {forwardRef} from 'react';
 import {Dimensions} from 'react-native';
 import Video, {OnProgressData} from 'react-native-video';
+import {useCDN, TURN_KEY} from '../../api/api';
 
 type VideoPlayerProps = {
   source: string;
@@ -18,7 +19,7 @@ export default forwardRef<Video, VideoPlayerProps>(
     return (
       <Video
         ref={ref}
-        source={{uri: source}}
+        source={{uri: useCDN(TURN_KEY + source)}}
         resizeMode={'cover'}
         onEnd={onEnd}
         ignoreSilentSwitch={'ignore'}
