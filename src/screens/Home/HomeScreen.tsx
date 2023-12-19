@@ -1,15 +1,7 @@
-import {Dimensions, ScrollView, StyleSheet} from 'react-native';
-import {Text} from 'react-native-paper';
-import {Flex, SkeletonScreen} from '../../components';
-import SkeletonFlashList from '../../components/List/SkeletonFlashList';
-import Turn from '../../components/Turn/Turn';
+import {StyleSheet} from 'react-native';
+import {SkeletonScreen} from '../../components';
 import CollectionTurn from '../../components/List/CollectionTurn';
 import TurnContextProvider from '../../shared/context/TurnContext';
-
-const estimatedItemListSize = {
-  width: Dimensions.get('screen').width,
-  height: Dimensions.get('screen').height,
-};
 
 export type TestData = {
   source: string;

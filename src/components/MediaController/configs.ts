@@ -26,7 +26,7 @@ export const blurViewConfig: Partial<BlurViewProps> = {
 export const sliderConfig: Partial<SliderProps> = {
   trackClickable: false,
   animateTransitions: true,
-  animationType: 'spring',
+  animationType: 'timing',
   trackStyle: {
     height: 10,
     borderRadius: 15,
@@ -44,7 +44,6 @@ export const sliderConfig: Partial<SliderProps> = {
   },
   containerStyle: {
     width: '100%',
-
-    borderWidth: 2,
+    justifyContent: 'center',
   },
 };

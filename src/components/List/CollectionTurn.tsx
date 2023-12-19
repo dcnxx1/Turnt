@@ -1,15 +1,10 @@
-import {
-  FlashList,
-  FlashListProps,
-  ListRenderItem,
-  ViewToken,
-} from '@shopify/flash-list';
-import {useRef, useState} from 'react';
-import {Dimensions, StyleSheet, ViewabilityConfig} from 'react-native';
+import {FlashList, ListRenderItem, ViewToken} from '@shopify/flash-list';
+import {useEffect, useRef, useState} from 'react';
+import {Dimensions, ViewabilityConfig} from 'react-native';
 import {TestData} from '../../screens/Home/HomeScreen';
 import {useTurnContext} from '../../shared/context/TurnContext';
 import SkeletonScreen from '../SkeletonScreen/SkeletonScreen';
-import Turn from '../Turn/Turn';
+import VideoPlayerManager from '../Video/VideoPlayerManager';
 import SkeletonFlashList from './SkeletonFlashList';
 
 type CollectionTurnProps = {
@@ -22,16 +17,27 @@ export default function CollectionTurn({data}: CollectionTurnProps) {
   const ref = useRef<FlashList<TestData>>(null);
 
   const onEndTurn = () => {
-    ref.current?.scrollToOffset({
-      animated: true,
-      offset: activeTurnIndex + 1,
-    });
+    if (ref.current) {
+      ref.current.scrollToIndex({
+        animated: true,
+        index: activeTurnIndex + 1,
+      });
+    }
   };
-
 
   const renderItem: ListRenderItem<TestData> = ({item, index}) => {
-    return <Turn onEndTurn={onEndTurn} id={item.id} source={item.source} />;
+    return (
+      <VideoPlayerManager
+        source={item.source}
+        videoId={item.id}
+        onEnd={onEndTurn}
+      />
+    );
   };
+
+  useEffect(() => {
+    handleSetActiveTurn(data[0]);
+  }, []);
 
   const keyExtractor = (item: TestData) => {
     return String(item.id);
@@ -62,6 +68,7 @@ export default function CollectionTurn({data}: CollectionTurnProps) {
 
   const content = (
     <SkeletonFlashList
+      ref={ref}
       decelerationRate={'fast'}
       data={data}
       estimatedItemSize={Dimensions.get('screen').height}
@@ -79,4 +86,3 @@ export default function CollectionTurn({data}: CollectionTurnProps) {
 
   return <SkeletonScreen content={content} />;
 }
-

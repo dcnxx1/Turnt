@@ -1,10 +1,10 @@
 import {
   ContentStyle,
   FlashList,
-  FlashListProps,
   ListRenderItem,
   ViewToken,
 } from '@shopify/flash-list';
+import {forwardRef} from 'react';
 import {Dimensions, ViewabilityConfig} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
@@ -37,49 +37,52 @@ export type SkeletonFlashListProps<T> = {
   extraData?: T;
 };
 
-function SkeletonFlashList<T>({
-  onViewableItemsChanged,
-  renderItem,
-  keyExtractor,
-  estimatedItemSize = screenWidth,
-  estimatedListSize = {
-    width: screenHeight,
-    height: screenHeight,
+export default forwardRef<FlashList<any>, SkeletonFlashListProps<any>>(
+  (
+    {
+      onViewableItemsChanged,
+      renderItem,
+      keyExtractor,
+      estimatedItemSize = screenWidth,
+      estimatedListSize = {
+        width: screenHeight,
+        height: screenHeight,
+      },
+      contentContainerStyle,
+      enableSnap,
+      bounces = false,
+      decelerationRate,
+      snapToAlignment,
+      viewabilityConfig,
+      data,
+      snapToInterval = screenHeight,
+      showScroll = false,
+      hasSafeAreaInsets,
+      extraData,
+    }: SkeletonFlashListProps<any>,
+    ref,
+  ) => {
+    const padding = useSafeAreaInsets();
+    return (
+      <FlashList
+        ref={ref}
+        data={data}
+        onViewableItemsChanged={onViewableItemsChanged}
+        showsHorizontalScrollIndicator={showScroll}
+        keyExtractor={keyExtractor}
+        estimatedListSize={estimatedListSize}
+        decelerationRate={decelerationRate}
+        viewabilityConfig={viewabilityConfig}
+        extraData={extraData}
+        estimatedItemSize={estimatedItemSize}
+        renderItem={renderItem}
+        contentContainerStyle={{
+          paddingTop: hasSafeAreaInsets ? padding.top : 0,
+        }}
+        snapToAlignment={snapToAlignment}
+        snapToInterval={snapToInterval}
+        bounces={bounces}
+      />
+    );
   },
-  contentContainerStyle,
-  enableSnap,
-  bounces = false,
-  decelerationRate,
-  snapToAlignment,
-  viewabilityConfig,
-  data,
-  snapToInterval = screenHeight,
-  showScroll = false,
-  hasSafeAreaInsets,
-  extraData,
-}: SkeletonFlashListProps<T>) {
-  const padding = useSafeAreaInsets();
-
-  return (
-    <FlashList
-      data={data}
-      onViewableItemsChanged={onViewableItemsChanged}
-      showsHorizontalScrollIndicator={showScroll}
-      keyExtractor={keyExtractor}
-      estimatedListSize={estimatedListSize}
-      decelerationRate={decelerationRate}
-      viewabilityConfig={viewabilityConfig}
-      extraData={extraData}
-      estimatedItemSize={estimatedItemSize}
-      renderItem={renderItem}
-      contentContainerStyle={{
-        paddingTop: hasSafeAreaInsets ? padding.top : 0,
-      }}
-      snapToAlignment={snapToAlignment}
-      snapToInterval={snapToInterval}
-      bounces
-    />
-  );
-}
-
-export default SkeletonFlashList;
+);

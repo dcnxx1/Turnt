@@ -8,7 +8,7 @@ import {
 import {EdgeInsets, useSafeAreaInsets} from 'react-native-safe-area-context';
 import Flex from '../Misc/Flex';
 import {Button, Text} from 'react-native-paper';
-import {StyleSheet} from 'react-native';
+import {LayoutChangeEvent, StyleSheet, View} from 'react-native';
 import theme from '../../theme';
 
 type BottomTabProps = {
@@ -16,6 +16,7 @@ type BottomTabProps = {
   descriptors: BottomTabDescriptorMap;
   navigation: NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>;
   insets: EdgeInsets;
+  onLayout: (event: LayoutChangeEvent) => void;
 };
 
 export default function BottomTab({
@@ -23,11 +24,14 @@ export default function BottomTab({
   descriptors,
   navigation,
   insets,
+  onLayout,
 }: BottomTabProps) {
   const {bottom} = useSafeAreaInsets();
 
   return (
-    <Flex style={[Style.container, {paddingBottom: bottom}]}>
+    <View
+      onLayout={onLayout}
+      style={[Style.container, {paddingBottom: bottom}]}>
       {state.routes.map((route, index) => {
         const {options} = descriptors[route.key];
         const isFocused = state.index === index;
@@ -51,7 +55,7 @@ export default function BottomTab({
           </Flex>
         );
       })}
-    </Flex>
+    </View>
   );
 }
 

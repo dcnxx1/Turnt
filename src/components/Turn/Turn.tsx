@@ -16,9 +16,3 @@ export default function Turn({source, id, onEndTurn}: TurnProps) {
   );
 }
 
-const Style = StyleSheet.create({
-  container: {
-    width: Dimensions.get('screen').height,
-    height: Dimensions.get('screen').height,
-  },
-});

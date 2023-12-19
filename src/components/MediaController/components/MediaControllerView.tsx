@@ -1,26 +1,55 @@
 import BottomSheet from '@gorhom/bottom-sheet';
 import {BlurView} from '@react-native-community/blur';
 import {useMemo} from 'react';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import Flex from '../../Misc/Flex';
 import {blurViewConfig, bottomSheetConfig} from '../configs';
-import MediaControllerSlider from './MediaControllerSlider';
 import TimelineSliderBar from './TimelineSliderBar';
+import MediaControllerArtistSong from './MediaControllerArtistSong';
+import {Text} from 'react-native-paper';
+import {
+  PlayNextButton,
+  PlayPreviousButton,
+  TogglePlayPauseButton,
+} from './MediaControllerButtons';
+import {useVideoStore} from '../../../store';
 
-type MediaControllerView = {};
+type MediaControllerView = {
+  tabHeight: number;
+};
 
-export default function MediaControllerView({}: MediaControllerView) {
-  const snapPoints = useMemo(() => ['15%', '35%'], []);
+export default function MediaControllerView({tabHeight}: MediaControllerView) {
+  const snapPoints = useMemo(() => ['4%', '35%'], []);
+  const {isPlaying, setIsPlaying} = useVideoStore();
+
+  const onPressPrevious = () => {};
+
+  const onPressTogglePlayPause = () => {
+    setIsPlaying(!isPlaying);
+  };
+
+  const onPressNext = () => {};
 
   return (
     <BottomSheet
+      bottomInset={tabHeight}
       {...bottomSheetConfig}
       containerStyle={Style.container}
       snapPoints={snapPoints}>
       <BlurView style={Style.blurView} {...blurViewConfig}>
-        <Flex style={Style.content}>
-          <TimelineSliderBar />
-        </Flex>
+        <View style={Style.content}>
+          <View style={Style.mediaController}>
+            <MediaControllerArtistSong />
+          </View>
+          <Flex style={Style.timelineSideBarContainer}>
+            <TimelineSliderBar />
+          </Flex>
+          <Flex style={Style.buttonContainer}>
+            <PlayPreviousButton onPress={onPressPrevious} />
+            <TogglePlayPauseButton onPress={onPressTogglePlayPause} />
+            <PlayNextButton onPress={onPressNext} />
+          </Flex>
+        </View>
       </BlurView>
     </BottomSheet>
   );
@@ -28,15 +57,27 @@ export default function MediaControllerView({}: MediaControllerView) {
 
 const Style = StyleSheet.create({
   container: {
-    height: '100%',
-    paddingHorizontal: 10,
-  },
-  content: {
-    paddingHorizontal: 10,
+    //
   },
   blurView: {
     width: '100%',
-    height: '100%',
     flex: 1,
+  },
+  content: {
+    flex: 1,
+  },
+  timelineSideBarContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  mediaController: {
+    justifyContent: 'flex-start',
+    paddingTop: 5,
+    alignItems: 'center',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
   },
 });

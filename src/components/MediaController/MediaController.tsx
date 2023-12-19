@@ -1,15 +1,12 @@
-import {StyleSheet} from 'react-native';
 import MediaControllerView from './components/MediaControllerView';
 import {useActiveTurn} from '../../store';
 
-export default function MediaController() {
+type MediaControllerProps = {
+  tabHeight: number;
+};
+
+export default function MediaController({tabHeight}: MediaControllerProps) {
   const {activeTurn} = useActiveTurn();
 
-  return <MediaControllerView />;
+  return <MediaControllerView tabHeight={tabHeight} />;
 }
-
-const Style = StyleSheet.create({
-  container: {
-    borderWidth: 2,
-  },
-});

@@ -1,23 +1,39 @@
 import {Slider} from '@miblanchard/react-native-slider';
-import {sliderConfig} from '../configs';
 import {useState} from 'react';
-import {useSeek} from '../../../store';
+import {sliderConfig} from '../configs';
+import {useVideoStore} from '../../../store';
 
 type SliderProps = {
   progress: number;
-  onSlidingComplete: (value: number[]) => void;
+  seekVideoTo: (value: number) => void;
 };
 
 export default function MediaControllerSlider({
   progress,
-  onSlidingComplete,
+  seekVideoTo,
 }: SliderProps) {
-  const [shadowSeek, setShadowSeek] = useState(0);
+  const [isSeeking, setSeeking] = useState(false);
+  const [seekProgress, setSeekProgress] = useState(0);
 
+  const onSlideComplete = (val: number[]) => {
+    setSeeking(false);
+    const seekTo = val[0];
+
+    seekVideoTo(seekTo);
+  };
+  const onSlidingStart = () => {
+    setSeeking(true);
+  };
+  const onValueChange = (val: number[]) => {
+    setSeekProgress(val[0]);
+  };
   return (
     <Slider
-      value={progress}
-      onSlidingComplete={onSlidingComplete}
+      onSlidingStart={onSlidingStart}
+      onValueChange={onValueChange}
+      maximumValue={314}
+      value={isSeeking ? seekProgress : progress}
+      onSlidingComplete={onSlideComplete}
       {...sliderConfig}
     />
   );
