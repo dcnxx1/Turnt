@@ -71,7 +71,7 @@ export default function OnBoardScreen() {
 
   return (
     <LinearGradientScreen
-      style={Style.container}
+      styleContent={Style.container}
       gradient={[theme.color.turner, theme.color.turnerPurpleBright]}
       content={content}
     />

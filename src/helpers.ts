@@ -1,3 +1,4 @@
+import {Alert} from 'react-native';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import RNPermission, {Permission} from 'react-native-permissions';
 
@@ -45,8 +46,6 @@ export function getFileExtension(uri: string) {
   const uriParts = uri.split('.');
   return uriParts[uriParts.length - 1];
 }
-
-
 
 export function secondsToDisplayTime(currentPositionSeconds: number): string {
   var minutes = Math.floor(currentPositionSeconds / 60);

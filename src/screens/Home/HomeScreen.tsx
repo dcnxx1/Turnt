@@ -25,7 +25,7 @@ function HomeScreen(): JSX.Element {
     <Text>Loading...</Text>
   );
 
-  return <SkeletonScreen style={Style.container} content={content} />;
+  return <SkeletonScreen styleContent={Style.container} content={content} />;
 }
 
 const Style = StyleSheet.create({

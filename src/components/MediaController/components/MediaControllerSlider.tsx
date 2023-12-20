@@ -29,6 +29,7 @@ export default function MediaControllerSlider({
   const onValueChange = (val: number[]) => {
     setSeekProgress(val[0]);
   };
+  
   return (
     <Slider
       onSlidingStart={onSlidingStart}

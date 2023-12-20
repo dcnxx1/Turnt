@@ -32,7 +32,6 @@ export default function AccountSetupScreen() {
           onSettled: createdUserResponse => {
             if (createdUserResponse) {
               me.setLocalUserProfile(createdUserResponse);
-              
             }
           },
         },
@@ -59,7 +58,7 @@ export default function AccountSetupScreen() {
       content={content}
       hasSafeAreaInsets
       gradient={[theme.color.turner, theme.color.turnerPurpleBright]}
-      style={Style.container}
+      styleContent={Style.container}
     />
   );
 }

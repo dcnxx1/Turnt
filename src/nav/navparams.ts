@@ -1,3 +1,4 @@
+import {FileType} from '../models/turn';
 import {Role} from '../models/user';
 
 export type AccountSetupParams = {
@@ -11,6 +12,18 @@ export type AccountSetupParams = {
 };
 
 export type HomeParams = {
+  HomeScreen: undefined;
   Home: undefined;
-  Profile: undefined;
+  ProfileScreen: undefined;
+};
+
+export type EditorParams = {
+  EditorStack: undefined;
+  FileSelectScreen: undefined;
+  EditorScreen: {
+    filePath: string;
+    duration: number | null ;
+    fileType: FileType;
+    mime: string,
+  };
 };

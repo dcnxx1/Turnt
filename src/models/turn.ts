@@ -13,3 +13,6 @@ export interface ITurn {
   user: {alias?: string};
   created_at?: string;
 }
+
+
+export type FileType = 'Audio' | 'Video'

@@ -17,15 +17,10 @@ export default function CollectionTurn({data}: CollectionTurnProps) {
   const {handleSetActiveTurn} = useTurnContext();
   const [activeTurnIndex, setActiveTurnIndex] = useState(0);
   const ref = useRef<FlashList<ITurn>>(null);
-  const {type} = useDispatchVideoTurn();
+  const {type, dispatch} = useDispatchVideoTurn();
 
   const onEndTurn = () => {
-    if (ref.current) {
-      ref.current.scrollToIndex({
-        animated: true,
-        index: activeTurnIndex + 1,
-      });
-    }
+    dispatch('PLAY_NEXT');
   };
 
   useEffect(() => {

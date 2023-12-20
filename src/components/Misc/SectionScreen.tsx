@@ -1,7 +1,5 @@
-import {StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
-import Flex from './Flex';
 import {ReactNode} from 'react';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
 
 export interface ScreenSectionProps {
   children: ReactNode;
@@ -18,6 +16,5 @@ export default function SectionScreen({
 const Style = StyleSheet.create({
   container: {
     width: '100%',
-    flexDirection: 'row',
   },
 });

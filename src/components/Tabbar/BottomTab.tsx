@@ -1,15 +1,16 @@
 import {BottomTabNavigationEventMap} from '@react-navigation/bottom-tabs';
 import {BottomTabDescriptorMap} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 import {
-  TabNavigationState,
-  ParamListBase,
   NavigationHelpers,
+  ParamListBase,
+  TabNavigationState,
 } from '@react-navigation/native';
+import {Image, LayoutChangeEvent, StyleSheet, View} from 'react-native';
+import {Button} from 'react-native-paper';
 import {EdgeInsets, useSafeAreaInsets} from 'react-native-safe-area-context';
-import Flex from '../Misc/Flex';
-import {Button, Text} from 'react-native-paper';
-import {LayoutChangeEvent, StyleSheet, View} from 'react-native';
+import {NavNameTypes, NavScreenNames} from '../../nav/types';
 import theme from '../../theme';
+import Flex from '../Misc/Flex';
 
 type BottomTabProps = {
   state: TabNavigationState<ParamListBase>;
@@ -17,6 +18,33 @@ type BottomTabProps = {
   navigation: NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>;
   insets: EdgeInsets;
   onLayout: (event: LayoutChangeEvent) => void;
+};
+
+const switchKeys = (routeName: NavNameTypes, isFocused: boolean) => {
+  switch (routeName) {
+    case NavScreenNames.HomeScreen:
+      return (
+        <Image
+          source={
+            isFocused
+              ? require('../../assets/icons/turnt.png')
+              : require('../../assets/icons/turnt_white.png')
+          }
+          style={Style.icon}
+        />
+      );
+    case NavScreenNames.ProfileScreen:
+      return (
+        <Image
+          style={Style.icon}
+          source={
+            isFocused
+              ? require('../../assets/icons/profile_white.png')
+              : require('../../assets/icons/profile.png')
+          }
+        />
+      );
+  }
 };
 
 export default function BottomTab({
@@ -31,7 +59,7 @@ export default function BottomTab({
   return (
     <View
       onLayout={onLayout}
-      style={[Style.container, {paddingBottom: bottom}]}>
+      style={[Style.bottomTabContainer, {paddingBottom: bottom}]}>
       {state.routes.map((route, index) => {
         const {options} = descriptors[route.key];
         const isFocused = state.index === index;
@@ -48,9 +76,9 @@ export default function BottomTab({
           }
         };
         return (
-          <Flex key={route.key}>
-            <Button onPress={onPress}>
-              <Text style={Style.text}>{route.name}</Text>
+          <Flex style={Style.buttonContainer} key={route.key}>
+            <Button style={Style.button} onPress={onPress}>
+              {switchKeys(route.name as NavNameTypes, isFocused)}
             </Button>
           </Flex>
         );
@@ -60,13 +88,26 @@ export default function BottomTab({
 }
 
 const Style = StyleSheet.create({
-  container: {
+  bottomTabContainer: {
     height: '10%',
     maxHeight: '10%',
     flexDirection: 'row',
     backgroundColor: theme.color.turnerDark,
   },
+  buttonContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+  },
+  button: {
+    width: '60%',
+  },
   text: {
     color: theme.color.white,
+  },
+  icon: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
   },
 });

@@ -62,7 +62,7 @@ export default function AuthScreen() {
   return (
     <LinearGradientScreen
       hasSafeAreaInsets
-      style={Style.container}
+      styleContent={Style.container}
       gradient={[theme.color.turner, theme.color.turnerPurpleBright]}
       content={content}
     />

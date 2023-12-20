@@ -6,17 +6,23 @@ import {
   createStackNavigator,
 } from '@react-navigation/stack';
 import Tabbar from '../components/Tabbar/Tabbar';
-import {Editor, Home, OnBoardScreen, Profile} from '../screens';
+import {
+  Editor,
+  FileSelectScreen,
+  Home,
+  OnBoardScreen,
+  Profile,
+} from '../screens';
 import AccountSetupScreen from '../screens/AccountSetup/AccountSetupScreen';
 import AuthScreen from '../screens/Auth/AuthScreen';
 import useLocalUserProfile from '../shared/hooks/useLocalUserProfile';
-import {AccountSetupParams, HomeParams} from './navparams';
-import {NavNames, RootNavNames} from './types';
+import {AccountSetupParams, EditorParams, HomeParams} from './navparams';
+import {NavScreenNames, RootNavNames} from './types';
 
 const HomeStack = createBottomTabNavigator<HomeParams>();
 const RootStack = createStackNavigator();
 const SetupStack = createStackNavigator<AccountSetupParams>();
-const EditorStack = createStackNavigator();
+const EditorStack = createStackNavigator<EditorParams>();
 
 const screenOptions: StackNavigationOptions = {
   headerShown: false,
@@ -31,9 +37,12 @@ function HomeStackNavigator() {
       screenOptions={{
         headerShown: false,
       }}
-      initialRouteName={NavNames.Home}>
-      <HomeStack.Screen component={Home} name={NavNames.Home} />
-      <HomeStack.Screen component={Profile} name={NavNames.Profile} />
+      initialRouteName={NavScreenNames.HomeScreen}>
+      <HomeStack.Screen component={Home} name={NavScreenNames.HomeScreen} />
+      <HomeStack.Screen
+        component={Profile}
+        name={NavScreenNames.ProfileScreen}
+      />
     </HomeStack.Navigator>
   );
 }
@@ -41,15 +50,18 @@ function HomeStackNavigator() {
 function SetupScreenStackNavigator() {
   return (
     <SetupStack.Navigator
-      initialRouteName={NavNames.AuthScreen}
+      initialRouteName={NavScreenNames.AuthScreen}
       screenOptions={screenOptions}>
       <SetupStack.Screen
         component={OnBoardScreen}
-        name={NavNames.OnBoardScreen}
+        name={NavScreenNames.OnBoardScreen}
       />
-      <SetupStack.Screen name={NavNames.AuthScreen} component={AuthScreen} />
       <SetupStack.Screen
-        name={NavNames.AccountSetupScreen}
+        name={NavScreenNames.AuthScreen}
+        component={AuthScreen}
+      />
+      <SetupStack.Screen
+        name={NavScreenNames.AccountSetupScreen}
         component={AccountSetupScreen}
       />
     </SetupStack.Navigator>
@@ -58,8 +70,17 @@ function SetupScreenStackNavigator() {
 
 function EditorStackNavigator() {
   return (
-    <EditorStack.Navigator initialRouteName={NavNames.Editor}>
-      <EditorStack.Screen component={Editor} name={NavNames.Editor} />
+    <EditorStack.Navigator
+      screenOptions={screenOptions}
+      initialRouteName={RootNavNames.EditorStack}>
+      <EditorStack.Screen
+        component={FileSelectScreen}
+        name={NavScreenNames.FileSelectScreen}
+      />
+      <EditorStack.Screen
+        component={Editor}
+        name={NavScreenNames.EditorScreen}
+      />
     </EditorStack.Navigator>
   );
 }
@@ -71,21 +92,21 @@ export default function Navigation() {
     <NavigationContainer>
       <RootStack.Navigator
         screenOptions={screenOptions}
-        initialRouteName={RootNavNames.SetupScreen}>
+        initialRouteName={RootNavNames.EditorStack}>
         {me.profile ? (
           <RootStack.Screen
-            name={RootNavNames.HomeScreen}
+            name={RootNavNames.HomeStack}
             component={HomeStackNavigator}
           />
         ) : (
           <RootStack.Screen
-            name={RootNavNames.SetupScreen}
+            name={RootNavNames.SetupStack}
             component={SetupScreenStackNavigator}
           />
         )}
 
         <RootStack.Screen
-          name={RootNavNames.EditorScreen}
+          name={RootNavNames.EditorStack}
           component={EditorStackNavigator}
         />
       </RootStack.Navigator>

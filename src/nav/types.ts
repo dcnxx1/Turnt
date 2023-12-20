@@ -1,15 +1,24 @@
-export enum NavNames {
-  Home = 'Home',
-  Editor = 'Editor',
-  Profile = 'Profile',
+export enum NavScreenNames {
+  HomeScreen = 'HomeScreen',
+  EditorScreen = 'EditorScreen',
+  ProfileScreen = 'ProfileScreen',
   OnBoardScreen = 'OnBoardScreen',
   AuthScreen = 'AuthScreen',
   AccountSetupScreen = 'AccountSetupScreen',
+  FileSelectScreen = 'FileSelectScreen',
 }
+export type NavNameTypes =
+  | 'HomeScreen'
+  | 'EditorScreen'
+  | 'ProfileScreen'
+  | 'OnBoardScreen'
+  | 'AuthScreen'
+  | 'AccountSetupScreen'
+  | 'FileSelectScreen';
 
 export enum RootNavNames {
-  SetupScreen = 'SetupSecreen',
-  EditorScreen = 'EditorScreen',
-  HomeScreen = 'HomeScreen',
-  AuthScreen = 'AuthScreen',
+  SetupStack = 'SetupStack',
+  EditorStack = 'EditorStack',
+  HomeStack = 'HomeStack',
+  AuthStack = 'AuthStack',
 }

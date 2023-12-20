@@ -1,14 +1,13 @@
-import {Children, ComponentType, ReactElement, ReactNode} from 'react';
-import Flex from '../Misc/Flex';
-import {LinearGradient} from 'react-native-linear-gradient';
+import {ComponentType, ReactElement, ReactNode} from 'react';
 import {Dimensions, StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
+import {LinearGradient} from 'react-native-linear-gradient';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
-import {capitalizeFirstLetter} from '../../helpers';
+import Flex from '../Misc/Flex';
 import SectionScreen, {ScreenSectionProps} from '../Misc/SectionScreen';
 
 interface SkeletonScreenProps {
   content: ReactNode;
-  style?: StyleProp<ViewStyle>;
+  styleContent?: StyleProp<ViewStyle>;
   header?: ReactElement;
   footer?: ReactElement;
   headerStyle?: ScreenSectionProps['style'];
@@ -19,7 +18,7 @@ interface SkeletonScreenProps {
 function SkeletonScreen({
   header,
   content,
-  style,
+  styleContent,
   footer,
   footerStyle,
   hasSafeAreaInsets,
@@ -32,11 +31,11 @@ function SkeletonScreen({
     paddingBottom: hasSafeAreaInsets ? padding.bottom : 0,
   };
   return (
-    <View style={[optionalPadding, {flex: 1}]}>
+    <Flex style={[optionalPadding]}>
       {header && <SectionScreen style={headerStyle} children={header} />}
-      <View style={[style, Style.container]}>{content}</View>
+      <View style={[styleContent, Style.container]}>{content}</View>
       {footer && <SectionScreen style={footerStyle} children={footer} />}
-    </View>
+    </Flex>
   );
 }
 
@@ -70,7 +69,6 @@ export const withSafeAreaView = (
 
 const Style = StyleSheet.create({
   container: {
-    flex: 1,
     height: Dimensions.get('screen').height,
     width: '100%',
   },
