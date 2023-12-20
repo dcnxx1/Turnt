@@ -25,6 +25,7 @@
     "@tanstack/react-query": "^5.8.9",
     "aws-sdk": "^2.1511.0",
     "axios": "^1.6.2",
+    "ffmpeg-kit-react-native": "^6.0.2",
     "react": "18.2.0",
     "react-hook-form": "^7.48.2",
     "react-native": "0.72.7",

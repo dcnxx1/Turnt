@@ -12,6 +12,7 @@ import ImageCropPicker, {Video} from 'react-native-image-crop-picker';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {EditorParams} from '../../nav/navparams';
+import {millisToSeconds} from '../../helpers';
 const LinearGradientScreen = withLinearGradient(SkeletonScreen);
 
 type EditorParamsPath = EditorParams['EditorScreen'];
@@ -98,7 +99,7 @@ export default function FileSelectScreen() {
     if (videoFile) {
       const videoParams: EditorParamsPath = {
         filePath: videoFile.path,
-        duration: videoFile.duration,
+        duration: millisToSeconds(videoFile.duration ?? 0),
         fileType: 'Video',
         mime: videoFile.mime,
       };

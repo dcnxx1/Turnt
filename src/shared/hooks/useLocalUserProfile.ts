@@ -20,12 +20,11 @@ export default function useLocalUserProfile() {
   };
 
   const getUser = (): Prettify<UserStorage> => {
-    const myAccountInfo = storage.getString('user') ?? '';
-    const parsedUser = JSON.parse(myAccountInfo);
+    const user = storage.getString('user') ?? '';
+    console.log('user :>>', user);
+    const parsedUser = user.length ? JSON.parse(user) : '';
     return parsedUser as UserStorage;
   };
-
-  const user = storage.getString('user') ?? '';
 
   return {
     profile: getUser(),
