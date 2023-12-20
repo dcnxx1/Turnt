@@ -1,20 +1,19 @@
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
 import {KeyboardAvoidingView, Platform, StyleSheet} from 'react-native';
 import {Text} from 'react-native-paper';
 import {Flex, SkeletonScreen} from '../../components';
 import {withLinearGradient} from '../../components/SkeletonScreen/SkeletonScreen';
-import {AccountSetupParams, HomeParams} from '../../nav/navparams';
+import {AccountSetupParams} from '../../nav/navparams';
+import useLocalUserProfile from '../../shared/hooks/useLocalUserProfile';
 import theme from '../../theme';
 import AccountSetupForm, {TCreateAccountFields} from './AccountSetupForm';
 import useCreateAccount from './hooks/useCreateAccount';
-import useLocalUserProfile from '../../shared/hooks/useLocalUserProfile';
-import {StackNavigationProp} from '@react-navigation/stack';
 
 const LinearGradientSkeletonScreen = withLinearGradient(SkeletonScreen);
 
 export default function AccountSetupScreen() {
   const route = useRoute<RouteProp<AccountSetupParams, 'AccountSetupScreen'>>();
-  const navigation = useNavigation<StackNavigationProp<AccountSetupParams>>();
   const createAccountMutation = useCreateAccount();
   const me = useLocalUserProfile();
 

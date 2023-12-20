@@ -1,17 +1,27 @@
-import {Dimensions, Text, View} from 'react-native';
+import {Dimensions, Text, View, StyleSheet} from 'react-native';
+import {SkeletonScreen} from '../../components';
+import {withLinearGradient} from '../../components/SkeletonScreen/SkeletonScreen';
+import {RouteProp, useRoute} from '@react-navigation/native';
+import {EditorParams} from '../../nav/navparams';
+import theme from '../../theme';
 
+const LinearGradientScreen = withLinearGradient(SkeletonScreen);
 export default function Editor(): JSX.Element {
+  const {params} = useRoute<RouteProp<EditorParams>>();
+  const onPressSubmitWithoutErrors = () => {};
+  const content = <></>;
+
+  console.log("params recieved: >>", params)
+
   return (
-    <View
-      style={{
-        flex: 1,
-        width: '100%',
-        backgroundColor: 'green',
-        height: Dimensions.get('screen').height,
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}>
-      <Text style={{color: 'white'}}>Yo</Text>
-    </View>
+    <LinearGradientScreen
+      gradient={[theme.color.turnerDark, '#000']}
+      content={content}
+      styleContent={Style.content}
+    />
   );
 }
+
+const Style = StyleSheet.create({
+  content: {},
+});

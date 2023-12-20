@@ -14,13 +14,6 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {EditorParams} from '../../nav/navparams';
 const LinearGradientScreen = withLinearGradient(SkeletonScreen);
 
-async function getAudioDuration() {
-  try {
-  } catch (err) {
-    errorAlertWithCallback(getAudioDuration);
-  }
-}
-
 type EditorParamsPath = EditorParams['EditorScreen'];
 
 function errorAlertWithCallback<T>(fnToRerun: () => T | void) {
@@ -82,7 +75,8 @@ export default function FileSelectScreen() {
     profile: {username},
   } = useLocalUserProfile();
   const navigation = useNavigation<StackNavigationProp<EditorParams>>();
-  const onPressMp3Button = async () => {
+
+  const onPressSelectAudio = async () => {
     const mp3File = await getMp3File();
     if (mp3File) {
       const params: EditorParamsPath = {
@@ -99,7 +93,7 @@ export default function FileSelectScreen() {
     navigation.navigate('EditorScreen', params);
   };
 
-  const onPressVideoButton = async () => {
+  const onPressSelectVideo = async () => {
     const videoFile = await getVideoFile();
     if (videoFile) {
       const videoParams: EditorParamsPath = {
@@ -123,10 +117,10 @@ export default function FileSelectScreen() {
 
   const content = (
     <>
-      <Button onPress={onPressMp3Button} style={Style.button}>
+      <Button onPress={onPressSelectAudio} style={Style.button}>
         <Text style={Style.buttonText}>MP3 Bestand uploaden</Text>
       </Button>
-      <Button onPress={onPressVideoButton} style={Style.button}>
+      <Button onPress={onPressSelectVideo} style={Style.button}>
         <Text style={Style.buttonText}>Video Uploaden</Text>
       </Button>
     </>
@@ -146,8 +140,6 @@ export default function FileSelectScreen() {
 
 const Style = StyleSheet.create({
   content: {
-    borderWidth: 2,
-    borderColor: 'orange',
     height: '100%',
     flex: 2,
     justifyContent: 'space-evenly',
