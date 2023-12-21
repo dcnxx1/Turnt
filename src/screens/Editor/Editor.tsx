@@ -1,62 +1,46 @@
-import {Dimensions, Text, View, StyleSheet} from 'react-native';
+import {RouteProp, useRoute} from '@react-navigation/native';
+import {StyleSheet, View} from 'react-native';
 import {SkeletonScreen} from '../../components';
 import {withLinearGradient} from '../../components/SkeletonScreen/SkeletonScreen';
-import {RouteProp, useRoute} from '@react-navigation/native';
 import {EditorParams} from '../../nav/navparams';
 import theme from '../../theme';
+import Timeline from './components/Timeline';
+import {getThumbnailDirectoryPathOrCreate} from '../../helpers';
 import RNFS from 'react-native-fs';
-import {
-  getThumbnails,
-  getVideoFramesCount,
-  thumbnailDirPath,
-} from '../../helpers';
-import {FFmpegKit, FFprobeKit} from 'ffmpeg-kit-react-native';
-import {useEffect} from 'react';
-import {Button} from 'react-native-paper';
-
+import { Button, Text } from 'react-native-paper';
 const LinearGradientScreen = withLinearGradient(SkeletonScreen);
+
+const deleteAll = async () => {
+  const thumbnailDir = await getThumbnailDirectoryPathOrCreate();
+  if (thumbnailDir) {
+    const thumbnailDirContent = await RNFS.readDir(thumbnailDir);
+    thumbnailDirContent.forEach(({path}) => {
+      RNFS.unlink(path);
+    });
+    console.log("content delted:!")
+    await RNFS.unlink(thumbnailDir);
+  }
+};
 
 export default function Editor(): JSX.Element {
   const {params} = useRoute<RouteProp<EditorParams>>();
   const onPressSubmitWithoutErrors = () => {};
-  console.log('duration :>>', params?.duration);
-  const deleteDir = async () => {
-    try {
-      const thumbnailDir = await thumbnailDirPath();
-      if (thumbnailDir) {
-        const dirContent = await RNFS.readDir(thumbnailDir);
 
-        dirContent.forEach(({path}) => {
-          RNFS.unlink(path).then(res => console.log('REMOVED :>>', res));
-        });
-      }
-    } catch (err) {
-      console.log('ERR DELETE CONTENT DIR :>>', err);
-    }
-  };
   const content = (
     <>
-      <Button onPress={deleteDir}>
-        <Text style={{color: 'white'}}>Delete dir</Text>
-      </Button>
+      <View style={Style.timeline}>
+        {params?.duration && params.filePath && (
+          <Timeline duration={params?.duration} filePath={params?.filePath} />
+        )}
+        <Button onPress={deleteAll}>
+            <Text style={{color: 'white'}}>
+              delete dir
+            </Text>
+        </Button>
+      </View>
     </>
   );
 
-  const generateTimeline = async (filePath: string) => {
-    try {
-    } catch (err) {
-      console.log('err', err);
-    }
-  };
-
-  useEffect(() => {
-    async function genSome() {
-      if (params?.filePath) {
-        await generateTimeline(params.filePath);
-      }
-    }
-    genSome();
-  }, []);
   return (
     <LinearGradientScreen
       gradient={[theme.color.turnerDark, '#000']}
@@ -68,9 +52,11 @@ export default function Editor(): JSX.Element {
 
 const Style = StyleSheet.create({
   content: {
-    borderWidth: 2,
-    borderColor: 'white',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignContent: 'center',
+  },
+  timeline: {
+    flexDirection: 'column',
+    height: '10%',
   },
 });

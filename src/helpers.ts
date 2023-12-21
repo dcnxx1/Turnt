@@ -1,7 +1,7 @@
 import {Alert} from 'react-native';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import RNPermission, {Permission} from 'react-native-permissions';
-import RNFS from 'react-native-fs';
+import RNFS, {CachesDirectoryPath} from 'react-native-fs';
 import {FFmpegKit, FFprobeKit} from 'ffmpeg-kit-react-native';
 
 export type Prettify<T> = {
@@ -76,34 +76,24 @@ export function secondsToMillis(seconds: number) {
 }
 const thumbnails = '/thumbnails';
 
-export async function getVideoFramesCount(
-  filePath: string,
-): Promise<number | undefined> {
-  const commandFrameRate = `-v error -loglevel quiet -hide_banner -select_streams v:0 -count_packets \
-  -show_entries stream=nb_read_packets -of csv=p=0 ${filePath}`;
+export const getThumbnailDirectoryPathOrCreate = async (): Promise<
+  string | undefined
+> => {
   try {
-    const session = await FFprobeKit.execute(commandFrameRate);
-    const numberOfFrames = await session.getAllLogsAsString();
-    return Number(numberOfFrames);
-  } catch (err) {
-    console.log('ERR GET FRAMERATE');
-  }
-}
-
-export const thumbnailDirPath = async (): Promise<string | undefined> => {
-  try {
-    const cache = await RNFS.readDir(RNFS.CachesDirectoryPath);
-    const cachePath = cache[0].path;
-
-    const thumbnailDirExists = await RNFS.exists(cachePath + thumbnails);
-    if (!thumbnailDirExists) {
-      await RNFS.mkdir(cachePath + thumbnails);
-      if (thumbnailDirExists) {
-        return cachePath + thumbnails;
-      }
-      throw new Error('Could not create thumbnailDir');
+    const cacheDirPath = await RNFS.readDir(CachesDirectoryPath);
+    const cacheDir = cacheDirPath[0].path;
+    const doesThumbnailDirExist = await RNFS.exists(cacheDir + thumbnails);
+    console.log('does thumbnailDirEixst:>>', doesThumbnailDirExist);
+    if (!doesThumbnailDirExist) {
+      return new Promise<string>((resolve, reject) => {
+        RNFS.mkdir(cacheDir + thumbnails).then(() =>
+          RNFS.exists(cacheDir + thumbnails).then(res => {
+            res ? resolve(cacheDir + thumbnails) : reject(undefined);
+          }),
+        );
+      });
     }
-    return cachePath + thumbnails;
+    return cacheDir + thumbnails;
   } catch (err) {
     console.log('ERR CREATE THUMBNAIL DIR', err);
   }
@@ -118,26 +108,3 @@ const NUMBER_OF_THUMBNAILS_TO_EXTRACT = 13;
  * @param numberOfThumbnails number
  * @returns `-i ${filePath} -hide_banner -r 1/24 ${outputDir}/thumbnail-%02d.jpg`
  */
-export const getThumbnails = async (
-  filePath: string,
-  duration: number,
-  numberOfThumbnails = NUMBER_OF_THUMBNAILS_TO_EXTRACT,
-) => {
-  let thumbnailArray: string[] = [];
-  try {
-    const thumbnailDir = await thumbnailDirPath();
-
-    const videoFramesCount: number = (await getVideoFramesCount(filePath)) ?? 0;
-    const frameRate = videoFramesCount / duration;
-    const extractAtEvery = frameRate * numberOfThumbnails;
-
-    if (thumbnailDir) {
-      const string = `-i ${filePath} -hide_banner -r 1/${extractAtEvery} ${thumbnailDir}/thumbnail-%02d.jpg`;
-      FFmpegKit.execute(string).then(async () => {});
-    }
-  } catch (err) {
-    console.log('ERR GET GENERATE THUMBNAILS');
-  } finally {
-    return thumbnailArray;
-  }
-};

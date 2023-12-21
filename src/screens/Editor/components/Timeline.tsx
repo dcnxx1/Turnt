@@ -1,31 +1,44 @@
-import {Dimensions, StyleSheet} from 'react-native';
-import {Flex} from '../../../components';
+import {useEffect} from 'react';
+import {Dimensions, Image, StyleSheet} from 'react-native';
 import {Text} from 'react-native-paper';
-import ffmpeg from 'ffmpeg-kit-react-native';
-import {getThumbnails} from '../../../helpers';
+import {Flex} from '../../../components';
+import useGenerateThumbnails from '../hooks/useGenerateThumbnails';
+
 const screenWidth = Dimensions.get('screen').width;
-import RNFS from 'react-native-fs';
 
 type Props = {
   duration: number;
   filePath: string;
 };
 
-const generateTimeline = async (filePath: string) => {
-  try {
-    const DirPath = RNFS.CachesDirectoryPath;
-    const string = getThumbnails(filePath, DirPath);
-  } catch (err) {
-    console.log('err', err);
-  }
-};
-
-export default function Timeline() {
+export default function Timeline({duration, filePath}: Props) {
+  const [thumbnails, isLoading] = useGenerateThumbnails(filePath, 13);
+  
   return (
-    <Flex>
-      <Text>Timeline goes here!</Text>
+    <Flex style={Style.container}>
+      {isLoading ? (
+        <Text style={{color: 'white'}}>Timeline is loading...</Text>
+      ) : (
+        thumbnails.map(path => (
+          <Image key={path} style={Style.image} source={{uri: path}} />
+        ))
+      )}
     </Flex>
   );
 }
 
-const Style = StyleSheet.create({});
+const Style = StyleSheet.create({
+  container: {
+    borderWidth: 2,
+    borderColor: 'yellow',
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    overflow: 'hidden',
+  },
+  image: {
+    width: 50,
+    height: '100%',
+    borderWidth: 2,
+  },
+});
