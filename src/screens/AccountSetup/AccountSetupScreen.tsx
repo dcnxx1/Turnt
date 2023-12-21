@@ -1,13 +1,12 @@
-import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {KeyboardAvoidingView, Platform, StyleSheet} from 'react-native';
-import {Text} from 'react-native-paper';
-import {Flex, SkeletonScreen} from '../../components';
-import {withLinearGradient} from '../../components/SkeletonScreen/SkeletonScreen';
-import {AccountSetupParams} from '../../nav/navparams';
+import { RouteProp, useRoute } from '@react-navigation/native';
+import { KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
+import { Text } from 'react-native-paper';
+import { Flex, SkeletonScreen } from '../../components';
+import { withLinearGradient } from '../../components/SkeletonScreen/SkeletonScreen';
+import { AccountSetupParams } from '../../nav/navparams';
 import useLocalUserProfile from '../../shared/hooks/useLocalUserProfile';
 import theme from '../../theme';
-import AccountSetupForm, {TCreateAccountFields} from './AccountSetupForm';
+import AccountSetupForm, { TCreateAccountFields } from './AccountSetupForm';
 import useCreateAccount from './hooks/useCreateAccount';
 
 const LinearGradientSkeletonScreen = withLinearGradient(SkeletonScreen);

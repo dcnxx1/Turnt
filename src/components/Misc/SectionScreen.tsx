@@ -1,5 +1,6 @@
 import {ReactNode} from 'react';
 import {StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
+import {Text} from 'react-native-paper';
 
 export interface ScreenSectionProps {
   children: ReactNode;

@@ -23,7 +23,7 @@ export const blurViewConfig: Partial<BlurViewProps> = {
   blurType: 'dark',
 };
 
-export const sliderConfig: Partial<SliderProps> = {
+export const sliderStyle: Partial<SliderProps> = {
   trackClickable: false,
   animateTransitions: true,
   animationType: 'timing',

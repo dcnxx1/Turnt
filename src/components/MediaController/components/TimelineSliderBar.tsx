@@ -28,8 +28,8 @@ export default function TimelineSliderBar({turnDuration}: Props) {
       <Flex flex={4}>
         <MediaControllerSlider
           maximumValue={turnDuration}
-          seekVideoTo={seekVideoTo}
-          progress={progress}
+          setVideoProgress={seekVideoTo}
+          videoProgress={progress}
         />
       </Flex>
       <Flex style={Style.videoProgress}>

@@ -1,8 +1,9 @@
-import {useEffect} from 'react';
-import {Dimensions, Image, StyleSheet} from 'react-native';
+import {Dimensions, Image, StyleSheet, View} from 'react-native';
 import {Text} from 'react-native-paper';
-import {Flex} from '../../../components';
-import useGenerateThumbnails from '../hooks/useGenerateThumbnails';
+import theme from '../../../theme';
+import useGenerateThumbnails, {
+  NUMBER_OF_THUMBNAILS_TO_EXTRACT,
+} from '../hooks/useGenerateThumbnails';
 
 const screenWidth = Dimensions.get('screen').width;
 
@@ -12,10 +13,13 @@ type Props = {
 };
 
 export default function Timeline({duration, filePath}: Props) {
-  const [thumbnails, isLoading] = useGenerateThumbnails(filePath, 13);
-  
+  const [thumbnails, isLoading] = useGenerateThumbnails(
+    filePath,
+    NUMBER_OF_THUMBNAILS_TO_EXTRACT,
+  );
+
   return (
-    <Flex style={Style.container}>
+    <View style={Style.container}>
       {isLoading ? (
         <Text style={{color: 'white'}}>Timeline is loading...</Text>
       ) : (
@@ -23,22 +27,25 @@ export default function Timeline({duration, filePath}: Props) {
           <Image key={path} style={Style.image} source={{uri: path}} />
         ))
       )}
-    </Flex>
+    </View>
   );
 }
 
 const Style = StyleSheet.create({
   container: {
-    borderWidth: 2,
-    borderColor: 'yellow',
+    borderWidth: 3,
+    borderRadius: 15,
+    borderColor: theme.color.turner,
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'center',
     overflow: 'hidden',
+    height: 50,
+    position: 'relative',
   },
   image: {
     width: 50,
-    height: '100%',
+    height: 50,
     borderWidth: 2,
   },
 });

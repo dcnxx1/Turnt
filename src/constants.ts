@@ -53,3 +53,5 @@ export interface IOnBoardProps {
   footer?: string;
   image: boolean;
 }
+
+export const TURN_IMPRESSION_TIME = 30;

@@ -1,10 +1,11 @@
+import {useEffect, useRef} from 'react';
 import Video, {OnProgressData} from 'react-native-video';
-import {TestData} from '../../screens/Home/HomeScreen';
+import {ITurn} from '../../models/turn';
 import {useTurnContext} from '../../shared/context/TurnContext';
 import {useSeek, useVideoStore} from '../../store';
 import VideoPlayer from './VideoPlayer';
-import {useEffect, useRef} from 'react';
-import { ITurn } from '../../models/turn';
+import {useCDN} from '../../api/api';
+import {TURN_KEY} from '../../s3';
 
 type Props = {
   videoId: ITurn['turn_id'];
@@ -42,7 +43,7 @@ export default function VideoPlayerManager({videoId, source, onEnd}: Props) {
       onEnd={onEnd}
       ref={ref}
       handleProgress={onProgress}
-      source={source}
+      source={useCDN(TURN_KEY + source)}
       paused={isVideoOnScreen ? !isPlaying : true}
     />
   );

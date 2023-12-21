@@ -76,6 +76,9 @@ export function secondsToMillis(seconds: number) {
 }
 const thumbnails = '/thumbnails';
 
+
+
+
 export const getThumbnailDirectoryPathOrCreate = async (): Promise<
   string | undefined
 > => {
@@ -83,7 +86,7 @@ export const getThumbnailDirectoryPathOrCreate = async (): Promise<
     const cacheDirPath = await RNFS.readDir(CachesDirectoryPath);
     const cacheDir = cacheDirPath[0].path;
     const doesThumbnailDirExist = await RNFS.exists(cacheDir + thumbnails);
-    console.log('does thumbnailDirEixst:>>', doesThumbnailDirExist);
+
     if (!doesThumbnailDirExist) {
       return new Promise<string>((resolve, reject) => {
         RNFS.mkdir(cacheDir + thumbnails).then(() =>

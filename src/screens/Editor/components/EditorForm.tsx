@@ -1,8 +1,8 @@
 import {Controller, useForm} from 'react-hook-form';
 import {z} from 'zod';
-import {Flex} from '../../components';
+import {Flex} from '../../../components';
 import {TextInput} from 'react-native-paper';
-import {ITurn} from '../../models/turn';
+import {ITurn} from '../../../models/turn';
 
 export type EditorFieldValues = {
   title: ITurn['title'];

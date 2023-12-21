@@ -61,6 +61,7 @@ async function getVideoFile(): Promise<Video | undefined> {
       mediaType: 'video',
       loadingLabelText: 'Ophalen...',
       multiple: false,
+      compressVideoPreset: 'HighestQuality'
     });
     return videoFile;
   } catch (err: any) {
@@ -101,6 +102,7 @@ export default function FileSelectScreen() {
         filePath: videoFile.path,
         duration: millisToSeconds(videoFile.duration ?? 0),
         fileType: 'Video',
+
         mime: videoFile.mime,
       };
       navigateToEditorScreen(videoParams);

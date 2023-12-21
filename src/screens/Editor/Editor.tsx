@@ -1,48 +1,68 @@
-import {RouteProp, useRoute} from '@react-navigation/native';
-import {StyleSheet, View} from 'react-native';
+import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {useEffect} from 'react';
+import {Image, Pressable, StyleSheet} from 'react-native';
+import RNFS from 'react-native-fs';
+import {Text} from 'react-native-paper';
 import {SkeletonScreen} from '../../components';
 import {withLinearGradient} from '../../components/SkeletonScreen/SkeletonScreen';
+import {getThumbnailDirectoryPathOrCreate} from '../../helpers';
 import {EditorParams} from '../../nav/navparams';
 import theme from '../../theme';
-import Timeline from './components/Timeline';
-import {getThumbnailDirectoryPathOrCreate} from '../../helpers';
-import RNFS from 'react-native-fs';
-import { Button, Text } from 'react-native-paper';
+import EditorScreen from './components/EditorScreen';
 const LinearGradientScreen = withLinearGradient(SkeletonScreen);
 
-const deleteAll = async () => {
+const deleteThumbnailContent = async () => {
   const thumbnailDir = await getThumbnailDirectoryPathOrCreate();
   if (thumbnailDir) {
     const thumbnailDirContent = await RNFS.readDir(thumbnailDir);
     thumbnailDirContent.forEach(({path}) => {
       RNFS.unlink(path);
     });
-    console.log("content delted:!")
-    await RNFS.unlink(thumbnailDir);
   }
 };
 
 export default function Editor(): JSX.Element {
-  const {params} = useRoute<RouteProp<EditorParams>>();
+  const {params} = useRoute<RouteProp<EditorParams>>()!;
+  const navigation = useNavigation<StackNavigationProp<EditorParams>>();
+
   const onPressSubmitWithoutErrors = () => {};
 
-  const content = (
-    <>
-      <View style={Style.timeline}>
-        {params?.duration && params.filePath && (
-          <Timeline duration={params?.duration} filePath={params?.filePath} />
-        )}
-        <Button onPress={deleteAll}>
-            <Text style={{color: 'white'}}>
-              delete dir
-            </Text>
-        </Button>
-      </View>
-    </>
+  const onPressGoBack = async () => {
+    navigation.navigate('FileSelectScreen');
+  };
+
+  useEffect(() => {
+    const navver = navigation.addListener('beforeRemove', async () => {
+      await deleteThumbnailContent();
+      navigation.navigate('FileSelectScreen');
+    });
+
+    return () => {
+      navigation.removeListener('beforeRemove', navver);
+    };
+  }, [navigation]);
+
+  const header = (
+    <Pressable onPress={onPressGoBack} style={Style.headerStyle}>
+      <Image
+        style={Style.leftIcon}
+        source={require('../../assets/icons/profile.png')}
+      />
+      <Text style={Style.headerText}> Terug</Text>
+    </Pressable>
+  );
+
+  const content = params && (
+    <EditorScreen onSubmit={onPressSubmitWithoutErrors} params={params} />
   );
 
   return (
     <LinearGradientScreen
+      scrollEnabled
+      header={header}
+      headerStyle={Style.headerStyle}
+      hasSafeAreaInsets
       gradient={[theme.color.turnerDark, '#000']}
       content={content}
       styleContent={Style.content}
@@ -52,11 +72,25 @@ export default function Editor(): JSX.Element {
 
 const Style = StyleSheet.create({
   content: {
-    justifyContent: 'center',
-    alignContent: 'center',
+    paddingHorizontal: 10,
   },
-  timeline: {
-    flexDirection: 'column',
-    height: '10%',
+  headerStyle: {
+    borderWidth: 2,
+    borderColor: 'green',
+    flexDirection: 'row',
+    paddingBottom: 5,
+    alignItems: 'center',
+    paddingHorizontal: 10,
+  },
+  headerText: {
+    color: 'white',
+    fontSize: 16,
+  },
+  leftIcon: {
+    borderWidth: 2,
+    borderColor: 'yellow',
+    resizeMode: 'cover',
+    width: 35,
+    height: 35,
   },
 });

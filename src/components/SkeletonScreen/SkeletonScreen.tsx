@@ -1,5 +1,12 @@
 import {ComponentType, ReactElement, ReactNode} from 'react';
-import {Dimensions, StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
+import {
+  Dimensions,
+  ScrollView,
+  StyleProp,
+  StyleSheet,
+  View,
+  ViewStyle,
+} from 'react-native';
 import {LinearGradient} from 'react-native-linear-gradient';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import Flex from '../Misc/Flex';
@@ -13,6 +20,7 @@ interface SkeletonScreenProps {
   headerStyle?: ScreenSectionProps['style'];
   footerStyle?: ScreenSectionProps['style'];
   hasSafeAreaInsets?: boolean;
+  scrollEnabled?: boolean;
 }
 
 function SkeletonScreen({
@@ -21,6 +29,7 @@ function SkeletonScreen({
   styleContent,
   footer,
   footerStyle,
+  scrollEnabled = false,
   hasSafeAreaInsets,
   headerStyle,
 }: SkeletonScreenProps) {

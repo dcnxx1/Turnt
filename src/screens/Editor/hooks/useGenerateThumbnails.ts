@@ -3,7 +3,7 @@ import {useEffect, useState} from 'react';
 import {getThumbnailDirectoryPathOrCreate} from '../../../helpers';
 import RNFS from 'react-native-fs';
 
-const NUMBER_OF_THUMBNAILS_TO_EXTRACT = 13;
+export const NUMBER_OF_THUMBNAILS_TO_EXTRACT = 13;
 const FFMPEG_SUCCESS_RETURN_CODE = 0;
 async function getVideoFramesCount(
   filePath: string,
@@ -35,6 +35,12 @@ type GenerateThumbnails = {
   thumbnails: string[];
   isLoading: boolean;
 };
+const returnCommandGenerateFrames = (
+  filePath: string,
+  thumbnailDir: string,
+  extractAtNFrame: number,
+) =>
+  `-i ${filePath} -hide_banner -vf "select=not(mod(n\\,${extractAtNFrame})),setpts=N/FRAME_RATE/TB" -vframes 13 ${thumbnailDir}/thumbnail-%02d.bmp`;
 
 export default function useGenerateThumbnails(
   filePath: string,
@@ -44,23 +50,24 @@ export default function useGenerateThumbnails(
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const generateThumbnails = async () => {
-    console.log('use generate thumbnails called');
     try {
       const thumbnailDir = await getThumbnailDirectoryPathOrCreate();
       const extractAtNFrame = await extractEveryNFrame(filePath);
 
-      if (thumbnailDir?.length) {
-        console.log("insdide thumbnailDirLength :>>")
-        const string = `-i ${filePath} -hide_banner -vf "select=not(mod(n\\,${extractAtNFrame})),setpts=N/FRAME_RATE/TB" -vframes 13 ${thumbnailDir}/thumbnail-%02d.bmp`;
-        const session = await FFmpegKit.execute(string);
-        const returnC = await session.getReturnCode();
-        if (returnC.getValue() === FFMPEG_SUCCESS_RETURN_CODE) {
-          console.log('return code is 0!');
+      if (thumbnailDir?.length && extractAtNFrame) {
+        const command = returnCommandGenerateFrames(
+          filePath,
+          thumbnailDir,
+          extractAtNFrame,
+        );
+        const session = await FFmpegKit.execute(command);
+        const sessionReturnCode = await session.getReturnCode();
+        const returnCode = sessionReturnCode.getValue();
+
+        if (returnCode === FFMPEG_SUCCESS_RETURN_CODE) {
           const thumbnailDirContent = await RNFS.readDir(thumbnailDir);
           setThumbnails([...thumbnailDirContent.map(({path}) => path)]);
         }
-      } else {
-        console.log('thumbnail dir does not exist!');
       }
     } catch (err) {
       throw new Error(err as any);
