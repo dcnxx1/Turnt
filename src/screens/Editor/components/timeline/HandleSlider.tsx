@@ -1,10 +1,11 @@
 import {StyleSheet, View} from 'react-native';
-import theme from '../theme';
+import theme from '../../../../theme';
+import {TimelineDimensions} from './Timeline';
 
 type Props = {
   width: number;
 };
-export default function Handle({width}: Props) {
+export default function SliderHandle({width}: Props) {
   return <View style={[style.container, {width}]}></View>;
 }
 
@@ -15,11 +16,8 @@ const style = StyleSheet.create({
     borderLeftWidth: 7,
     borderRightWidth: 7,
     borderRadius: 4,
-    borderColor: theme.color.turner,
+    borderColor: theme.color.turnerPurpleBright,
     width: 75,
-    height: 55,
-    marginTop: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
+    height: 70,
   },
 });

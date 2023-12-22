@@ -20,11 +20,11 @@ export default function VideoPlayerManager({videoId, source, onEnd}: Props) {
   const ref = useRef<Video>(null);
   const isVideoOnScreen = activeTurn.turn_id === videoId;
   const {seekTo, setSeekTo} = useSeek();
-
+  
   const onProgress = ({currentTime}: OnProgressData) => {
     setProgress(currentTime);
   };
-
+  
   useEffect(() => {
     if (ref.current) {
       ref.current.seek(seekTo);

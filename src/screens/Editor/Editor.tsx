@@ -75,8 +75,6 @@ const Style = StyleSheet.create({
     paddingHorizontal: 10,
   },
   headerStyle: {
-    borderWidth: 2,
-    borderColor: 'green',
     flexDirection: 'row',
     paddingBottom: 5,
     alignItems: 'center',
@@ -87,10 +85,8 @@ const Style = StyleSheet.create({
     fontSize: 16,
   },
   leftIcon: {
-    borderWidth: 2,
-    borderColor: 'yellow',
     resizeMode: 'cover',
-    width: 35,
-    height: 35,
+    width: 45,
+    height: 45,
   },
 });

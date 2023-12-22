@@ -15,6 +15,7 @@ export type HomeParams = {
   HomeScreen: undefined;
   Home: undefined;
   ProfileScreen: undefined;
+  EditorStack: undefined;
 };
 
 export type EditorParams = {
@@ -22,8 +23,8 @@ export type EditorParams = {
   FileSelectScreen: undefined;
   EditorScreen: {
     filePath: string;
-    duration: number | null ;
+    duration: number | null;
     fileType: FileType;
-    mime: string,
+    mime: string;
   };
 };

@@ -11,7 +11,7 @@ type SliderProps = {
 
 export default function MediaControllerSlider({
   videoProgress,
-  setVideoProgress: setVideoTime,
+  setVideoProgress,
   maximumValue,
   style = sliderStyle,
 }: SliderProps) {
@@ -21,8 +21,7 @@ export default function MediaControllerSlider({
   const onSlideComplete = (val: number[]) => {
     setSeeking(false);
     const seekTo = val[0];
-
-    setVideoTime(seekTo);
+    setVideoProgress(seekTo);
   };
   const onSlidingStart = () => {
     setSeeking(true);

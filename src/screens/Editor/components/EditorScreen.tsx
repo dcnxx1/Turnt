@@ -1,14 +1,13 @@
-import {Dimensions, ScrollView, StyleSheet, View} from 'react-native';
-import {Text} from 'react-native-paper';
-import {EditorParams} from '../../../nav/navparams';
-import EditorVideoManager from './EditorVideoManager';
-import Timeline from './Timeline';
-import {z} from 'zod';
-import {ITurn, Genre} from '../../../models/turn';
-import {Prettify, secondsToDisplayTime} from '../../../helpers';
 import {Controller, useForm} from 'react-hook-form';
-import TimelineSlider from './TimelineSlider';
-import {TURN_IMPRESSION_TIME} from '../../../constants';
+import {Dimensions, StyleSheet} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
+import {TextInput} from 'react-native-paper';
+import {z} from 'zod';
+import {Flex} from '../../../components';
+import {ITurn} from '../../../models/turn';
+import {EditorParams} from '../../../nav/navparams';
+import Timeline from './timeline/Timeline';
+import EditorVideoManager from './videoManager/EditorVideoTimelineManager';
 
 type Props = {
   onSubmit: () => void;
@@ -31,11 +30,6 @@ export type EditorFieldValues = {
   genre: ITurn['genre'];
 };
 
-type EditorFormValues = {
-  image: string;
-  title: string;
-};
-
 type EditorFormValuesType = z.infer<typeof editorFieldSchema>;
 
 export default function EditorScreen({onSubmit, params}: Props) {
@@ -55,60 +49,46 @@ export default function EditorScreen({onSubmit, params}: Props) {
     },
   });
   const watchImpressionStartAt = watch('impressionStartAt');
+
   return (
-    <ScrollView
-      contentInsetAdjustmentBehavior={'always'}
-      contentContainerStyle={Style.container}>
-      <View style={Style.videoContainer}>
-        <EditorVideoManager
-          impressionStartAt={watchImpressionStartAt}
-          source={filePath}
-        />
-      </View>
-      <View style={Style.impressionStartStopContainer}>
-        <Text style={Style.impressionStartStopText}>
-          {secondsToDisplayTime(~~watchImpressionStartAt)} {' '} - {' '}
-          {secondsToDisplayTime(
-            ~~watchImpressionStartAt + TURN_IMPRESSION_TIME,
-          )}
-        </Text>
-      </View>
-      <View style={Style.timelineContainer}>
-        <Timeline duration={duration} filePath={filePath} />
-        <Controller
-          control={control}
-          name="impressionStartAt"
-          render={({field: {onChange, value}}) => {
-            return (
-              <TimelineSlider
-                setVideoTime={onChange}
-                videoProgress={value}
-                maximumValue={duration}
-              />
-            );
-          }}
-        />
-      </View>
+    <ScrollView contentInsetAdjustmentBehavior={'scrollableAxes'} contentContainerStyle={Style.container}>
+      <EditorVideoManager
+        impressionStartAt={watchImpressionStartAt}
+        source={filePath}
+      />
+
+      <Controller
+        control={control}
+        name="impressionStartAt"
+        render={({field: {onChange, value}}) => {
+          return (
+            <Timeline
+              onChange={onChange}
+              sliderValue={value}
+              duration={duration}
+              filePath={filePath}
+            />
+          );
+        }}
+      />
+
+      <Controller
+        control={control}
+        name={'title'}
+        render={({field: {onChange, value}}) => (
+          <TextInput label={'Title'} value={value} onChange={onChange} />
+        )}
+      />
     </ScrollView>
   );
 }
 
 const Style = StyleSheet.create({
   container: {
-    width: '100%',
-    height: '100%',
-    paddingBottom: '10%',
+    flexGrow: 1,
   },
   videoContainer: {
     width: '100%',
     height: '80%',
-  },
-  timelineContainer: {},
-  impressionStartStopContainer: {
-    paddingVertical: 20,
-  },
-  impressionStartStopText: {
-    color: 'white',
-    fontSize: 18,
   },
 });

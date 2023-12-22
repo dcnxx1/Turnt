@@ -1,5 +1,5 @@
 import {FFmpegKit, FFprobeKit} from 'ffmpeg-kit-react-native';
-import {useEffect, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {getThumbnailDirectoryPathOrCreate} from '../../../helpers';
 import RNFS from 'react-native-fs';
 
@@ -35,12 +35,24 @@ type GenerateThumbnails = {
   thumbnails: string[];
   isLoading: boolean;
 };
-const returnCommandGenerateFrames = (
+const generateFramesCommand = (
   filePath: string,
   thumbnailDir: string,
   extractAtNFrame: number,
 ) =>
   `-i ${filePath} -hide_banner -vf "select=not(mod(n\\,${extractAtNFrame})),setpts=N/FRAME_RATE/TB" -vframes 13 ${thumbnailDir}/thumbnail-%02d.bmp`;
+
+const sortThumbnailsByCreationTime = (
+  thumbnailDirContent: RNFS.ReadDirItem[],
+) => {
+  return [...thumbnailDirContent].sort((a, b) => {
+    // Use a default value for undefined 'ctime'
+    const ctimeA = a.ctime !== undefined ? a.ctime.getTime() : 0;
+    const ctimeB = b.ctime !== undefined ? b.ctime.getTime() : 0;
+
+    return ctimeA - ctimeB;
+  });
+};
 
 export default function useGenerateThumbnails(
   filePath: string,
@@ -49,32 +61,38 @@ export default function useGenerateThumbnails(
   const [thumbnails, setThumbnails] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const generateThumbnails = async () => {
+  const generateThumbnails = useCallback(async () => {
     try {
+      if (thumbnails.length) {
+        return;
+      }
       const thumbnailDir = await getThumbnailDirectoryPathOrCreate();
       const extractAtNFrame = await extractEveryNFrame(filePath);
 
       if (thumbnailDir?.length && extractAtNFrame) {
-        const command = returnCommandGenerateFrames(
+        const command = generateFramesCommand(
           filePath,
           thumbnailDir,
           extractAtNFrame,
         );
         const session = await FFmpegKit.execute(command);
         const sessionReturnCode = await session.getReturnCode();
-        const returnCode = sessionReturnCode.getValue();
+        const returnCode: number = sessionReturnCode.getValue();
 
         if (returnCode === FFMPEG_SUCCESS_RETURN_CODE) {
           const thumbnailDirContent = await RNFS.readDir(thumbnailDir);
-          setThumbnails([...thumbnailDirContent.map(({path}) => path)]);
+          const thumbnailsByCreationTime =
+            sortThumbnailsByCreationTime(thumbnailDirContent);
+          thumbnailsByCreationTime.shift();
+          setThumbnails([...thumbnailsByCreationTime.map(({path}) => path)]);
         }
       }
     } catch (err) {
-      throw new Error(err as any);
+      throw new Error('ERR CREATE THUMBNAILS :> ' + err);
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [filePath, isLoading, thumbnails]);
 
   useEffect(() => {
     async function generate() {
