@@ -9,7 +9,7 @@ import {withLinearGradient} from '../../components/SkeletonScreen/SkeletonScreen
 import {getThumbnailDirectoryPathOrCreate} from '../../helpers';
 import {EditorParams} from '../../nav/navparams';
 import theme from '../../theme';
-import EditorScreen from './components/EditorScreen';
+import EditorScreen from './EditorScreen';
 const LinearGradientScreen = withLinearGradient(SkeletonScreen);
 
 const deleteThumbnailContent = async () => {
@@ -47,9 +47,8 @@ export default function Editor(): JSX.Element {
     <Pressable onPress={onPressGoBack} style={Style.headerStyle}>
       <Image
         style={Style.leftIcon}
-        source={require('../../assets/icons/profile.png')}
+        source={require('../../assets/icons/arrow.png')}
       />
-      <Text style={Style.headerText}> Terug</Text>
     </Pressable>
   );
 
@@ -73,6 +72,7 @@ export default function Editor(): JSX.Element {
 const Style = StyleSheet.create({
   content: {
     paddingHorizontal: 10,
+    flex: 1,
   },
   headerStyle: {
     flexDirection: 'row',
@@ -86,7 +86,8 @@ const Style = StyleSheet.create({
   },
   leftIcon: {
     resizeMode: 'cover',
-    width: 45,
-    height: 45,
+    width: 35,
+    height: 35,
+    transform: [{rotate: '180deg'}],
   },
 });

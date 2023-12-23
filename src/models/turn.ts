@@ -14,7 +14,7 @@ export interface ITurn {
   created_at?: string;
 }
 
-export type FileType = 'Audio' | 'Video';
+export type FileType = 'Audio' | 'Video'| 'Photo';
 
 export type Genre =
   | 'HipHop'

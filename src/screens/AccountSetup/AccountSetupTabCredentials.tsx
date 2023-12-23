@@ -5,7 +5,7 @@ import {
   FieldErrors,
   UseFormSetError,
 } from 'react-hook-form';
-import EditableAvatar from '../../components/Images/EditableAvatar';
+import EditableImage from '../../components/Images/EditableImage';
 import {Text, TextInput} from 'react-native-paper';
 import {StyleSheet} from 'react-native';
 import {TCreateAccountFields} from './AccountSetupForm';
@@ -38,7 +38,7 @@ export default function AccountSetupTabCredentials({
           render={({field: {onChange, value}}) => {
             return (
               <>
-                <EditableAvatar source={value} setAvatarPath={onChange} />
+                <EditableImage source={value} setPath={onChange} />
                 <Text style={Style.textStyle}>
                   {errors.avatar ? errors.avatar.message : ''}
                 </Text>

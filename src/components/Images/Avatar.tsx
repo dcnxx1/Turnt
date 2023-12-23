@@ -16,7 +16,6 @@ export default function Avatar({size = 100, source}: Props) {
   };
   return (
     <RNAvatar.Image
-      onProgress={e => console.log(e.nativeEvent.total)}
       size={size}
       source={!source ? default_cover_blue : {uri: source}}
       style={[Style.image, resizeStyle]}

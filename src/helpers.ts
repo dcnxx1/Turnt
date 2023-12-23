@@ -1,8 +1,12 @@
 import {Alert} from 'react-native';
-import ImageCropPicker from 'react-native-image-crop-picker';
+import ImageCropPicker, {
+  Video as CropVideo,
+  Image as CropImage,
+} from 'react-native-image-crop-picker';
 import RNPermission, {Permission} from 'react-native-permissions';
 import RNFS, {CachesDirectoryPath} from 'react-native-fs';
 import {FFmpegKit, FFprobeKit} from 'ffmpeg-kit-react-native';
+import {FileType} from './models/turn';
 
 export type Prettify<T> = {
   [P in keyof T]: T[P];
@@ -76,8 +80,35 @@ export function secondsToMillis(seconds: number) {
 }
 const thumbnails = '/thumbnails';
 
+type MediaFileType = 'video' | 'photo' | 'any';
 
+type MediaType<T> = T extends {fileType: 'Video'} ? CropVideo : CropVideo;
 
+export async function getMediaFile(
+  fileType: MediaFileType,
+  multiple = false,
+  useCrop = false,
+): Promise<CropImage | CropVideo> {
+  try {
+    if (fileType == 'photo') {
+      const image = await ImageCropPicker.openPicker({
+        mediaType: 'photo',
+        multiple: multiple,
+        cropping: useCrop,
+      });
+      return image;
+    }
+    const video = await ImageCropPicker.openPicker({
+      mediaType: 'video',
+      multiple: multiple,
+      compressVideoPreset: 'HighestQuality',
+    });
+
+    return video;
+  } catch (err) {
+    throw new Error('ERR GET_FILE_FROM_SYSTEM ' + err);
+  }
+}
 
 export const getThumbnailDirectoryPathOrCreate = async (): Promise<
   string | undefined
@@ -101,13 +132,3 @@ export const getThumbnailDirectoryPathOrCreate = async (): Promise<
     console.log('ERR CREATE THUMBNAIL DIR', err);
   }
 };
-
-const NUMBER_OF_THUMBNAILS_TO_EXTRACT = 13;
-
-/**
- *
- * @param filePath string
- * @param duration number - duration of video
- * @param numberOfThumbnails number
- * @returns `-i ${filePath} -hide_banner -r 1/24 ${outputDir}/thumbnail-%02d.jpg`
- */

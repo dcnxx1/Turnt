@@ -5,7 +5,7 @@ import {StyleSheet} from 'react-native';
 import {Button, Text, TextInput} from 'react-native-paper';
 import {z} from 'zod';
 import {Flex} from '../../components';
-import EditableAvatar from '../../components/Images/EditableAvatar';
+import EditableImage from '../../components/Images/EditableImage';
 import DatePicker from '../../components/Misc/DatePicker';
 
 export interface TCreateAccountFields {
@@ -95,7 +95,7 @@ export default function AccountSetupForm({
           render={({field: {onChange, value}}) => {
             return (
               <>
-                <EditableAvatar source={value} setAvatarPath={onChange} />
+                <EditableImage source={value} setPath={onChange} />
                 <Text style={Style.textStyle}>
                   {errors.avatar ? errors.avatar.message : ''}
                 </Text>
