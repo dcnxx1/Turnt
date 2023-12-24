@@ -1,6 +1,7 @@
-import { Slider } from '@miblanchard/react-native-slider';
-import { useState } from 'react';
-import { sliderStyle } from '../configs';
+import {Slider} from '@miblanchard/react-native-slider';
+import {useEffect, useState} from 'react';
+import {sliderStyle} from '../configs';
+import {useActiveTurn} from '../../../store';
 
 type SliderProps = {
   videoProgress: number;
@@ -34,6 +35,9 @@ export default function MediaControllerSlider({
     <Slider
       onSlidingStart={onSlidingStart}
       onValueChange={onValueChange}
+      minimumValue={0}
+      
+      startFromZero
       maximumValue={maximumValue}
       value={isSeeking ? seekProgress : videoProgress}
       onSlidingComplete={onSlideComplete}

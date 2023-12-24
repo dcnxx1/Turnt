@@ -29,7 +29,7 @@ const screenOptions: StackNavigationOptions = {
   gestureEnabled: false,
 };
 
-function HomeStackNavigator() { 
+function HomeStackNavigator() {
   return (
     <HomeStack.Navigator
       detachInactiveScreens={false}
@@ -93,7 +93,7 @@ export default function Navigation() {
       <RootStack.Navigator
         screenOptions={screenOptions}
         initialRouteName={RootNavNames.SetupStack}>
-        {true ? (
+        {me.profile ? (
           <RootStack.Screen
             name={RootNavNames.HomeStack}
             component={HomeStackNavigator}

@@ -18,8 +18,8 @@ export type SkeletonFlashListProps<T> = {
   }) => void;
   renderItem: ListRenderItem<T>;
   keyExtractor: (item: T, index: number) => string;
-  estimatedItemSize?: number;
-  estimatedListSize?: {
+  estimatedItemSize: number;
+  estimatedListSize: {
     width: number;
     height: number;
   };

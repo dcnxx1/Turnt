@@ -14,7 +14,7 @@ export interface ITurn {
   created_at?: string;
 }
 
-export type FileType = 'Audio' | 'Video'| 'Photo';
+export type FileType = 'Audio' | 'Video' | 'Photo';
 
 export type Genre =
   | 'HipHop'
@@ -23,5 +23,4 @@ export type Genre =
   | 'Hardstyle'
   | 'HardCore'
   | 'Pop'
-  | 'Drill'
-  | undefined;
+  | 'Drill';

@@ -1,32 +1,48 @@
-import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {useEffect} from 'react';
-import {Image, Pressable, StyleSheet} from 'react-native';
-import RNFS from 'react-native-fs';
-import {Text} from 'react-native-paper';
-import {SkeletonScreen} from '../../components';
-import {withLinearGradient} from '../../components/SkeletonScreen/SkeletonScreen';
-import {getThumbnailDirectoryPathOrCreate} from '../../helpers';
-import {EditorParams} from '../../nav/navparams';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { QueryClient, useQueryClient } from '@tanstack/react-query';
+import { useEffect } from 'react';
+import { Image, Pressable, StyleSheet } from 'react-native';
+import { SkeletonScreen } from '../../components';
+import { withLinearGradient } from '../../components/SkeletonScreen/SkeletonScreen';
+import { deleteThumbnailContent } from '../../helpers';
+import { FileType, Genre } from '../../models/turn';
+import { EditorParams } from '../../nav/navparams';
+import useLocalUserProfile from '../../shared/hooks/useLocalUserProfile';
 import theme from '../../theme';
-import EditorScreen from './EditorScreen';
+import EditorScreen, {
+  EditorFormValuesType
+} from './EditorScreen';
+import useCreateTurn from './hooks/useCreateTurn';
 const LinearGradientScreen = withLinearGradient(SkeletonScreen);
-
-const deleteThumbnailContent = async () => {
-  const thumbnailDir = await getThumbnailDirectoryPathOrCreate();
-  if (thumbnailDir) {
-    const thumbnailDirContent = await RNFS.readDir(thumbnailDir);
-    thumbnailDirContent.forEach(({path}) => {
-      RNFS.unlink(path);
-    });
-  }
-};
 
 export default function Editor(): JSX.Element {
   const {params} = useRoute<RouteProp<EditorParams>>()!;
+  const me = useLocalUserProfile();
+  const createTurnMutation = useCreateTurn();
+  const queryClient = useQueryClient();
   const navigation = useNavigation<StackNavigationProp<EditorParams>>();
 
-  const onPressSubmitWithoutErrors = () => {};
+  const onPressSubmitWithoutErrors = (fieldValues: EditorFormValuesType) => {
+    createTurnMutation(
+      {
+        artist_id: me.profile.user_id,
+        cover: fieldValues.cover,
+        duration: params?.duration ?? 0,
+        genre: fieldValues.genre as Genre,
+        impressionStartAt: fieldValues.impressionStartAt,
+        source: params?.filePath ?? '',
+        title: fieldValues.title,
+        type: fieldValues.fileType as FileType,
+      },
+      {
+        onSettled: () => {
+          queryClient.invalidateQueries({queryKey: ['feed']});
+          navigation.navigate('HomeScreen');
+        },
+      },
+    );
+  };
 
   const onPressGoBack = async () => {
     navigation.navigate('FileSelectScreen');

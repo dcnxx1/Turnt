@@ -78,7 +78,6 @@ export function millisToSeconds(milliseconds: number) {
 export function secondsToMillis(seconds: number) {
   return seconds * 1000;
 }
-const thumbnails = '/thumbnails';
 
 type MediaFileType = 'video' | 'photo' | 'any';
 
@@ -110,25 +109,51 @@ export async function getMediaFile(
   }
 }
 
-export const getThumbnailDirectoryPathOrCreate = async (): Promise<
-  string | undefined
-> => {
+export const getDirectoryPath = async (directory: string) => {
   try {
     const cacheDirPath = await RNFS.readDir(CachesDirectoryPath);
     const cacheDir = cacheDirPath[0].path;
-    const doesThumbnailDirExist = await RNFS.exists(cacheDir + thumbnails);
+    return cacheDir + '/' + directory;
+  } catch (err) {
+    console.log('ERR GET DIR PATH', err);
+  }
+};
 
-    if (!doesThumbnailDirExist) {
+export const getDirectoryPathOrCreate = async (
+  directory: string,
+): Promise<string | undefined> => {
+  if (!directory) {
+    return;
+  }
+  try {
+    const cacheDirPath = await RNFS.readDir(CachesDirectoryPath);
+    const cacheDir = cacheDirPath[0].path;
+    const directoryExists = await RNFS.exists(cacheDir + '/' + directory);
+
+    if (!directoryExists) {
       return new Promise<string>((resolve, reject) => {
-        RNFS.mkdir(cacheDir + thumbnails).then(() =>
-          RNFS.exists(cacheDir + thumbnails).then(res => {
-            res ? resolve(cacheDir + thumbnails) : reject(undefined);
+        RNFS.mkdir(cacheDir + '/' + directory).then(() =>
+          RNFS.exists(cacheDir + '/' + directory).then(dirExists => {
+            dirExists ? resolve(cacheDir + '/' + directory) : reject();
           }),
         );
       });
     }
-    return cacheDir + thumbnails;
+    return cacheDir + '/' + directory;
   } catch (err) {
     console.log('ERR CREATE THUMBNAIL DIR', err);
   }
+};
+
+export const deleteThumbnailContent = async () => {
+  try {
+    const thumbnailDir = await getDirectoryPath('thumbnails');
+    if (thumbnailDir) {
+      const thumbnailDirContent = await RNFS.readDir(thumbnailDir);
+      thumbnailDirContent.forEach(({path}) => {
+        RNFS.unlink(path);
+      });
+    }
+    return
+  } catch (err) {}
 };

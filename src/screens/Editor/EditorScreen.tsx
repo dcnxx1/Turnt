@@ -1,55 +1,85 @@
+import {zodResolver} from '@hookform/resolvers/zod';
+import {useEffect, useRef} from 'react';
 import {Controller, useForm} from 'react-hook-form';
-import {KeyboardAvoidingView, Platform, StyleSheet, View} from 'react-native';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  TextInput as RNTextInput,
+  StyleSheet,
+  View,
+} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {TextInput} from 'react-native-paper';
+import {Button, Icon, Text, TextInput} from 'react-native-paper';
 import {z} from 'zod';
-import {ITurn} from '../../models/turn';
+import {Genre, ITurn, FileType} from '../../models/turn';
 import {EditorParams} from '../../nav/navparams';
-import Timeline from './components/timeline/Timeline';
-import EditorVideoManager from './components/videoManager/EditorVideoTimelineManager';
 import theme from '../../theme';
 import CoverSelect from './components/CoverSelect';
+import GenreSelect from './components/GenreSelect';
+import Timeline from './components/timeline/Timeline';
+import EditorVideoManager from './components/videoManager/EditorVideoTimelineManager';
 
 type Props = {
-  onSubmit: () => void;
+  onSubmit: (editorFieldValues: EditorFormValuesType) => void;
   params: EditorParams['EditorScreen'];
 };
 
-const editorFieldSchema = z.object({
-  impressionStartAt: z.number(),
-  title: z
-    .string()
-    .min(1, {message: 'Titel moet meer dan 1 karakter bevatten'}),
-  cover: z.string(),
-  genre: z.string(),
-});
+const editorFieldSchema = z
+  .object({
+    impressionStartAt: z.number(),
+    title: z
+      .string()
+      .min(1, {message: 'Titel moet meer dan 1 karakter bevatten'}),
+    cover: z.string().min(1,'Kies een cover Foto'),
+    genre: z.string(),
+    fileType: z.string(),
+  })
+  .refine(
+    formData => {
+      const fileType: FileType = formData.fileType as FileType;
+
+      return !!formData.cover?.length && fileType === 'Video' && 'Kies een cover';
+    },
+    {path: ['cover'], message: 'Kies een cover foto'},
+  );
 
 export type EditorFieldValues = {
   impressionStartAt: ITurn['impressionStartAt'];
   cover: ITurn['cover'];
   title: ITurn['title'];
   genre: ITurn['genre'];
+  fileType: FileType;
 };
 
-type EditorFormValuesType = z.infer<typeof editorFieldSchema>;
+export type EditorFormValuesType = z.infer<typeof editorFieldSchema>;
 
 export default function EditorScreen({onSubmit, params}: Props) {
   const duration = params.duration || 0;
   const filePath = params.filePath;
-
+  const textInputRef = useRef<RNTextInput>(null);
   const {
     watch,
     control,
+    handleSubmit,
     formState: {errors},
   } = useForm<EditorFormValuesType>({
+    resolver: zodResolver(editorFieldSchema),
     defaultValues: {
       impressionStartAt: 0,
       cover: '',
       title: '',
       genre: 'Drill',
+      fileType: params.fileType,
     },
+    reValidateMode: 'onSubmit',
   });
   const watchImpressionStartAt = watch('impressionStartAt');
+
+  useEffect(() => {
+    if (errors.title) {
+      textInputRef.current?.focus();
+    }
+  }, [errors, textInputRef]);
 
   return (
     <KeyboardAvoidingView
@@ -59,7 +89,7 @@ export default function EditorScreen({onSubmit, params}: Props) {
       <ScrollView
         contentInsetAdjustmentBehavior={'scrollableAxes'}
         contentContainerStyle={Style.container}>
-        <View style={Style.videoWrapper}>
+        <View>
           <EditorVideoManager
             impressionStartAt={watchImpressionStartAt}
             source={filePath}
@@ -85,21 +115,53 @@ export default function EditorScreen({onSubmit, params}: Props) {
           control={control}
           name={'title'}
           render={({field: {onChange, value}}) => (
-            <TextInput
-              numberOfLines={1}
-              style={Style.textInput}
-              label={'Titel'}
-              value={value}
-              onChangeText={onChange}
-            />
+            <View>
+              <TextInput
+                ref={textInputRef}
+                numberOfLines={1}
+                right={
+                  <Icon
+                    size={25}
+                    source={require('../../assets/icons/arrow.png')}
+                  />
+                }
+                style={Style.textInput}
+                label={'Titel'}
+                value={value}
+                onChangeText={onChange}
+              />
+              <Text style={{color: 'red'}}>
+                {errors.title ? errors.title.message : ''}
+              </Text>
+            </View>
           )}
         />
 
         <Controller
           control={control}
           name={'cover'}
-          render={({field: {onChange, value}}) => <CoverSelect onChange={onChange} value={value} />}
+          render={({field: {onChange, value}}) => (
+            <View>
+              <CoverSelect onChange={onChange} value={value} />
+              <Text style={{color: 'red'}}>
+                {errors.cover && 'Kies een cover'}
+              </Text>
+            </View>
+          )}
         />
+
+        <Controller
+          control={control}
+          name="genre"
+          render={({field: {onChange, value}}) => (
+            <GenreSelect onChange={onChange} value={value as Genre} />
+          )}
+        />
+        <View style={Style.buttonContainer}>
+          <Button onPress={() => handleSubmit(onSubmit)()}>
+            <Text style={Style.text}>Uploaden</Text>
+          </Button>
+        </View>
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -120,5 +182,13 @@ const Style = StyleSheet.create({
     borderColor: theme.color.turner,
     borderWidth: 2,
   },
-  videoWrapper: {},
+  buttonContainer: {
+    borderWidth: 2,
+    borderColor: theme.color.white,
+    borderRadius: 15,
+  },
+  text: {
+    color: theme.color.white,
+    fontSize: 18,
+  },
 });

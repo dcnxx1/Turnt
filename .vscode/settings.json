@@ -1,9 +1,11 @@
 {
     "background.fullscreen": {
-        "images": [],
-        "opacity": 0.91,
-        "size": "cover",
-        "position": "center",
-        "interval": 0
+      "images": ["file:///Users/dcnx/Project/app/.vscode/afcd9135282d5d8d6ddd24300feea69f.jpg"],
+  
+      "opacity": 0.90,
+      "size": "cover",
+      "position": "center",
+      "interval": 0
     }
-}
+  }
+  

@@ -1,9 +1,9 @@
 import {StyleSheet} from 'react-native';
 import {SkeletonScreen} from '../../components';
-import CollectionTurn from '../../components/List/CollectionTurn';
+import VideoListManager from '../../components/List/VideoListManager';
 import TurnContextProvider from '../../shared/context/TurnContext';
 import {useQuery} from '@tanstack/react-query';
-import {getCollection} from '../../api/collection';
+import {getFeed} from '../../api/collection';
 import {Text} from 'react-native-paper';
 
 export type TestData = {
@@ -13,13 +13,13 @@ export type TestData = {
 
 function HomeScreen(): JSX.Element {
   const {data: turns} = useQuery({
-    queryKey: ['content'],
-    queryFn: () => getCollection(),
+    queryKey: ['feed'],
+    queryFn: () => getFeed(),
   });
 
   const content = turns ? (
     <TurnContextProvider>
-      <CollectionTurn data={turns} />
+      <VideoListManager data={turns} />
     </TurnContextProvider>
   ) : (
     <Text>Loading...</Text>

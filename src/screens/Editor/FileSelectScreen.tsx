@@ -77,7 +77,7 @@ export default function FileSelectScreen() {
     profile: {username},
   } = useLocalUserProfile();
   const navigation = useNavigation<StackNavigationProp<EditorParams>>();
-
+  
   const onPressSelectAudio = async () => {
     const mp3File = await getMp3File();
     if (mp3File) {

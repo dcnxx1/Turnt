@@ -95,7 +95,7 @@ export default function AccountSetupForm({
           render={({field: {onChange, value}}) => {
             return (
               <>
-                <EditableImage source={value} setPath={onChange} />
+                <EditableImage isAvatar source={value} setSource={onChange} />
                 <Text style={Style.textStyle}>
                   {errors.avatar ? errors.avatar.message : ''}
                 </Text>

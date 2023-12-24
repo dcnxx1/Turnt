@@ -27,4 +27,5 @@ export type EditorParams = {
     fileType: FileType;
     mime: string;
   };
+  HomeScreen: undefined;
 };

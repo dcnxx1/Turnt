@@ -1,7 +1,8 @@
 import {FFmpegKit, FFprobeKit} from 'ffmpeg-kit-react-native';
 import {useCallback, useEffect, useState} from 'react';
-import {getThumbnailDirectoryPathOrCreate} from '../../../helpers';
+
 import RNFS from 'react-native-fs';
+import { getDirectoryPathOrCreate } from '../../../helpers';
 
 export const NUMBER_OF_THUMBNAILS_TO_EXTRACT = 13;
 const FFMPEG_SUCCESS_RETURN_CODE = 0;
@@ -40,7 +41,7 @@ const generateFramesCommand = (
   thumbnailDir: string,
   extractAtNFrame: number,
 ) =>
-  `-i ${filePath} -hide_banner -vf "select=not(mod(n\\,${extractAtNFrame})),setpts=N/FRAME_RATE/TB" -vframes 13 ${thumbnailDir}/thumbnail-%02d.bmp`;
+  `-i ${filePath} -hide_banner -vf "select=not(mod(n\\,${extractAtNFrame})),setpts=N/FRAME_RATE/TB" -vframes 13 ${thumbnailDir}/thumbnail-%02d.jpg`;
 
 const sortThumbnailsByCreationTime = (
   thumbnailDirContent: RNFS.ReadDirItem[],
@@ -66,7 +67,7 @@ export default function useGenerateThumbnails(
       if (thumbnails.length) {
         return;
       }
-      const thumbnailDir = await getThumbnailDirectoryPathOrCreate();
+      const thumbnailDir = await getDirectoryPathOrCreate('thumbnails');
       const extractAtNFrame = await extractEveryNFrame(filePath);
 
       if (thumbnailDir?.length && extractAtNFrame) {

@@ -2,15 +2,12 @@ import {useEffect, useRef, useState} from 'react';
 import {Dimensions, Pressable, StyleSheet, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import Video, {OnProgressData} from 'react-native-video';
+import {Flex} from '../../../../components';
 import VideoPlayer from '../../../../components/Video/VideoPlayer';
 import {TURN_IMPRESSION_TIME} from '../../../../constants';
 import {secondsToDisplayTime} from '../../../../helpers';
 import theme from '../../../../theme';
 import VideoPlayerButtonController from './VideoPlayerButtonController';
-import useGenerateThumbnails, {
-  NUMBER_OF_THUMBNAILS_TO_EXTRACT,
-} from '../../hooks/useGenerateThumbnails';
-import {Flex} from '../../../../components';
 
 type Props = {
   source: string;
@@ -73,10 +70,12 @@ export default function EditorVideoManager({source, impressionStartAt}: Props) {
               {
                 type: paused ? 'Play' : 'Pause',
                 onPress: togglePlayPause,
+                size: 25,
               },
               {
                 type: 'Replay',
                 onPress: onReset,
+                size: 25,
               },
             ]}
           />
@@ -93,21 +92,20 @@ const Style = StyleSheet.create({
   },
   videoContainer: {
     width: '100%',
-    height: Dimensions.get('screen').height * .8,
+    height: Dimensions.get('screen').height * 0.8,
     borderWidth: 2,
     borderColor: theme.color.turner,
   },
   impressionButtonContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    paddingVertical: 15,
   },
   impressionText: {
     color: theme.color.white,
     fontSize: 16,
   },
   buttonsContainer: {
-    paddingVertical: 15,
- 
     justifyContent: 'space-evenly',
   },
 });

@@ -81,7 +81,10 @@ export default function VideoPlayerButtonController({
   return (
     <View style={[Style.container, style]}>
       {useButtons.map(({type, onPress, size}) => (
-        <Pressable key={type} onPress={onPress}>
+        <Pressable
+          
+          key={type}
+          onPress={onPress}>
           {renderButtonIcon(type, size)}
         </Pressable>
       ))}

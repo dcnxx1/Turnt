@@ -22,7 +22,7 @@ export interface EditableImageProps {
 }
 
 export default function EditableImage({
-  size,
+  size = 100,
   source,
   setSource,
   style,

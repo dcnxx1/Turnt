@@ -7,10 +7,12 @@ import MediaControllerSlider from './MediaControllerSlider';
 import {ITurn} from '../../../models/turn';
 
 type Props = {
-  turnDuration: ITurn['duration'];
+  videoDuration: ITurn['duration'];
 };
 
-export default function TimelineSliderBar({turnDuration}: Props) {
+export default function TimelineSliderBar({
+  videoDuration: turnDuration,
+}: Props) {
   const {progress} = useVideoStore();
   const {setSeekTo} = useSeek();
   const {setProgress} = useVideoStore();

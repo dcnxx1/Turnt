@@ -13,18 +13,22 @@ type Props = {
   source: string;
 };
 
-export default function VideoPlayerManager({videoId, source, onEnd}: Props) {
+export default function VideoPlayerManager({
+  videoId,
+  source,
+  onEnd,
+}: Props) {
   const {activeTurn} = useTurnContext();
   const {isPlaying, setIsPlaying} = useVideoStore();
   const setProgress = useVideoStore(state => state.setProgress);
   const ref = useRef<Video>(null);
   const isVideoOnScreen = activeTurn.turn_id === videoId;
   const {seekTo, setSeekTo} = useSeek();
-  
+
   const onProgress = ({currentTime}: OnProgressData) => {
     setProgress(currentTime);
   };
-  
+
   useEffect(() => {
     if (ref.current) {
       ref.current.seek(seekTo);
@@ -32,11 +36,12 @@ export default function VideoPlayerManager({videoId, source, onEnd}: Props) {
   }, [seekTo]);
 
   useEffect(() => {
-    if (!isPlaying) {
+    if (isVideoOnScreen && !isPlaying) {
       setIsPlaying(true);
+        
     }
     setSeekTo(0);
-  }, [activeTurn]);
+  }, [isVideoOnScreen]);
 
   return (
     <VideoPlayer

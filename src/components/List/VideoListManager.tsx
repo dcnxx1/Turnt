@@ -1,21 +1,21 @@
 import {FlashList, ListRenderItem, ViewToken} from '@shopify/flash-list';
 import {useEffect, useRef, useState} from 'react';
 import {Dimensions, ViewabilityConfig} from 'react-native';
-import {TestData} from '../../screens/Home/HomeScreen';
+import {ITurn} from '../../models/turn';
 import {useTurnContext} from '../../shared/context/TurnContext';
+import useDispatchVideoTurn from '../../store/useDispatchVideoTurn';
 import SkeletonScreen from '../SkeletonScreen/SkeletonScreen';
 import VideoPlayerManager from '../Video/VideoPlayerManager';
 import SkeletonFlashList from './SkeletonFlashList';
-import useDispatchVideoTurn from '../../store/useDispatchVideoTurn';
-import {ITurn} from '../../models/turn';
 
 type CollectionTurnProps = {
   data: ITurn[];
 };
 
-export default function CollectionTurn({data}: CollectionTurnProps) {
+export default function VideoListManager({data}: CollectionTurnProps) {
   const {handleSetActiveTurn} = useTurnContext();
   const [activeTurnIndex, setActiveTurnIndex] = useState(0);
+
   const ref = useRef<FlashList<ITurn>>(null);
   const {type, dispatch} = useDispatchVideoTurn();
 
@@ -30,6 +30,7 @@ export default function CollectionTurn({data}: CollectionTurnProps) {
           animated: true,
           index: activeTurnIndex + 1,
         });
+
         break;
       case 'PLAY_PREVIOUS':
         ref.current?.scrollToIndex({
@@ -52,6 +53,7 @@ export default function CollectionTurn({data}: CollectionTurnProps) {
       />
     );
   };
+
 
   useEffect(() => {
     handleSetActiveTurn(data[0]);
@@ -82,6 +84,7 @@ export default function CollectionTurn({data}: CollectionTurnProps) {
 
   const viewConfigRef = useRef<ViewabilityConfig>({
     viewAreaCoveragePercentThreshold: 95,
+
   }).current;
 
   const content = (
