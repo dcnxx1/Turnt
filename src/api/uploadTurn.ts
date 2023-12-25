@@ -1,6 +1,6 @@
-import { Genre, FileType } from '../models/turn';
+import {Genre, FileType, ITurn} from '../models/turn';
 import {uploadTurnToS3} from '../s3';
-import { API } from './api';
+import {API} from './api';
 
 export interface IUploadTurn {
   source: string;
@@ -13,7 +13,9 @@ export interface IUploadTurn {
   type: FileType;
 }
 
-export async function uploadTurn(turnUpload: IUploadTurn) {
+export async function uploadTurn(
+  turnUpload: IUploadTurn,
+): Promise<ITurn | undefined> {
   try {
     const keys = await uploadTurnToS3(
       turnUpload.artist_id,
@@ -35,7 +37,7 @@ export async function uploadTurn(turnUpload: IUploadTurn) {
       const result = await API.post(`content`, {
         ...body,
       });
-      console.log(result.data);
+      return result.data;
     }
   } catch (err) {
     throw new Error('Error while uploading turn ' + err);

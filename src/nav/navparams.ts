@@ -1,4 +1,4 @@
-import {FileType} from '../models/turn';
+import {FileType, ITurn} from '../models/turn';
 import {Role} from '../models/user';
 
 export type AccountSetupParams = {
@@ -27,5 +27,5 @@ export type EditorParams = {
     fileType: FileType;
     mime: string;
   };
-  HomeScreen: undefined;
+  HomeScreen: ITurn;
 };

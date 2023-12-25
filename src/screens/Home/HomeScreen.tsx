@@ -16,7 +16,7 @@ function HomeScreen(): JSX.Element {
     queryKey: ['feed'],
     queryFn: () => getFeed(),
   });
-
+  
   const content = turns ? (
     <TurnContextProvider>
       <VideoListManager data={turns} />

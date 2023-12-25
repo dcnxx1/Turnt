@@ -1,28 +1,29 @@
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { QueryClient, useQueryClient } from '@tanstack/react-query';
-import { useEffect } from 'react';
-import { Image, Pressable, StyleSheet } from 'react-native';
-import { SkeletonScreen } from '../../components';
-import { withLinearGradient } from '../../components/SkeletonScreen/SkeletonScreen';
-import { deleteThumbnailContent } from '../../helpers';
-import { FileType, Genre } from '../../models/turn';
-import { EditorParams } from '../../nav/navparams';
+import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {useQueryClient} from '@tanstack/react-query';
+import {useEffect} from 'react';
+import {Image, Pressable, StyleSheet} from 'react-native';
+import {SkeletonScreen} from '../../components';
+import {withLinearGradient} from '../../components/SkeletonScreen/SkeletonScreen';
+import {deleteThumbnailContent} from '../../helpers';
+import {FileType, Genre} from '../../models/turn';
+import {EditorParams} from '../../nav/navparams';
 import useLocalUserProfile from '../../shared/hooks/useLocalUserProfile';
+import {useActiveTurn, useDispatchVideoTurn} from '../../store';
 import theme from '../../theme';
-import EditorScreen, {
-  EditorFormValuesType
-} from './EditorScreen';
+import EditorScreen, {EditorFormValuesType} from './EditorScreen';
 import useCreateTurn from './hooks/useCreateTurn';
+import {ScrollToTurn} from '../../store/useDispatchVideoTurn';
 const LinearGradientScreen = withLinearGradient(SkeletonScreen);
 
 export default function Editor(): JSX.Element {
-  const {params} = useRoute<RouteProp<EditorParams>>()!;
+  const {params} = useRoute<RouteProp<Pick<EditorParams, 'EditorScreen'>>>()!;
   const me = useLocalUserProfile();
   const createTurnMutation = useCreateTurn();
   const queryClient = useQueryClient();
   const navigation = useNavigation<StackNavigationProp<EditorParams>>();
-
+  const {setActiveTurn} = useActiveTurn();
+  const {toTurn} = ScrollToTurn();
   const onPressSubmitWithoutErrors = (fieldValues: EditorFormValuesType) => {
     createTurnMutation(
       {
@@ -36,9 +37,12 @@ export default function Editor(): JSX.Element {
         type: fieldValues.fileType as FileType,
       },
       {
-        onSettled: () => {
+        onSettled: turn => {
           queryClient.invalidateQueries({queryKey: ['feed']});
-          navigation.navigate('HomeScreen');
+          if (turn) {
+            navigation.navigate('HomeScreen', turn);
+            setActiveTurn(turn);
+          }
         },
       },
     );
@@ -49,13 +53,16 @@ export default function Editor(): JSX.Element {
   };
 
   useEffect(() => {
-    const navver = navigation.addListener('beforeRemove', async () => {
-      await deleteThumbnailContent();
-      navigation.navigate('FileSelectScreen');
-    });
+    const beforeRemoveListener = navigation.addListener(
+      'beforeRemove',
+      async () => {
+        await deleteThumbnailContent();
+        navigation.navigate('FileSelectScreen');
+      },
+    );
 
     return () => {
-      navigation.removeListener('beforeRemove', navver);
+      navigation.removeListener('beforeRemove', beforeRemoveListener);
     };
   }, [navigation]);
 

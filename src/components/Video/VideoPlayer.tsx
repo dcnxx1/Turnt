@@ -31,6 +31,7 @@ export default forwardRef<Video, VideoPlayerProps>(
   ) => {
     return (
       <Video
+        currentTime={-1}
         ref={ref}
         source={{uri: source}}
         resizeMode={'cover'}

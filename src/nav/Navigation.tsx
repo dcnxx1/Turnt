@@ -18,6 +18,7 @@ import AuthScreen from '../screens/Auth/AuthScreen';
 import useLocalUserProfile from '../shared/hooks/useLocalUserProfile';
 import {AccountSetupParams, EditorParams, HomeParams} from './navparams';
 import {NavScreenNames, RootNavNames} from './types';
+import { useRef } from 'react';
 
 const HomeStack = createBottomTabNavigator<HomeParams>();
 const RootStack = createStackNavigator();
@@ -87,6 +88,17 @@ function EditorStackNavigator() {
 
 export default function Navigation() {
   const me = useLocalUserProfile();
+
+  const onStateChange = (state: {key: string; name: string}) => {
+ 
+  };
+
+
+const AppContent = () => {
+  const routeNameRef = useRef<string>()
+}
+
+
 
   return (
     <NavigationContainer>

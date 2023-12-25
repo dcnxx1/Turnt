@@ -3,9 +3,10 @@ import axios from 'axios';
 const urls = {
   zaandam: 'http://172.29.109.109:3000',
   default: 'http://192.168.2.23:3000',
+  hoofddorp: 'http://10.0.5.91:3000',
 };
 export const API = axios.create({
-  baseURL: urls.default,
+  baseURL: urls.hoofddorp,
 });
 
 export const useCDN = (key: string): string => {

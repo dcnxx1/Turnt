@@ -2,7 +2,7 @@ import {useEffect, useRef} from 'react';
 import Video, {OnProgressData} from 'react-native-video';
 import {ITurn} from '../../models/turn';
 import {useTurnContext} from '../../shared/context/TurnContext';
-import {useSeek, useVideoStore} from '../../store';
+import {useActiveTurn, useSeek, useVideoStore} from '../../store';
 import VideoPlayer from './VideoPlayer';
 import {useCDN} from '../../api/api';
 import {TURN_KEY} from '../../s3';
@@ -18,7 +18,7 @@ export default function VideoPlayerManager({
   source,
   onEnd,
 }: Props) {
-  const {activeTurn} = useTurnContext();
+  const {activeTurn} = useActiveTurn()
   const {isPlaying, setIsPlaying} = useVideoStore();
   const setProgress = useVideoStore(state => state.setProgress);
   const ref = useRef<Video>(null);
@@ -38,7 +38,6 @@ export default function VideoPlayerManager({
   useEffect(() => {
     if (isVideoOnScreen && !isPlaying) {
       setIsPlaying(true);
-        
     }
     setSeekTo(0);
   }, [isVideoOnScreen]);

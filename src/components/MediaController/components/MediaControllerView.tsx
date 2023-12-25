@@ -1,6 +1,6 @@
 import BottomSheet from '@gorhom/bottom-sheet';
 import {BlurView} from '@react-native-community/blur';
-import {useMemo} from 'react';
+import {useCallback, useEffect, useMemo} from 'react';
 import {StyleSheet, View} from 'react-native';
 import Flex from '../../Misc/Flex';
 import {blurViewConfig, bottomSheetConfig} from '../configs';
@@ -29,12 +29,12 @@ export default function MediaControllerView({tabHeight}: MediaControllerView) {
     setIsPlaying(!isPlaying);
   };
 
-  const onPressPrevious = () => {
-    dispatch('PLAY_PREVIOUS');
-  };
-  const onPressNext = () => {
+  const onPressNext = useCallback(() => {
     dispatch('PLAY_NEXT');
-  };
+  }, [dispatch]);
+  const onPressPrevious = useCallback(() => {
+    dispatch('PLAY_PREVIOUS');
+  }, [dispatch]);
 
   return (
     <BottomSheet

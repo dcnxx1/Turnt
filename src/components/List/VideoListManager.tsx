@@ -42,7 +42,7 @@ export default function VideoListManager({data}: CollectionTurnProps) {
         null;
         break;
     }
-  }, [type]);
+  }, [type, ref]);
 
   const renderItem: ListRenderItem<ITurn> = ({item}) => {
     return (
@@ -53,7 +53,6 @@ export default function VideoListManager({data}: CollectionTurnProps) {
       />
     );
   };
-
 
   useEffect(() => {
     handleSetActiveTurn(data[0]);
@@ -84,11 +83,11 @@ export default function VideoListManager({data}: CollectionTurnProps) {
 
   const viewConfigRef = useRef<ViewabilityConfig>({
     viewAreaCoveragePercentThreshold: 95,
-
   }).current;
 
   const content = (
     <SkeletonFlashList
+      extraData={[...data]}
       ref={ref}
       decelerationRate={'fast'}
       data={data}
