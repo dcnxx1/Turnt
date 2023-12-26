@@ -1,6 +1,7 @@
-import {ComponentType, ReactElement, ReactNode} from 'react';
+import {ComponentType, ReactElement, ReactNode, useState} from 'react';
 import {
   Dimensions,
+  Pressable,
   ScrollView,
   StyleProp,
   StyleSheet,
@@ -11,10 +12,19 @@ import {LinearGradient} from 'react-native-linear-gradient';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import Flex from '../Misc/Flex';
 import SectionScreen, {ScreenSectionProps} from '../Misc/SectionScreen';
+import {
+  Dialog,
+  PaperProvider,
+  Portal,
+  Provider,
+  Text,
+} from 'react-native-paper';
+
+import {theme} from '../../constants';
 
 interface SkeletonScreenProps {
   content: ReactNode;
-  styleContent?: StyleProp<ViewStyle>;
+  contentStyle?: StyleProp<ViewStyle>;
   header?: ReactElement;
   footer?: ReactElement;
   headerStyle?: ScreenSectionProps['style'];
@@ -26,7 +36,7 @@ interface SkeletonScreenProps {
 function SkeletonScreen({
   header,
   content,
-  styleContent,
+  contentStyle,
   footer,
   footerStyle,
   scrollEnabled = false,
@@ -42,7 +52,7 @@ function SkeletonScreen({
   return (
     <Flex style={[optionalPadding]}>
       {header && <SectionScreen style={headerStyle} children={header} />}
-      <View style={[styleContent, Style.container]}>{content}</View>
+      <View style={[contentStyle, , Style.container]}>{content}</View>
       {footer && <SectionScreen style={footerStyle} children={footer} />}
     </Flex>
   );
@@ -83,6 +93,15 @@ const Style = StyleSheet.create({
   },
   linearGradient: {
     flex: 1,
+  },
+  dialogActionText: {
+    color: theme.color.white,
+  },
+  dialogContainer: {
+    width: '70%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
   },
 });
 

@@ -1,5 +1,5 @@
 import {forwardRef} from 'react';
-import {Dimensions, StyleProp, ViewStyle} from 'react-native';
+import {Dimensions, StyleProp, StyleSheet, ViewStyle} from 'react-native';
 import Video, {OnProgressData} from 'react-native-video';
 
 type VideoPlayerProps = {
@@ -27,6 +27,7 @@ export default forwardRef<Video, VideoPlayerProps>(
       playInBackground = true,
       playWhenInactive = true,
     }: VideoPlayerProps,
+
     ref,
   ) => {
     return (
@@ -43,15 +44,15 @@ export default forwardRef<Video, VideoPlayerProps>(
         pictureInPicture={false}
         playWhenInactive={playWhenInactive}
         paused={paused}
-        style={
-          style
-            ? style
-            : {
-                width: SCREEN_WIDTH,
-                height: SCREEN_HEIGHT,
-              }
-        }
+        style={style ? style : Style.videoStyle}
       />
     );
   },
 );
+
+const Style = StyleSheet.create({
+  videoStyle: {
+    width: SCREEN_WIDTH,
+    height: SCREEN_HEIGHT,
+  },
+});

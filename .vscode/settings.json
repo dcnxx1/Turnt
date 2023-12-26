@@ -2,7 +2,7 @@
     "background.fullscreen": {
       "images": ["file:///Users/dcnx/Project/app/.vscode/afcd9135282d5d8d6ddd24300feea69f.jpg"],
   
-      "opacity": 0.90,
+      "opacity": 0.97,
       "size": "cover",
       "position": "center",
       "interval": 0

@@ -1,98 +1,54 @@
-import {Alert, StyleSheet, Text} from 'react-native';
-import DocumentPicker, {
-  DocumentPickerResponse,
-  isCancel,
-} from 'react-native-document-picker';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {StyleSheet, Text} from 'react-native';
 import {Button} from 'react-native-paper';
 import {SkeletonScreen} from '../../components';
 import {withLinearGradient} from '../../components/SkeletonScreen/SkeletonScreen';
+import {millisToSeconds} from '../../helpers';
+import {EditorParams} from '../../nav/navparams';
 import useLocalUserProfile from '../../shared/hooks/useLocalUserProfile';
 import theme from '../../theme';
-import ImageCropPicker, {Video} from 'react-native-image-crop-picker';
-import {useNavigation} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {EditorParams} from '../../nav/navparams';
-import {millisToSeconds} from '../../helpers';
+import {getAudioDuration} from './hooks/useGenerateThumbnails';
+import {
+  VideoCoverColor,
+  chooseDefaultCoverImage,
+  getMp3File,
+  getVideoFile,
+} from './utils';
 const LinearGradientScreen = withLinearGradient(SkeletonScreen);
 
 type EditorParamsPath = EditorParams['EditorScreen'];
-
-function errorAlertWithCallback<T>(fnToRerun: () => T | void) {
-  Alert.alert('Oeps', 'Er is iets mis gegaan', [
-    {
-      style: 'cancel',
-      text: 'Annuleren',
-    },
-    {
-      style: 'default',
-      isPreferred: true,
-      text: 'Opnieuw proberen',
-      onPress: () => {
-        fnToRerun();
-        return;
-      },
-    },
-  ]);
-}
-
-async function getMp3File(): Promise<DocumentPickerResponse | undefined> {
-  const audioMimeTypes = DocumentPicker.types.audio;
-
-  try {
-    const mp3File = await DocumentPicker.pickSingle({
-      type: [audioMimeTypes],
-      mode: 'import',
-      allowMultiSelection: false,
-    });
-    if (mp3File) {
-      console.log('mp3 fike :>', mp3File);
-      return mp3File;
-    }
-  } catch (err) {
-    if (!isCancel(err)) {
-      errorAlertWithCallback(getMp3File);
-    }
-  }
-}
-
-async function getVideoFile(): Promise<Video | undefined> {
-  try {
-    const videoFile = await ImageCropPicker.openPicker({
-      mediaType: 'video',
-      loadingLabelText: 'Ophalen...',
-      multiple: false,
-      compressVideoPreset: 'HighestQuality'
-    });
-    return videoFile;
-  } catch (err: any) {
-    const message: string = err.message;
-    if (!message.includes('User')) {
-      errorAlertWithCallback(getVideoFile);
-    }
-  }
-}
 
 export default function FileSelectScreen() {
   const {
     profile: {username},
   } = useLocalUserProfile();
   const navigation = useNavigation<StackNavigationProp<EditorParams>>();
-  
-  const onPressSelectAudio = async () => {
-    const mp3File = await getMp3File();
-    if (mp3File) {
-      const params: EditorParamsPath = {
-        filePath: mp3File.uri,
-        duration: null,
-        fileType: 'Audio',
-        mime: mp3File.type ?? 'audio/mp3',
-      };
-      navigateToEditorScreen(params);
-    }
-  };
+  const defaultCoverColor: VideoCoverColor = chooseDefaultCoverImage();
 
   const navigateToEditorScreen = (params: EditorParams['EditorScreen']) => {
     navigation.navigate('EditorScreen', params);
+  };
+
+  const onPressSelectAudio = async () => {
+    try {
+      const mp3File = await getMp3File();
+      if (mp3File) {
+        const decodeUri = decodeURIComponent(mp3File.uri);
+        const duration = await getAudioDuration(decodeUri);
+
+        const params: EditorParamsPath = {
+          filePath: mp3File.uri,
+          duration: Number(duration),
+          fileType: 'Audio',
+          mime: mp3File.type ?? 'audio/mp3',
+          defaultCoverColor,
+        };
+        navigateToEditorScreen(params);
+      }
+    } catch (err) {
+      console.log('ERR SELECT AUDIO :>>', err);
+    }
   };
 
   const onPressSelectVideo = async () => {
@@ -102,9 +58,10 @@ export default function FileSelectScreen() {
         filePath: videoFile.path,
         duration: millisToSeconds(videoFile.duration ?? 0),
         fileType: 'Video',
-
         mime: videoFile.mime,
+        defaultCoverColor,
       };
+
       navigateToEditorScreen(videoParams);
     }
   };
@@ -131,7 +88,7 @@ export default function FileSelectScreen() {
 
   return (
     <LinearGradientScreen
-      styleContent={Style.content}
+      contentStyle={Style.content}
       header={header}
       headerStyle={Style.headerStyle}
       hasSafeAreaInsets

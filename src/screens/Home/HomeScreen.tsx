@@ -16,7 +16,7 @@ function HomeScreen(): JSX.Element {
     queryKey: ['feed'],
     queryFn: () => getFeed(),
   });
-  
+
   const content = turns ? (
     <TurnContextProvider>
       <VideoListManager data={turns} />
@@ -25,7 +25,7 @@ function HomeScreen(): JSX.Element {
     <Text>Loading...</Text>
   );
 
-  return <SkeletonScreen styleContent={Style.container} content={content} />;
+  return <SkeletonScreen contentStyle={Style.container} content={content} />;
 }
 
 const Style = StyleSheet.create({

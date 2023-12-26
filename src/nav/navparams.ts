@@ -1,5 +1,6 @@
 import {FileType, ITurn} from '../models/turn';
 import {Role} from '../models/user';
+import {VideoCoverColor} from '../screens/Editor/utils';
 
 export type AccountSetupParams = {
   OnBoardScreen: undefined;
@@ -26,6 +27,7 @@ export type EditorParams = {
     duration: number | null;
     fileType: FileType;
     mime: string;
+    defaultCoverColor: VideoCoverColor;
   };
   HomeScreen: ITurn;
 };

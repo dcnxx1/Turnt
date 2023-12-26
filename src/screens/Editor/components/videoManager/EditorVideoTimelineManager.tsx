@@ -6,18 +6,30 @@ import {Flex} from '../../../../components';
 import VideoPlayer from '../../../../components/Video/VideoPlayer';
 import {TURN_IMPRESSION_TIME} from '../../../../constants';
 import {secondsToDisplayTime} from '../../../../helpers';
+import {FileType, ITurn} from '../../../../models/turn';
 import theme from '../../../../theme';
+import {VideoCoverColor, requiredImages} from '../../utils';
 import VideoPlayerButtonController from './VideoPlayerButtonController';
+import ImageBlurBackground from '../../../../components/Images/ImageBlurBackground';
 
 type Props = {
   source: string;
   impressionStartAt: number;
+  cover: ITurn['cover'];
+  fileType: FileType;
+  defaultCover: VideoCoverColor;
 };
 
-export default function EditorVideoManager({source, impressionStartAt}: Props) {
+export default function EditorVideoManager({
+  source,
+  impressionStartAt,
+  fileType,
+  defaultCover,
+  cover,
+}: Props) {
   const [paused, setPaused] = useState(false);
   const videoRef = useRef<Video>(null);
-
+  const videoCover = cover.length ? {uri: cover} : requiredImages[defaultCover];
   const togglePlayPause = () => {
     setPaused(!paused);
   };
@@ -45,12 +57,13 @@ export default function EditorVideoManager({source, impressionStartAt}: Props) {
     <>
       <View style={Style.videoContainer}>
         <Pressable onPress={togglePlayPause}>
+          {fileType === 'Audio' && <ImageBlurBackground style={Style.video} source={videoCover} />}
           <VideoPlayer
             ref={videoRef}
             handleProgress={onProgress}
             playInBackground={false}
             playWhenInactive={false}
-            style={Style.video}
+            style={fileType === 'Audio' ? {height: 0, width: 0} : Style.video}
             paused={paused}
             source={source}
           />

@@ -18,7 +18,9 @@ import AuthScreen from '../screens/Auth/AuthScreen';
 import useLocalUserProfile from '../shared/hooks/useLocalUserProfile';
 import {AccountSetupParams, EditorParams, HomeParams} from './navparams';
 import {NavScreenNames, RootNavNames} from './types';
-import { useRef } from 'react';
+import {useRef} from 'react';
+import {PaperProvider} from 'react-native-paper';
+
 
 const HomeStack = createBottomTabNavigator<HomeParams>();
 const RootStack = createStackNavigator();
@@ -89,39 +91,36 @@ function EditorStackNavigator() {
 export default function Navigation() {
   const me = useLocalUserProfile();
 
-  const onStateChange = (state: {key: string; name: string}) => {
- 
+  const onStateChange = (state: {key: string; name: string}) => {};
+
+  const AppContent = () => {
+    const routeNameRef = useRef<string>();
   };
 
-
-const AppContent = () => {
-  const routeNameRef = useRef<string>()
-}
-
-
-
   return (
-    <NavigationContainer>
-      <RootStack.Navigator
-        screenOptions={screenOptions}
-        initialRouteName={RootNavNames.SetupStack}>
-        {me.profile ? (
-          <RootStack.Screen
-            name={RootNavNames.HomeStack}
-            component={HomeStackNavigator}
-          />
-        ) : (
-          <RootStack.Screen
-            name={RootNavNames.SetupStack}
-            component={SetupScreenStackNavigator}
-          />
-        )}
+    <PaperProvider>
+      <NavigationContainer>
+        <RootStack.Navigator
+          screenOptions={screenOptions}
+          initialRouteName={RootNavNames.SetupStack}>
+          {me.profile ? (
+            <RootStack.Screen
+              name={RootNavNames.HomeStack}
+              component={HomeStackNavigator}
+            />
+          ) : (
+            <RootStack.Screen
+              name={RootNavNames.SetupStack}
+              component={SetupScreenStackNavigator}
+            />
+          )}
 
-        <RootStack.Screen
-          name={RootNavNames.EditorStack}
-          component={EditorStackNavigator}
-        />
-      </RootStack.Navigator>
-    </NavigationContainer>
+          <RootStack.Screen
+            name={RootNavNames.EditorStack}
+            component={EditorStackNavigator}
+          />
+        </RootStack.Navigator>
+      </NavigationContainer>
+    </PaperProvider>
   );
 }

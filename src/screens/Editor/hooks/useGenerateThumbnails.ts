@@ -2,10 +2,18 @@ import {FFmpegKit, FFprobeKit} from 'ffmpeg-kit-react-native';
 import {useCallback, useEffect, useState} from 'react';
 
 import RNFS from 'react-native-fs';
-import { getDirectoryPathOrCreate } from '../../../helpers';
+import {getDirectoryPathOrCreate} from '../../../helpers';
+import {FileType} from '../../../models/turn';
+import {
+  VideoCoverColor,
+  coverThumbnailSource,
+  defaultColoredCoverThumbnailSource,
+  generateThumbnailsFromDefault,
+} from '../utils';
 
 export const NUMBER_OF_THUMBNAILS_TO_EXTRACT = 13;
 const FFMPEG_SUCCESS_RETURN_CODE = 0;
+
 async function getVideoFramesCount(
   filePath: string,
 ): Promise<number | undefined> {
@@ -54,15 +62,65 @@ const sortThumbnailsByCreationTime = (
     return ctimeA - ctimeB;
   });
 };
+const ffprobe = (filePath: string, command: string) => {
+  return `-i ${filePath} ${command}`;
+};
+
+const audioMetadataCommand = (audioPath: string) =>
+  `-v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "${audioPath}"`;
+export const moveFileTo = async (
+  filePath: string,
+  destFilePath: string,
+): Promise<string | undefined> => {
+  try {
+    return new Promise((resolve, reject) => {
+      RNFS.moveFile(filePath, destFilePath).then(() => {
+        RNFS.exists(destFilePath).then(exists => {
+          exists
+            ? RNFS.readFile(destFilePath).then(res => resolve(res))
+            : reject(undefined);
+        });
+      });
+    });
+  } catch (err) {
+    console.log('ERR MOVE FILE TO NEW LOCATION :>>', err);
+  }
+};
+
+export async function getAudioDuration(audioPath: string) {
+  try {
+    const audioMetadata = audioMetadataCommand(audioPath);
+    const session = await FFprobeKit.execute(audioMetadata);
+    return await session.getAllLogsAsString();
+  } catch (err) {
+    console.log('ERR WHIL GET AUDIO DURATION :>>', err);
+  }
+}
 
 export default function useGenerateThumbnails(
   filePath: string,
   numberOfThumbnailsToExtract = NUMBER_OF_THUMBNAILS_TO_EXTRACT,
-): [string[], boolean] {
-  const [thumbnails, setThumbnails] = useState<string[]>([]);
+  fileType: FileType,
+  defaultCoverColor: VideoCoverColor,
+  coverImage: string,
+): [string[] | any[], boolean] {
+  const [thumbnails, setThumbnails] = useState<string[] | any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const generateThumbnails = useCallback(async () => {
+  const generateDefaultThumbnails = () => {
+    const defaultedCoverImages =
+      defaultColoredCoverThumbnailSource(defaultCoverColor);
+    const defaultCovers = generateThumbnailsFromDefault(defaultedCoverImages);
+    setThumbnails(defaultCovers);
+  };
+  const generateCoverThumbnails = () => {
+    const coverImageFormatSource = coverThumbnailSource(coverImage);
+    const arrayCoverImage = generateThumbnailsFromDefault(
+      coverImageFormatSource,
+    );
+    setThumbnails(arrayCoverImage);
+  };
+  const generateVideoThumbnails = useCallback(async () => {
     try {
       if (thumbnails.length) {
         return;
@@ -85,7 +143,17 @@ export default function useGenerateThumbnails(
           const thumbnailsByCreationTime =
             sortThumbnailsByCreationTime(thumbnailDirContent);
           thumbnailsByCreationTime.shift();
-          setThumbnails([...thumbnailsByCreationTime.map(({path}) => path)]);
+
+          setThumbnails([
+            ...thumbnailsByCreationTime.map(({path}) => {
+              return {
+                path: {uri: path},
+              };
+            }),
+          ]);
+          console.log(thumbnails);
+        } else {
+          generateDefaultThumbnails();
         }
       }
     } catch (err) {
@@ -97,10 +165,19 @@ export default function useGenerateThumbnails(
 
   useEffect(() => {
     async function generate() {
-      await generateThumbnails();
+      if (fileType === 'Audio') {
+        if (!coverImage.length) {
+          generateDefaultThumbnails();
+          return;
+        }
+        generateCoverThumbnails();
+        return;
+      }
+
+      await generateVideoThumbnails();
     }
     generate();
-  }, []);
+  }, [coverImage]);
 
   return [thumbnails, isLoading];
 }

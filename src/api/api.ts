@@ -6,7 +6,7 @@ const urls = {
   hoofddorp: 'http://10.0.5.91:3000',
 };
 export const API = axios.create({
-  baseURL: urls.hoofddorp,
+  baseURL: urls.default,
 });
 
 export const useCDN = (key: string): string => {

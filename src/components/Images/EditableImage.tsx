@@ -10,7 +10,8 @@ import {
 import {Avatar as RNAvatar} from 'react-native-paper';
 import {askPermission, selectLibraryImageWithCropper} from '../../helpers';
 import {openSettings} from 'react-native-permissions';
-
+import {VideoCoverColor} from '../../screens/Editor/utils';
+import * as covers from '../../assets/covers';
 const Image = RNAvatar.Image;
 
 export interface EditableImageProps {
@@ -19,6 +20,7 @@ export interface EditableImageProps {
   setSource: (source: string) => void;
   style?: StyleProp<ViewStyle>;
   isAvatar: boolean;
+  defaultCover: VideoCoverColor;
 }
 
 export default function EditableImage({
@@ -27,6 +29,7 @@ export default function EditableImage({
   setSource,
   style,
   isAvatar,
+  defaultCover,
 }: EditableImageProps) {
   const handleOnAvatarChange = useCallback(async () => {
     try {
@@ -66,11 +69,7 @@ export default function EditableImage({
       ) : (
         <RNImage
           style={imageSize}
-          source={
-            source.length
-              ? {uri: source}
-              : require('../../assets/covers/cover_brown_default.png')
-          }
+          source={source.length ? {uri: source} : covers[defaultCover]}
         />
       )}
     </Pressable>

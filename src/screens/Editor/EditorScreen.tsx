@@ -24,24 +24,15 @@ type Props = {
   params: EditorParams['EditorScreen'];
 };
 
-const editorFieldSchema = z
-  .object({
-    impressionStartAt: z.number(),
-    title: z
-      .string()
-      .min(1, {message: 'Titel moet meer dan 1 karakter bevatten'}),
-    cover: z.string().min(1,'Kies een cover Foto'),
-    genre: z.string(),
-    fileType: z.string(),
-  })
-  .refine(
-    formData => {
-      const fileType: FileType = formData.fileType as FileType;
-
-      return !!formData.cover?.length && fileType === 'Video' && 'Kies een cover';
-    },
-    {path: ['cover'], message: 'Kies een cover foto'},
-  );
+const editorFieldSchema = z.object({
+  impressionStartAt: z.number(),
+  title: z
+    .string()
+    .min(1, {message: 'Titel moet meer dan 1 karakter bevatten'}),
+  cover: z.string().min(1, 'Kies een cover Foto'),
+  genre: z.string(),
+  fileType: z.string(),
+});
 
 export type EditorFieldValues = {
   impressionStartAt: ITurn['impressionStartAt'];
@@ -74,6 +65,7 @@ export default function EditorScreen({onSubmit, params}: Props) {
     reValidateMode: 'onSubmit',
   });
   const watchImpressionStartAt = watch('impressionStartAt');
+  const watchCover = watch('cover');
 
   useEffect(() => {
     if (errors.title) {
@@ -91,16 +83,21 @@ export default function EditorScreen({onSubmit, params}: Props) {
         contentContainerStyle={Style.container}>
         <View>
           <EditorVideoManager
+            fileType={params.fileType}
+            defaultCover={params.defaultCoverColor}
+            cover={watchCover}
             impressionStartAt={watchImpressionStartAt}
             source={filePath}
           />
-
           <Controller
             control={control}
             name="impressionStartAt"
             render={({field: {onChange, value}}) => {
               return (
                 <Timeline
+                  cover={watchCover}
+                  defaultCoverColor={params.defaultCoverColor}
+                  fileType={params.fileType}
                   onChange={onChange}
                   sliderValue={value}
                   duration={duration}
@@ -142,7 +139,11 @@ export default function EditorScreen({onSubmit, params}: Props) {
           name={'cover'}
           render={({field: {onChange, value}}) => (
             <View>
-              <CoverSelect onChange={onChange} value={value} />
+              <CoverSelect
+                defaultCoverColor={params.defaultCoverColor}
+                onChange={onChange}
+                value={value}
+              />
               <Text style={{color: 'red'}}>
                 {errors.cover && 'Kies een cover'}
               </Text>

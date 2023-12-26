@@ -1,17 +1,21 @@
-import {Image, LayoutChangeEvent, StyleSheet, View} from 'react-native';
-import {Text} from 'react-native-paper';
+import {Image, StyleSheet, View} from 'react-native';
+import {FileType, ITurn} from '../../../../models/turn';
 import theme from '../../../../theme';
 import useGenerateThumbnails, {
   NUMBER_OF_THUMBNAILS_TO_EXTRACT,
 } from '../../hooks/useGenerateThumbnails';
+import {VideoCoverColor, useComponentSize} from '../../utils';
 import TimelineSlider from './TimelineSlider';
-import {useCallback, useEffect, useRef, useState} from 'react';
-
+import * as covers from '../../../../assets/covers';
+import {useEffect} from 'react';
 type Props = {
   duration: number;
   filePath: string;
   sliderValue: number;
   onChange: () => void;
+  fileType: FileType;
+  defaultCoverColor: VideoCoverColor;
+  cover: ITurn['cover'];
 };
 
 export type TimelineDimensions = {
@@ -19,47 +23,31 @@ export type TimelineDimensions = {
   readonly height: number;
 };
 
-const useComponentSize = (): [
-  TimelineDimensions,
-  (e: LayoutChangeEvent) => void,
-] => {
-  const [size, setSize] = useState<TimelineDimensions>({
-    height: 0,
-    width: 0,
-  });
-
-  const onLayout = useCallback((event: LayoutChangeEvent) => {
-    const {width, height} = event.nativeEvent.layout;
-    setSize({width, height});
-  }, []);
-
-  return [size, onLayout];
-};
-
 export default function Timeline({
   duration,
   filePath,
   sliderValue,
+  fileType,
   onChange,
+  defaultCoverColor,
+  cover,
 }: Props) {
+  const [size, onLayout] = useComponentSize();
+
   const [thumbnails, isLoading] = useGenerateThumbnails(
     filePath,
     NUMBER_OF_THUMBNAILS_TO_EXTRACT,
+    fileType,
+    defaultCoverColor,
+    cover,
   );
-  const [size, onLayout] = useComponentSize();
-
+  useEffect(() => {
+    console.log('thumbnails :>>', thumbnails);
+  }, [thumbnails]);
   return (
     <View onLayout={onLayout} style={Style.container}>
       <View>
-        <View style={[Style.thumbnailContainer]}>
-          {thumbnails.map(thumbnailPath => (
-            <Image
-              key={thumbnailPath}
-              style={[Style.image]}
-              source={{uri: thumbnailPath}}
-            />
-          ))}
-        </View>
+        <ImageTimelineRow thumbnails={thumbnails} />
         <TimelineSlider
           timelineDimensions={size}
           setVideoTime={onChange}
@@ -71,16 +59,35 @@ export default function Timeline({
   );
 }
 
+type ImageTimelineRowProps = {
+  thumbnails: string[] | any[];
+};
+
+const sourceIsString = (source: unknown): source is string => {
+  return typeof source === 'string';
+};
+
+const ImageTimelineRow = ({thumbnails}: ImageTimelineRowProps) => {
+  return (
+    <View style={[Style.thumbnailContainer]}>
+      {thumbnails.map((thumbnail, index) => {
+        return (
+          <Image key={index} style={[Style.image]} source={thumbnail.path} />
+        );
+      })}
+    </View>
+  );
+};
+
 const Style = StyleSheet.create({
-  container: {
- 
-  },
+  container: {},
   thumbnailContainer: {
     width: '100%',
     flexDirection: 'row',
     borderWidth: 3,
     borderRadius: 15,
     borderColor: theme.color.turner,
+    minHeight: 50,
     overflow: 'hidden',
   },
   image: {
