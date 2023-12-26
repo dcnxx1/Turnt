@@ -1,6 +1,10 @@
 import {forwardRef} from 'react';
 import {Dimensions, StyleProp, StyleSheet, ViewStyle} from 'react-native';
 import Video, {OnProgressData} from 'react-native-video';
+import ImageBlurBackground from '../Images/ImageBlurBackground';
+import {FileType} from '../../models/turn';
+import {useCDN} from '../../api/api';
+import {COVER_KEY} from '../../s3';
 
 type VideoPlayerProps = {
   source: string;

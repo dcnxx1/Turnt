@@ -1,7 +1,7 @@
 import {FlashList, ListRenderItem, ViewToken} from '@shopify/flash-list';
 import {useEffect, useRef, useState} from 'react';
 import {Dimensions, ViewabilityConfig} from 'react-native';
-import {ITurn} from '../../models/turn';
+import {FileType, ITurn} from '../../models/turn';
 import {useTurnContext} from '../../shared/context/TurnContext';
 import useDispatchVideoTurn from '../../store/useDispatchVideoTurn';
 import SkeletonScreen from '../SkeletonScreen/SkeletonScreen';
@@ -47,6 +47,8 @@ export default function VideoListManager({data}: CollectionTurnProps) {
   const renderItem: ListRenderItem<ITurn> = ({item}) => {
     return (
       <VideoPlayerManager
+        fileType={item.type as FileType}
+        videoCover={item.cover}
         source={item.source}
         videoId={item.turn_id}
         onEnd={onEndTurn}
