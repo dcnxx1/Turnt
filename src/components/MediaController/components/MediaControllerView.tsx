@@ -12,7 +12,7 @@ import {
   PlayPreviousButton,
   TogglePlayPauseButton,
 } from './MediaControllerButtons';
-import {useActiveTurn, useVideoStore} from '../../../store';
+import {useActiveTurnStore, useVideoStore} from '../../../store';
 import useDispatchVideoTurn from '../../../store/useDispatchVideoTurn';
 
 type MediaControllerView = {
@@ -23,7 +23,7 @@ export default function MediaControllerView({tabHeight}: MediaControllerView) {
   const snapPoints = useMemo(() => ['4%', '35%'], []);
   const {isPlaying, setIsPlaying} = useVideoStore();
   const {dispatch} = useDispatchVideoTurn();
-  const {activeTurn} = useActiveTurn();
+  const {activeTurn} = useActiveTurnStore();
 
   const onPressTogglePlayPause = () => {
     setIsPlaying(!isPlaying);

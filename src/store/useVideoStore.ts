@@ -1,3 +1,4 @@
+import TrackPlayer from 'react-native-track-player';
 import {create} from 'zustand';
 
 type State = {

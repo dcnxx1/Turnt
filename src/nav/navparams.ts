@@ -29,5 +29,5 @@ export type EditorParams = {
     mime: string;
     defaultCoverColor: VideoCoverColor;
   };
-  HomeScreen: ITurn;
+  HomeScreen: undefined;
 };

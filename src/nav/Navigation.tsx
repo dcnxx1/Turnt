@@ -1,10 +1,15 @@
-import {NavigationContainer} from '@react-navigation/native';
+import {
+  NavigationContainer,
+  NavigationContainerRef,
+} from '@react-navigation/native';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {
   StackNavigationOptions,
   createStackNavigator,
 } from '@react-navigation/stack';
+import {useRef} from 'react';
+import {PaperProvider} from 'react-native-paper';
 import Tabbar from '../components/Tabbar/Tabbar';
 import {
   Editor,
@@ -16,11 +21,10 @@ import {
 import AccountSetupScreen from '../screens/AccountSetup/AccountSetupScreen';
 import AuthScreen from '../screens/Auth/AuthScreen';
 import useLocalUserProfile from '../shared/hooks/useLocalUserProfile';
+
 import {AccountSetupParams, EditorParams, HomeParams} from './navparams';
 import {NavScreenNames, RootNavNames} from './types';
-import {useRef} from 'react';
-import {PaperProvider} from 'react-native-paper';
-
+import {stopPlaybackTrackPlayerCapabilities} from '../utils';
 
 const HomeStack = createBottomTabNavigator<HomeParams>();
 const RootStack = createStackNavigator();
@@ -35,6 +39,7 @@ const screenOptions: StackNavigationOptions = {
 function HomeStackNavigator() {
   return (
     <HomeStack.Navigator
+      backBehavior={'initialRoute'}
       detachInactiveScreens={false}
       tabBar={props => <Tabbar {...props} />}
       screenOptions={{
@@ -90,16 +95,21 @@ function EditorStackNavigator() {
 
 export default function Navigation() {
   const me = useLocalUserProfile();
+  const navigationRef = useRef<NavigationContainerRef<any>>(null);
 
-  const onStateChange = (state: {key: string; name: string}) => {};
-
-  const AppContent = () => {
-    const routeNameRef = useRef<string>();
+  const onStateChange = () => {
+    const state = navigationRef.current?.getState();
+    const routes = state?.routes || [];
+    const previousRouteParams = routes[routes.length - 2];
+    const currentRoute = routes[routes.length - 1].name;
+    if (previousRouteParams) {
+      stopPlaybackTrackPlayerCapabilities();
+    }
   };
 
   return (
     <PaperProvider>
-      <NavigationContainer>
+      <NavigationContainer ref={navigationRef} onStateChange={onStateChange}>
         <RootStack.Navigator
           screenOptions={screenOptions}
           initialRouteName={RootNavNames.SetupStack}>
@@ -114,7 +124,6 @@ export default function Navigation() {
               component={SetupScreenStackNavigator}
             />
           )}
-
           <RootStack.Screen
             name={RootNavNames.EditorStack}
             component={EditorStackNavigator}

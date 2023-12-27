@@ -95,7 +95,12 @@ export default function AccountSetupForm({
           render={({field: {onChange, value}}) => {
             return (
               <>
-                <EditableImage isAvatar source={value} setSource={onChange} />
+                <EditableImage
+                  defaultCover={'Orange'}
+                  isAvatar
+                  source={value}
+                  setSource={onChange}
+                />
                 <Text style={Style.textStyle}>
                   {errors.avatar ? errors.avatar.message : ''}
                 </Text>

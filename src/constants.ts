@@ -1,3 +1,5 @@
+import {Capability} from 'react-native-track-player';
+
 export const theme = {
   color: {
     white: '#FDFCFA',
@@ -55,3 +57,12 @@ export interface IOnBoardProps {
 }
 
 export const TURN_IMPRESSION_TIME = 30;
+
+export const trackPlayerCapabilities = [
+  Capability.Play,
+  Capability.Pause,
+  Capability.SkipToNext,
+  Capability.SkipToPrevious,
+  Capability.SeekTo,
+  Capability.Like,
+];

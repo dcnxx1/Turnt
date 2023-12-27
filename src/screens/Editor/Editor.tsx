@@ -9,7 +9,7 @@ import {deleteThumbnailContent} from '../../helpers';
 import {FileType, Genre} from '../../models/turn';
 import {EditorParams} from '../../nav/navparams';
 import useLocalUserProfile from '../../shared/hooks/useLocalUserProfile';
-import {useActiveTurn} from '../../store';
+import {useActiveTurnStore} from '../../store';
 import theme from '../../theme';
 import EditorScreen, {EditorFormValuesType} from './EditorScreen';
 import useCreateTurn from './hooks/useCreateTurn';
@@ -21,7 +21,7 @@ export default function Editor(): JSX.Element {
   const createTurnMutation = useCreateTurn();
   const queryClient = useQueryClient();
   const navigation = useNavigation<StackNavigationProp<EditorParams>>();
-  const {setActiveTurn} = useActiveTurn();
+  const {setActiveTurn} = useActiveTurnStore();
 
   const onPressSubmitWithoutErrors = (fieldValues: EditorFormValuesType) => {
     createTurnMutation(
@@ -39,8 +39,8 @@ export default function Editor(): JSX.Element {
         onSettled: turn => {
           queryClient.invalidateQueries({queryKey: ['feed']});
           if (turn) {
-            navigation.navigate('HomeScreen', turn);
             setActiveTurn(turn);
+            navigation.navigate('HomeScreen');
           }
         },
       },

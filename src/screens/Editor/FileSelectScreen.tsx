@@ -8,6 +8,7 @@ import {millisToSeconds} from '../../helpers';
 import {EditorParams} from '../../nav/navparams';
 import useLocalUserProfile from '../../shared/hooks/useLocalUserProfile';
 import theme from '../../theme';
+import {restoreTrackPlayerCapabilities} from '../../utils';
 import {getAudioDuration} from './hooks/useGenerateThumbnails';
 import {
   VideoCoverColor,
@@ -37,6 +38,8 @@ export default function FileSelectScreen() {
         const decodeUri = decodeURIComponent(mp3File.uri);
         const duration = await getAudioDuration(decodeUri);
 
+        
+
         const params: EditorParamsPath = {
           filePath: mp3File.uri,
           duration: Number(duration),
@@ -54,7 +57,7 @@ export default function FileSelectScreen() {
   const onPressSelectVideo = async () => {
     const videoFile = await getVideoFile();
     if (videoFile) {
-      const videoParams: EditorParamsPath = {
+      const params: EditorParamsPath = {
         filePath: videoFile.path,
         duration: millisToSeconds(videoFile.duration ?? 0),
         fileType: 'Video',
@@ -62,12 +65,17 @@ export default function FileSelectScreen() {
         defaultCoverColor,
       };
 
-      navigateToEditorScreen(videoParams);
+      navigateToEditorScreen(params);
     }
   };
 
+  const onPressGoBack = () => {
+    restoreTrackPlayerCapabilities();
+    navigation.goBack();
+  };
   const header = (
     <>
+      <Text onPress={onPressGoBack}>Terug</Text>
       <Text style={Style.headerText}>Welkom {username}</Text>
       <Text style={Style.colorWhite}>
         Kies een MP3 bestand of een video om te uploaden
@@ -135,5 +143,11 @@ const Style = StyleSheet.create({
     height: '10%',
     resizeMode: 'cover',
     aspectRatio: 1,
+  },
+  leftIcon: {
+    resizeMode: 'cover',
+    width: 35,
+    height: 35,
+    transform: [{rotate: '180deg'}],
   },
 });

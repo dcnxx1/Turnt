@@ -3,10 +3,10 @@ import {Dimensions, StyleSheet} from 'react-native';
 import Video, {OnProgressData} from 'react-native-video';
 import {useCDN} from '../../api/api';
 import {FileType, ITurn} from '../../models/turn';
-import {COVER_KEY, TURN_KEY} from '../../s3';
-import {useActiveTurn, useSeek, useVideoStore} from '../../store';
-import ImageBlurBackground from '../Images/ImageBlurBackground';
+import {TURN_KEY} from '../../s3';
+import {useActiveTurnStore, useSeek, useVideoStore} from '../../store';
 import VideoPlayer from './VideoPlayer';
+import TrackPlayer from 'react-native-track-player';
 
 type Props = {
   videoId: ITurn['turn_id'];
@@ -26,7 +26,7 @@ export default function VideoPlayerManager({
   onEnd,
   videoCover,
 }: Props) {
-  const {activeTurn} = useActiveTurn();
+  const {activeTurn} = useActiveTurnStore();
   const {isPlaying, setIsPlaying} = useVideoStore();
   const setProgress = useVideoStore(state => state.setProgress);
   const ref = useRef<Video>(null);
@@ -35,6 +35,7 @@ export default function VideoPlayerManager({
 
   const onProgress = ({currentTime}: OnProgressData) => {
     setProgress(currentTime);
+    TrackPlayer.seekTo(currentTime);
   };
 
   useEffect(() => {
@@ -52,14 +53,7 @@ export default function VideoPlayerManager({
 
   return (
     <>
-      {
-        activeTurn.type === 'Audio' ? <ImageBlurBackground
-        source={{uri: useCDN(COVER_KEY + videoCover)}}
-        style={Style.fileHidden}
-      /> : null
-      }
       <VideoPlayer
-        style={activeTurn.type === 'Audio' ? Style.fileHidden : Style.video}
         onEnd={onEnd}
         ref={ref}
         handleProgress={onProgress}
@@ -75,12 +69,4 @@ const Style = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  fileHidden: {
-    display: 'none',
-  },
-  imageBlurBackground: {
-    height: SCREEN_HEIGHT,
-    width: SCREEN_WIDTH,
-  },
-  imageBlurBackgroundHidden: {},
 });

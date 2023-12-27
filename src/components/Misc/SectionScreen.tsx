@@ -5,6 +5,8 @@ import {Text} from 'react-native-paper';
 export interface ScreenSectionProps {
   children: ReactNode;
   style?: StyleProp<ViewStyle>;
+  leftAction?: () => void;
+  leftComponent?: ReactNode;
 }
 
 export default function SectionScreen({

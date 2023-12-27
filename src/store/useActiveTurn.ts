@@ -1,5 +1,4 @@
 import {create} from 'zustand';
-import {TestData} from '../screens/Home/HomeScreen';
 import {ITurn} from '../models/turn';
 
 type ActiveTurn = {
@@ -7,9 +6,9 @@ type ActiveTurn = {
   setActiveTurn: (turn: ITurn) => void;
 };
 
-const useActiveTurn = create<ActiveTurn>(set => ({
+const useActiveTurnStore = create<ActiveTurn>(set => ({
   activeTurn: {} as ITurn,
   setActiveTurn: (turn: ITurn) => set({activeTurn: turn}),
 }));
 
-export default useActiveTurn;
+export default useActiveTurnStore;

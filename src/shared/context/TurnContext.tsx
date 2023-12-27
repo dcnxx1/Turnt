@@ -1,7 +1,7 @@
 import {ReactNode, createContext, useContext, useEffect, useState} from 'react';
 import {TestData} from '../../screens/Home/HomeScreen';
-import {useActiveTurn} from '../../store/';
-import { ITurn } from '../../models/turn';
+import {useActiveTurnStore} from '../../store/';
+import {ITurn} from '../../models/turn';
 
 type TurnContext = {
   activeTurn: ITurn;
@@ -26,10 +26,9 @@ export default function TurnContextProvider({
   children,
 }: TurnContextProviderProps) {
   const [activeTurn, setActiveTurn] = useState({} as ITurn);
-  const {setActiveTurn: storeSetActiveTurn} = useActiveTurn();
+  const {setActiveTurn: storeSetActiveTurn} = useActiveTurnStore();
 
-  const handleSetActiveTurn = (activeTurn: ITurn) =>
-    setActiveTurn(activeTurn);
+  const handleSetActiveTurn = (activeTurn: ITurn) => setActiveTurn(activeTurn);
 
   useEffect(() => {
     storeSetActiveTurn(activeTurn);
