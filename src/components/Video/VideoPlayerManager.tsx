@@ -1,13 +1,12 @@
 import {useEffect, useRef} from 'react';
+import {Dimensions, StyleSheet} from 'react-native';
 import Video, {OnProgressData} from 'react-native-video';
-import {FileType, ITurn} from '../../models/turn';
-import {useTurnContext} from '../../shared/context/TurnContext';
-import {useActiveTurn, useSeek, useVideoStore} from '../../store';
-import VideoPlayer from './VideoPlayer';
 import {useCDN} from '../../api/api';
+import {FileType, ITurn} from '../../models/turn';
 import {COVER_KEY, TURN_KEY} from '../../s3';
-import {StyleSheet} from 'react-native';
+import {useActiveTurn, useSeek, useVideoStore} from '../../store';
 import ImageBlurBackground from '../Images/ImageBlurBackground';
+import VideoPlayer from './VideoPlayer';
 
 type Props = {
   videoId: ITurn['turn_id'];
@@ -16,6 +15,9 @@ type Props = {
   fileType: FileType;
   videoCover: string;
 };
+
+const SCREEN_WIDTH = Dimensions.get('screen').width;
+const SCREEN_HEIGHT = Dimensions.get('screen').height;
 
 export default function VideoPlayerManager({
   videoId,
@@ -50,20 +52,14 @@ export default function VideoPlayerManager({
 
   return (
     <>
-      {fileType === 'Audio' && isVideoOnScreen && (
-        <ImageBlurBackground
-          style={Style.video}
-          source={useCDN(COVER_KEY + videoCover)}
-        />
-      )}
+      {
+        activeTurn.type === 'Audio' ? <ImageBlurBackground
+        source={{uri: useCDN(COVER_KEY + videoCover)}}
+        style={Style.fileHidden}
+      /> : null
+      }
       <VideoPlayer
-        style={
-          isVideoOnScreen
-            ? fileType === 'Audio'
-              ? {height: 0, width: 0}
-              : Style.video
-            : Style.video
-        }
+        style={activeTurn.type === 'Audio' ? Style.fileHidden : Style.video}
         onEnd={onEnd}
         ref={ref}
         handleProgress={onProgress}
@@ -79,5 +75,12 @@ const Style = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  thumbnailStyle: {},
+  fileHidden: {
+    display: 'none',
+  },
+  imageBlurBackground: {
+    height: SCREEN_HEIGHT,
+    width: SCREEN_WIDTH,
+  },
+  imageBlurBackgroundHidden: {},
 });

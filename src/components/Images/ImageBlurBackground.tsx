@@ -21,8 +21,6 @@ export default function ImageBlurBackground({
 
 const Style = StyleSheet.create({
   container: {
-    width: '100%',
-    height: '100%',
     borderWidth: 2,
     position: 'relative',
     justifyContent: 'center',
