@@ -20,20 +20,25 @@ export default function AccountSetupScreen() {
     fieldValues: TCreateAccountFields,
   ) => {
     if (fieldValues) {
-      createAccountMutation(
-        {
-          fieldValues,
-          code: route.params.code,
-          role: route.params.role,
-        },
-        {
-          onSettled: createdUserResponse => {
-            if (createdUserResponse) {
-              me.setLocalUserProfile(createdUserResponse);
-            }
-          },
-        },
-      );
+      me.setLocalUser({
+        role: 'Artist',
+        user_id: 'SOmeuser',
+        username: 'Wowzer',
+      });
+      // createAccountMutation(
+      //   {
+      //     fieldValues,
+      //     code: route.params.code,
+      //     role: route.params.role,
+      //   },
+      //   {
+      //     onSettled: createdUserResponse => {
+      //       if (createdUserResponse) {
+      //         me.setLocalUser(createdUserResponse)
+      //       }
+      //     },
+      //   },
+      // );
     }
   };
   const header = (

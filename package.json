@@ -9,6 +9,9 @@
     "start": "react-native start",
     "test": "jest"
   },
+  "jest": {
+    "preset": "react-native"
+  },
   "reactNativePermissionsIOS": [
     "MediaLibrary"
   ],
@@ -56,6 +59,7 @@
     "@react-native/metro-config": "^0.72.11",
     "@tanstack/eslint-plugin-query": "^5.8.4",
     "@tsconfig/react-native": "^3.0.0",
+    "@types/jest": "^29.5.11",
     "@types/react": "^18.0.24",
     "@types/react-native-video": "^5.0.18",
     "@types/react-test-renderer": "^18.0.0",

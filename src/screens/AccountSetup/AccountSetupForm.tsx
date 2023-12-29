@@ -196,10 +196,7 @@ export default function AccountSetupForm({
       </Flex>
 
       <Flex>
-        <Button
-          disabled={isSubmitting}
-          onPress={handleOnPressNext}
-          style={Style.button}>
+        <Button onPress={handleOnPressNext} style={Style.button}>
           Volgende
         </Button>
       </Flex>

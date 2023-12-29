@@ -1,17 +1,19 @@
-/**
- * @format
- */
+import {MMKV} from 'react-native-mmkv';
 
-import 'react-native';
-import React from 'react';
-import App from '../src/app/App';
+describe('Test STore', () => {
+  let storage: MMKV;
 
-// Note: import explicitly to use the types shiped with jest.
-import {it} from '@jest/globals';
+  beforeAll(() => {
+    storage = new MMKV();
+  });
 
-// Note: test renderer must be required after react-native.
-import renderer from 'react-test-renderer';
-
-it('renders correctly', () => {
-  renderer.create(<App />);
+  it('sets string value to store', () => {
+    const userArr = {
+      username: 'Wow',
+      age: 25,
+      rating: 5,
+    };
+    storage.set('user', JSON.stringify(userArr));
+    expect(storage.getString('user')).toBeDefined()
+  });
 });

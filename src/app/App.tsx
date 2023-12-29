@@ -9,9 +9,7 @@ export default function App() {
   return (
     <StrictMode>
       <QueryClientProvider client={queryClient}>
-        <AppContent>
-          <Navigation />
-        </AppContent>
+        <AppContent />
       </QueryClientProvider>
     </StrictMode>
   );

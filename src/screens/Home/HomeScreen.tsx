@@ -1,4 +1,4 @@
-import {useQuery} from '@tanstack/react-query';
+import {useQuery, useQueryClient} from '@tanstack/react-query';
 import {StyleSheet} from 'react-native';
 import {Text} from 'react-native-paper';
 import {getFeed} from '../../api/collection';
@@ -11,9 +11,11 @@ export type TestData = {
 };
 
 function HomeScreen(): JSX.Element {
+  const queryClient = useQueryClient();
   const {data: turns} = useQuery({
     queryKey: ['feed'],
     queryFn: () => getFeed(),
+    initialData: queryClient.getQueryData(['feed']),
   });
 
   const content = turns ? (

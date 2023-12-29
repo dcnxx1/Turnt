@@ -1,9 +1,13 @@
-import {useQuery} from '@tanstack/react-query';
-import {FC, ReactNode, useEffect} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {ReactNode} from 'react';
 import TrackPlayer, {Capability, Track} from 'react-native-track-player';
-import {getFeed} from '../api/collection';
-import {ITurn} from '../models/turn';
 import {COVER_KEY, TURN_KEY, useCDN} from '../api/api';
+import {ITurn} from '../models/turn';
+import {Navigation} from '../nav';
+import {RootNavNames} from '../nav/types';
+import useLocalUserProfile from '../shared/hooks/useLocalUserProfile';
+import {Text} from 'react-native-paper';
+
 type Props = {
   children: ReactNode;
 };
@@ -16,10 +20,9 @@ async function setupTrackPlayer() {
       Capability.Play,
       Capability.Pause,
       Capability.SkipToNext,
-
       Capability.SkipToPrevious,
       Capability.SeekTo,
-      Capability.Like,
+      Capability.Stop,
     ],
   });
 }
@@ -38,17 +41,22 @@ export function turnArrayToTracksMapper(turns: ITurn[]): Track[] {
   });
 }
 
-const AppContent: FC<Props> = ({children}: Props) => {
-  const {data} = useQuery({queryKey: ['feed'], queryFn: getFeed});
-  useEffect(() => {
-    async function addToTrackPlayer() {
-      if (data) {
-        await TrackPlayer.add([...turnArrayToTracksMapper(data)]);
-      }
-    }
-    addToTrackPlayer();
-  }, [data]);
-  return <>{children}</>;
+const AppContent = () => {
+  const me = useLocalUserProfile();
+
+  if (me.isLoading) {
+    return <Text>WACHT EFE MFER</Text>;
+  }
+
+  return (
+    <NavigationContainer>
+      <Navigation
+        initialRoute={
+          me.isSignedIn ? RootNavNames.HomeStack : RootNavNames.SetupStack
+        }
+      />
+    </NavigationContainer>
+  );
 };
 
 export default AppContent;

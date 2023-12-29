@@ -1,14 +1,8 @@
-import {
-  NavigationContainer,
-  NavigationContainerRef,
-} from '@react-navigation/native';
-
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {
   StackNavigationOptions,
   createStackNavigator,
 } from '@react-navigation/stack';
-import {useRef} from 'react';
 import {PaperProvider} from 'react-native-paper';
 import Tabbar from '../components/Tabbar/Tabbar';
 import {
@@ -20,11 +14,9 @@ import {
 } from '../screens';
 import AccountSetupScreen from '../screens/AccountSetup/AccountSetupScreen';
 import AuthScreen from '../screens/Auth/AuthScreen';
-import useLocalUserProfile from '../shared/hooks/useLocalUserProfile';
 
 import {AccountSetupParams, EditorParams, HomeParams} from './navparams';
 import {NavScreenNames, RootNavNames} from './types';
-import {stopPlaybackTrackPlayerCapabilities} from '../utils';
 
 const HomeStack = createBottomTabNavigator<HomeParams>();
 const RootStack = createStackNavigator();
@@ -39,7 +31,6 @@ const screenOptions: StackNavigationOptions = {
 function HomeStackNavigator() {
   return (
     <HomeStack.Navigator
-      backBehavior={'initialRoute'}
       detachInactiveScreens={false}
       tabBar={props => <Tabbar {...props} />}
       screenOptions={{
@@ -58,7 +49,7 @@ function HomeStackNavigator() {
 function SetupScreenStackNavigator() {
   return (
     <SetupStack.Navigator
-      initialRouteName={NavScreenNames.AuthScreen}
+      initialRouteName={NavScreenNames.AccountSetupScreen}
       screenOptions={screenOptions}>
       <SetupStack.Screen
         component={OnBoardScreen}
@@ -93,43 +84,29 @@ function EditorStackNavigator() {
   );
 }
 
-export default function Navigation() {
-  const me = useLocalUserProfile();
-  const navigationRef = useRef<NavigationContainerRef<any>>(null);
+type Props = {
+  initialRoute: string;
+};
 
-  const onStateChange = () => {
-    const state = navigationRef.current?.getState();
-    const routes = state?.routes || [];
-    const previousRouteParams = routes[routes.length - 2];
-    const currentRoute = routes[routes.length - 1].name;
-    if (previousRouteParams) {
-      stopPlaybackTrackPlayerCapabilities();
-    }
-  };
-
+export default function Navigation({initialRoute}: Props) {
   return (
     <PaperProvider>
-      <NavigationContainer ref={navigationRef} onStateChange={onStateChange}>
-        <RootStack.Navigator
-          screenOptions={screenOptions}
-          initialRouteName={RootNavNames.SetupStack}>
-          {me.profile ? (
-            <RootStack.Screen
-              name={RootNavNames.HomeStack}
-              component={HomeStackNavigator}
-            />
-          ) : (
-            <RootStack.Screen
-              name={RootNavNames.SetupStack}
-              component={SetupScreenStackNavigator}
-            />
-          )}
-          <RootStack.Screen
-            name={RootNavNames.EditorStack}
-            component={EditorStackNavigator}
-          />
-        </RootStack.Navigator>
-      </NavigationContainer>
+      <RootStack.Navigator
+        screenOptions={screenOptions}
+        initialRouteName={initialRoute}>
+        <RootStack.Screen
+          name={RootNavNames.HomeStack}
+          component={HomeStackNavigator}
+        />
+        <RootStack.Screen
+          name={RootNavNames.SetupStack}
+          component={SetupScreenStackNavigator}
+        />
+        <RootStack.Screen
+          name={RootNavNames.EditorStack}
+          component={EditorStackNavigator}
+        />
+      </RootStack.Navigator>
     </PaperProvider>
   );
 }
