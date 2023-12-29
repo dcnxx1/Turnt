@@ -3,46 +3,30 @@ import {useEffect, useRef, useState} from 'react';
 import {Dimensions, ViewabilityConfig} from 'react-native';
 import {FileType, ITurn} from '../../models/turn';
 import {useTurnContext} from '../../shared/context/TurnContext';
-import useDispatchVideoTurn from '../../store/useDispatchVideoTurn';
 import SkeletonScreen from '../SkeletonScreen/SkeletonScreen';
 import VideoPlayerManager from '../Video/VideoPlayerManager';
 import SkeletonFlashList from './SkeletonFlashList';
+import useVideoListIndexDispatch from '../../store/useVideoListIndexDispatch';
+import {useActiveTurnStore} from '../../store';
 
 type CollectionTurnProps = {
   data: ITurn[];
 };
 
 export default function VideoListManager({data}: CollectionTurnProps) {
-  const {handleSetActiveTurn} = useTurnContext();
-  const [activeTurnIndex, setActiveTurnIndex] = useState(0);
+  const {setActiveTurn} = useActiveTurnStore();
+  const {index, increment} = useVideoListIndexDispatch();
 
   const ref = useRef<FlashList<ITurn>>(null);
-  const {type, dispatch} = useDispatchVideoTurn();
-
-  const onEndTurn = () => {
-    dispatch('PLAY_NEXT');
-  };
 
   useEffect(() => {
-    switch (type) {
-      case 'PLAY_NEXT':
-        ref.current?.scrollToIndex({
-          animated: true,
-          index: activeTurnIndex + 1,
-        });
-
-        break;
-      case 'PLAY_PREVIOUS':
-        ref.current?.scrollToIndex({
-          animated: true,
-          index: activeTurnIndex - 1,
-        });
-        break;
-      default:
-        null;
-        break;
+    if (ref.current) {
+      ref.current.scrollToIndex({
+        animated: true,
+        index,
+      });
     }
-  }, [type, ref]);
+  }, [index, ref]);
 
   const renderItem: ListRenderItem<ITurn> = ({item}) => {
     return (
@@ -51,13 +35,13 @@ export default function VideoListManager({data}: CollectionTurnProps) {
         videoCover={item.cover}
         source={item.source}
         videoId={item.turn_id}
-        onEnd={onEndTurn}
+        onEnd={increment}
       />
     );
   };
 
   useEffect(() => {
-    handleSetActiveTurn(data[0]);
+    setActiveTurn(data[0]);
   }, []);
 
   const keyExtractor = ({turn_id}: ITurn) => {
@@ -75,10 +59,10 @@ export default function VideoListManager({data}: CollectionTurnProps) {
       const {item, index} = info.viewableItems[0];
       if (item !== null) {
         const currentActiveTurn = item as ITurn;
-        handleSetActiveTurn(currentActiveTurn);
+        setActiveTurn(currentActiveTurn);
       }
       if (index !== null) {
-        setActiveTurnIndex(index);
+        // setIndex(index);
       }
     }
   };

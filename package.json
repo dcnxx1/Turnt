@@ -25,6 +25,7 @@
     "@react-navigation/bottom-tabs": "^6.5.11",
     "@react-navigation/native": "^6.1.9",
     "@react-navigation/stack": "^6.3.20",
+    "@reduxjs/toolkit": "^2.0.1",
     "@shopify/flash-list": "^1.6.3",
     "@tanstack/react-query": "^5.8.9",
     "aws-sdk": "^2.1511.0",
@@ -46,8 +47,10 @@
     "react-native-reanimated": "^3.6.1",
     "react-native-safe-area-context": "^4.7.4",
     "react-native-screens": "^3.27.0",
+    "react-native-splash-screen": "^3.3.0",
     "react-native-track-player": "^4.0.1",
     "react-native-video": "^5.2.1",
+    "redux": "^5.0.1",
     "zod": "^3.22.4",
     "zustand": "^4.4.7"
   },

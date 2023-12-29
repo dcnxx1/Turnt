@@ -52,15 +52,13 @@ export default function VideoPlayerManager({
   }, [isVideoOnScreen]);
 
   return (
-    <>
-      <VideoPlayer
-        onEnd={onEnd}
-        ref={ref}
-        handleProgress={onProgress}
-        source={useCDN(TURN_KEY + source)}
-        paused={isVideoOnScreen ? !isPlaying : true}
-      />
-    </>
+    <VideoPlayer
+      onEnd={onEnd}
+      ref={ref}
+      handleProgress={onProgress}
+      source={useCDN(TURN_KEY + source)}
+      paused={isVideoOnScreen ? !isPlaying : true}
+    />
   );
 }
 

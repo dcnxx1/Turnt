@@ -19,9 +19,9 @@ function HomeScreen(): JSX.Element {
   });
 
   const content = turns ? (
-    <TurnContextProvider>
+  
       <VideoListManager data={turns} />
-    </TurnContextProvider>
+ 
   ) : (
     <Text>Loading...</Text>
   );

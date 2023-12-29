@@ -8,7 +8,6 @@ import {forwardRef} from 'react';
 import {Dimensions, ViewabilityConfig} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
-
 const screenWidth = Dimensions.get('screen').width;
 const screenHeight = Dimensions.get('screen').height;
 
@@ -55,6 +54,7 @@ export default forwardRef<FlashList<any>, SkeletonFlashListProps<any>>(
       decelerationRate,
       snapToAlignment,
       viewabilityConfig,
+
       data,
       snapToInterval = screenHeight,
       showScroll = false,
@@ -76,7 +76,6 @@ export default forwardRef<FlashList<any>, SkeletonFlashListProps<any>>(
         viewabilityConfig={viewabilityConfig}
         extraData={extraData}
         estimatedItemSize={estimatedItemSize}
-        
         renderItem={renderItem}
         contentContainerStyle={{
           paddingTop: hasSafeAreaInsets ? padding.top : 0,

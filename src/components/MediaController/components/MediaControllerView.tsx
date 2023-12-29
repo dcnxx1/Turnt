@@ -1,19 +1,18 @@
 import BottomSheet from '@gorhom/bottom-sheet';
 import {BlurView} from '@react-native-community/blur';
-import {useCallback, useEffect, useMemo} from 'react';
+import {useCallback, useMemo} from 'react';
 import {StyleSheet, View} from 'react-native';
+import {useActiveTurnStore, useVideoStore} from '../../../store';
+import useVideoListIndexDispatch from '../../../store/useVideoListIndexDispatch';
 import Flex from '../../Misc/Flex';
 import {blurViewConfig, bottomSheetConfig} from '../configs';
-import TimelineSliderBar from './TimelineSliderBar';
 import MediaControllerArtistSong from './MediaControllerArtistSong';
-import {Text} from 'react-native-paper';
 import {
   PlayNextButton,
   PlayPreviousButton,
   TogglePlayPauseButton,
 } from './MediaControllerButtons';
-import {useActiveTurnStore, useVideoStore} from '../../../store';
-import useDispatchVideoTurn from '../../../store/useDispatchVideoTurn';
+import TimelineSliderBar from './TimelineSliderBar';
 
 type MediaControllerView = {
   tabHeight: number;
@@ -22,7 +21,7 @@ type MediaControllerView = {
 export default function MediaControllerView({tabHeight}: MediaControllerView) {
   const snapPoints = useMemo(() => ['4%', '35%'], []);
   const {isPlaying, setIsPlaying} = useVideoStore();
-  const {dispatch} = useDispatchVideoTurn();
+  const {increment, decrement} = useVideoListIndexDispatch();
   const {activeTurn} = useActiveTurnStore();
 
   const onPressTogglePlayPause = () => {
@@ -30,11 +29,11 @@ export default function MediaControllerView({tabHeight}: MediaControllerView) {
   };
 
   const onPressNext = useCallback(() => {
-    dispatch('PLAY_NEXT');
-  }, [dispatch]);
+    increment();
+  }, []);
   const onPressPrevious = useCallback(() => {
-    dispatch('PLAY_PREVIOUS');
-  }, [dispatch]);
+    decrement();
+  }, []);
 
   return (
     <BottomSheet

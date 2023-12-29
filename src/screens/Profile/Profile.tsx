@@ -5,7 +5,6 @@ import {Text} from 'react-native-paper';
 import SkeletonScreen from '../../components/SkeletonScreen/SkeletonScreen';
 import {HomeParams} from '../../nav/navparams';
 import theme from '../../theme';
-import {removeLocalUserProfile} from '../../app/boot';
 
 export default function Profile(): JSX.Element {
   const navigation = useNavigation<StackNavigationProp<HomeParams>>();
