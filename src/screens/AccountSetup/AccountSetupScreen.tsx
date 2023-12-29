@@ -8,7 +8,7 @@ import {AccountSetupParams} from '../../nav/navparams';
 import theme from '../../theme';
 import AccountSetupForm, {TCreateAccountFields} from './AccountSetupForm';
 import useCreateAccount from './hooks/useCreateAccount';
-import { setLocalUserProfile } from '../../app/boot';
+import {setLocalUserProfile} from '../../app/boot';
 
 const LinearGradientSkeletonScreen = withLinearGradient(SkeletonScreen);
 
@@ -20,25 +20,20 @@ export default function AccountSetupScreen() {
     fieldValues: TCreateAccountFields,
   ) => {
     if (fieldValues) {
-      setLocalUserProfile({
-        role: 'Artist',
-        user_id: '25152151521',
-        username: 'WOWOWOWO'
-      })
-      // createAccountMutation(
-      //   {
-      //     fieldValues,
-      //     code: route.params.code,
-      //     role: route.params.role,
-      //   },
-      //   {
-      //     onSettled: createdUserResponse => {
-      //       if (createdUserResponse) {
-      //         me.setLocalUser(createdUserResponse)
-      //       }
-      //     },
-      //   },
-      // );
+      createAccountMutation(
+        {
+          fieldValues,
+          code: route.params.code,
+          role: route.params.role,
+        },
+        {
+          onSettled: createdUserResponse => {
+            if (createdUserResponse) {
+              setLocalUserProfile(createdUserResponse);
+            }
+          },
+        },
+      );
     }
   };
   const header = (

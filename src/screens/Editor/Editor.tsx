@@ -17,7 +17,6 @@ const LinearGradientScreen = withLinearGradient(SkeletonScreen);
 
 export default function Editor(): JSX.Element {
   const {params} = useRoute<RouteProp<Pick<EditorParams, 'EditorScreen'>>>()!;
-  // const me = useLocalUserProfile();
   const createTurnMutation = useCreateTurn();
   const queryClient = useQueryClient();
   const navigation = useNavigation<StackNavigationProp<EditorParams>>();

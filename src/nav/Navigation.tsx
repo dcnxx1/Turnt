@@ -52,7 +52,7 @@ function HomeStackNavigator() {
 function SetupScreenStackNavigator() {
   return (
     <SetupStack.Navigator
-      initialRouteName={NavScreenNames.AccountSetupScreen}
+      initialRouteName={NavScreenNames.OnBoardScreen}
       screenOptions={screenOptions}>
       <SetupStack.Screen
         component={OnBoardScreen}

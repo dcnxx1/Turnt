@@ -14,7 +14,7 @@ export default function Profile(): JSX.Element {
   };
 
   const content = (
-    <Pressable onPress={removeLocalUserProfile}>
+    <Pressable onPress={onPressNavigateEditor}>
       <Text>Go to editor</Text>
     </Pressable>
   );
