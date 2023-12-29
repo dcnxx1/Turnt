@@ -15,7 +15,7 @@ type CollectionTurnProps = {
 
 export default function VideoListManager({data}: CollectionTurnProps) {
   const {setActiveTurn} = useActiveTurnStore();
-  const {index, increment} = useVideoListIndexDispatch();
+  const {index, increment, setIndex} = useVideoListIndexDispatch();
 
   const ref = useRef<FlashList<ITurn>>(null);
 
@@ -62,7 +62,7 @@ export default function VideoListManager({data}: CollectionTurnProps) {
         setActiveTurn(currentActiveTurn);
       }
       if (index !== null) {
-        // setIndex(index);
+        setIndex(index);
       }
     }
   };
