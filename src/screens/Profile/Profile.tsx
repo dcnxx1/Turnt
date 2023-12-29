@@ -5,16 +5,16 @@ import {Text} from 'react-native-paper';
 import SkeletonScreen from '../../components/SkeletonScreen/SkeletonScreen';
 import {HomeParams} from '../../nav/navparams';
 import theme from '../../theme';
-import useLocalUserProfile from '../../shared/hooks/useLocalUserProfile';
+import {removeLocalUserProfile} from '../../app/boot';
+
 export default function Profile(): JSX.Element {
   const navigation = useNavigation<StackNavigationProp<HomeParams>>();
   const onPressNavigateEditor = () => {
     navigation.navigate('EditorStack');
   };
-  const me = useLocalUserProfile()
 
   const content = (
-    <Pressable onPress={me.removeLocalUser}>
+    <Pressable onPress={removeLocalUserProfile}>
       <Text>Go to editor</Text>
     </Pressable>
   );

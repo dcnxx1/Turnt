@@ -8,7 +8,7 @@ import {withLinearGradient} from '../../components/SkeletonScreen/SkeletonScreen
 import {deleteThumbnailContent} from '../../helpers';
 import {FileType, Genre} from '../../models/turn';
 import {EditorParams} from '../../nav/navparams';
-import useLocalUserProfile from '../../shared/hooks/useLocalUserProfile';
+
 import {useActiveTurnStore} from '../../store';
 import theme from '../../theme';
 import EditorScreen, {EditorFormValuesType} from './EditorScreen';
@@ -17,7 +17,7 @@ const LinearGradientScreen = withLinearGradient(SkeletonScreen);
 
 export default function Editor(): JSX.Element {
   const {params} = useRoute<RouteProp<Pick<EditorParams, 'EditorScreen'>>>()!;
-  const me = useLocalUserProfile();
+  // const me = useLocalUserProfile();
   const createTurnMutation = useCreateTurn();
   const queryClient = useQueryClient();
   const navigation = useNavigation<StackNavigationProp<EditorParams>>();
@@ -26,7 +26,7 @@ export default function Editor(): JSX.Element {
   const onPressSubmitWithoutErrors = (fieldValues: EditorFormValuesType) => {
     createTurnMutation(
       {
-        artist_id: me.profile.user_id,
+        artist_id: '',
         cover: fieldValues.cover,
         duration: params?.duration ?? 0,
         genre: fieldValues.genre as Genre,

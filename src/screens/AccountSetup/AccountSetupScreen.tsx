@@ -4,27 +4,27 @@ import {Text} from 'react-native-paper';
 import {Flex, SkeletonScreen} from '../../components';
 import {withLinearGradient} from '../../components/SkeletonScreen/SkeletonScreen';
 import {AccountSetupParams} from '../../nav/navparams';
-import useLocalUserProfile from '../../shared/hooks/useLocalUserProfile';
+
 import theme from '../../theme';
 import AccountSetupForm, {TCreateAccountFields} from './AccountSetupForm';
 import useCreateAccount from './hooks/useCreateAccount';
+import { setLocalUserProfile } from '../../app/boot';
 
 const LinearGradientSkeletonScreen = withLinearGradient(SkeletonScreen);
 
 export default function AccountSetupScreen() {
   const route = useRoute<RouteProp<AccountSetupParams, 'AccountSetupScreen'>>();
   const createAccountMutation = useCreateAccount();
-  const me = useLocalUserProfile();
 
   const onSubmitCreateAccountWithoutErrors = (
     fieldValues: TCreateAccountFields,
   ) => {
     if (fieldValues) {
-      me.setLocalUser({
+      setLocalUserProfile({
         role: 'Artist',
-        user_id: 'SOmeuser',
-        username: 'Wowzer',
-      });
+        user_id: '25152151521',
+        username: 'WOWOWOWO'
+      })
       // createAccountMutation(
       //   {
       //     fieldValues,

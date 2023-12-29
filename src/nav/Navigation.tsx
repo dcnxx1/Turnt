@@ -17,6 +17,9 @@ import AuthScreen from '../screens/Auth/AuthScreen';
 
 import {AccountSetupParams, EditorParams, HomeParams} from './navparams';
 import {NavScreenNames, RootNavNames} from './types';
+import useLocalProfile from '../store/useLocalProfile';
+import {useEffect} from 'react';
+import {removeLocalUserProfile} from '../app/boot';
 
 const HomeStack = createBottomTabNavigator<HomeParams>();
 const RootStack = createStackNavigator();
@@ -89,19 +92,25 @@ type Props = {
 };
 
 export default function Navigation({initialRoute}: Props) {
+  const me = useLocalProfile();
+
   return (
     <PaperProvider>
       <RootStack.Navigator
         screenOptions={screenOptions}
         initialRouteName={initialRoute}>
-        <RootStack.Screen
-          name={RootNavNames.HomeStack}
-          component={HomeStackNavigator}
-        />
-        <RootStack.Screen
-          name={RootNavNames.SetupStack}
-          component={SetupScreenStackNavigator}
-        />
+        {me.user?.user_id ? (
+          <RootStack.Screen
+            name={RootNavNames.HomeStack}
+            component={HomeStackNavigator}
+          />
+        ) : (
+          <RootStack.Screen
+            name={RootNavNames.SetupStack}
+            component={SetupScreenStackNavigator}
+          />
+        )}
+
         <RootStack.Screen
           name={RootNavNames.EditorStack}
           component={EditorStackNavigator}

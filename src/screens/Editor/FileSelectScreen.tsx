@@ -6,7 +6,7 @@ import {SkeletonScreen} from '../../components';
 import {withLinearGradient} from '../../components/SkeletonScreen/SkeletonScreen';
 import {millisToSeconds} from '../../helpers';
 import {EditorParams} from '../../nav/navparams';
-import useLocalUserProfile from '../../shared/hooks/useLocalUserProfile';
+
 import theme from '../../theme';
 import {restoreTrackPlayerCapabilities} from '../../utils';
 import {getAudioDuration} from './hooks/useGenerateThumbnails';
@@ -21,9 +21,9 @@ const LinearGradientScreen = withLinearGradient(SkeletonScreen);
 type EditorParamsPath = EditorParams['EditorScreen'];
 
 export default function FileSelectScreen() {
-  const {
-    profile: {username},
-  } = useLocalUserProfile();
+  // const {
+  //   profile: {username},
+  // } = useLocalUserProfile();
   const navigation = useNavigation<StackNavigationProp<EditorParams>>();
   const defaultCoverColor: VideoCoverColor = chooseDefaultCoverImage();
 
@@ -76,7 +76,7 @@ export default function FileSelectScreen() {
   const header = (
     <>
       <Text onPress={onPressGoBack}>Terug</Text>
-      <Text style={Style.headerText}>Welkom {username}</Text>
+      <Text style={Style.headerText}>Welkom {''}</Text>
       <Text style={Style.colorWhite}>
         Kies een MP3 bestand of een video om te uploaden
       </Text>
