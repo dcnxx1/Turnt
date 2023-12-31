@@ -1,15 +1,18 @@
 import {forwardRef} from 'react';
 import {Dimensions, StyleProp, StyleSheet, ViewStyle} from 'react-native';
-import Video, {OnProgressData} from 'react-native-video';
+import Video, {OnLoadData, OnProgressData} from 'react-native-video';
 
 export type VideoPlayerProps = {
   source: string;
   paused: boolean | undefined;
-  onEnd?: () => void;
-  handleProgress?: (data: OnProgressData) => void;
   style?: StyleProp<ViewStyle>;
   playInBackground?: boolean;
   playWhenInactive?: boolean;
+
+  onEnd?: () => void;
+  onProgress: (data: OnProgressData) => void;
+  onReadyForDisplay: () => void;
+  onLoad: (data: OnLoadData) => void;
 };
 
 const SCREEN_WIDTH = Dimensions.get('screen').width;
@@ -21,8 +24,10 @@ export default forwardRef<Video, VideoPlayerProps>(
     {
       source,
       paused,
+      onLoad,
       onEnd,
-      handleProgress,
+      onProgress,
+      onReadyForDisplay,
       style,
       playInBackground = true,
       playWhenInactive = true,
@@ -32,13 +37,14 @@ export default forwardRef<Video, VideoPlayerProps>(
   ) => {
     return (
       <Video
-        currentTime={-1}
         ref={ref}
         source={{uri: source}}
         resizeMode={'cover'}
         onEnd={onEnd}
         ignoreSilentSwitch={'ignore'}
-        onProgress={handleProgress}
+        onLoad={onLoad}
+        onReadyForDisplay={onReadyForDisplay}
+        onProgress={onProgress}
         playInBackground={playInBackground}
         progressUpdateInterval={UPDATE_INTERVAL_MS}
         pictureInPicture={false}

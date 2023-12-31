@@ -1,6 +1,5 @@
 import {StyleSheet, View} from 'react-native';
 import theme from '../../../../theme';
-import {TimelineDimensions} from './Timeline';
 
 type Props = {
   width: number;

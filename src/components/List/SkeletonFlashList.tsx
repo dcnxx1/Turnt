@@ -5,7 +5,13 @@ import {
   ViewToken,
 } from '@shopify/flash-list';
 import {forwardRef} from 'react';
-import {Dimensions, ViewabilityConfig} from 'react-native';
+import {
+  Dimensions,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  ViewabilityConfig,
+  ViewabilityConfigCallbackPairs,
+} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const screenWidth = Dimensions.get('screen').width;
@@ -30,6 +36,7 @@ export type SkeletonFlashListProps<T> = {
   bounces?: boolean;
   data?: readonly T[];
   hasSafeAreaInsets?: boolean;
+  onScroll: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
   decelerationRate?: number | 'fast' | 'normal' | undefined;
   showScroll?: boolean;
   FULL_SCREEN?: boolean;
@@ -49,12 +56,12 @@ export default forwardRef<FlashList<any>, SkeletonFlashListProps<any>>(
         height: screenHeight,
       },
       contentContainerStyle,
+      onScroll,
       enableSnap,
       bounces = false,
       decelerationRate,
       snapToAlignment,
       viewabilityConfig,
-
       data,
       snapToInterval = screenHeight,
       showScroll = false,
@@ -68,6 +75,7 @@ export default forwardRef<FlashList<any>, SkeletonFlashListProps<any>>(
       <FlashList
         ref={ref}
         data={data}
+        onScroll={onScroll}
         onViewableItemsChanged={onViewableItemsChanged}
         showsHorizontalScrollIndicator={showScroll}
         keyExtractor={keyExtractor}

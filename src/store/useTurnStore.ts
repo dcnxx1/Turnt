@@ -1,26 +1,30 @@
 import {create} from 'zustand';
 import {ITurn} from '../models/turn';
 
-type TurnStore = {
+type ActiveTurnProps = {
   title: ITurn['title'];
   artist: ITurn['user']['alias'];
   duration: ITurn['duration'];
   progress: number;
   isSeeking: boolean;
-
-  incrementProgress: () => void;
-  setProgress: (progress: number) => void;
-  setIsSeeking: (isSeeking: boolean) => void;
+  isPlaying: boolean;
+  isActive: boolean;
 };
 
-const useTurnStore = create<TurnStore>(set => ({
-  title: '',
-  artist: '',
-  progress: 0,
-  duration: 0,
-  isSeeking: false,
+type TurnStore = {
+  turns: ActiveTurnProps[];
+  setTurns: (turns: ActiveTurnProps[]) => void;
+  setNextTurn: (turn: ActiveTurnProps) => void;
+};
 
-  incrementProgress: () => set(state => ({progress: (state.progress += 1)})),
-  setProgress: (progress: number) => set({progress}),
-  setIsSeeking: (isSeeking: boolean) => set({isSeeking}),
+const useTurnStore = create<TurnStore>((set, get) => ({
+  turns: [],
+  setTurns: (turns: ActiveTurnProps[]) => set({turns}),
+
+  setNextTurn: (turn: ActiveTurnProps) =>
+    set(state => ({
+      turns: [...state.turns, turn],
+    })),
 }));
+
+export default useTurnStore;

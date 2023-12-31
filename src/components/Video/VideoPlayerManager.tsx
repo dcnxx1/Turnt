@@ -1,42 +1,33 @@
-import {useEffect, useRef} from 'react';
-import {Dimensions, StyleSheet} from 'react-native';
-import Video, {OnProgressData} from 'react-native-video';
+import {useCallback, useEffect, useRef, useState} from 'react';
+import {Pressable, StyleSheet} from 'react-native';
+import Video, {OnLoadData, OnProgressData} from 'react-native-video';
 import {useCDN} from '../../api/api';
-import {FileType, ITurn} from '../../models/turn';
+import {ITurn} from '../../models/turn';
 import {TURN_KEY} from '../../s3';
 import {useActiveTurnStore, useSeek, useVideoStore} from '../../store';
 import VideoPlayer from './VideoPlayer';
-import TrackPlayer from 'react-native-track-player';
 
 type Props = {
   videoId: ITurn['turn_id'];
   onEnd: () => void;
   source: string;
-  fileType: FileType;
-  videoCover: string;
+  onLoad: (data: OnLoadData) => void;
 };
-
-const SCREEN_WIDTH = Dimensions.get('screen').width;
-const SCREEN_HEIGHT = Dimensions.get('screen').height;
 
 export default function VideoPlayerManager({
   videoId,
   source,
-  fileType,
   onEnd,
-  videoCover,
+  onLoad,
 }: Props) {
-  const {activeTurn} = useActiveTurnStore();
+  const {
+    activeTurn: {turn_id, duration},
+  } = useActiveTurnStore();
   const {isPlaying, setIsPlaying} = useVideoStore();
-  const setProgress = useVideoStore(state => state.setProgress);
+  const {setProgress} = useVideoStore();
   const ref = useRef<Video>(null);
-  const isVideoOnScreen = activeTurn.turn_id === videoId;
-  const {seekTo, setSeekTo} = useSeek();
-
-  const onProgress = ({currentTime}: OnProgressData) => {
-    setProgress(currentTime);
-    TrackPlayer.seekTo(currentTime);
-  };
+  const isVideoOnScreen = turn_id === videoId;
+  const {seekTo, setSeekTo, isSeeking} = useSeek();
 
   useEffect(() => {
     if (ref.current) {
@@ -48,14 +39,26 @@ export default function VideoPlayerManager({
     if (isVideoOnScreen && !isPlaying) {
       setIsPlaying(true);
     }
+    setProgress(0);
     setSeekTo(0);
   }, [isVideoOnScreen]);
 
+  const onProgress = ({currentTime}: OnProgressData) => {
+    if (isSeeking) return;
+    if (isVideoOnScreen && currentTime >= duration) {
+      onEnd();
+    }
+    isVideoOnScreen && setProgress(currentTime);
+  };
+
+  const onReadyForDisplay = () => {};
+
   return (
     <VideoPlayer
-      onEnd={onEnd}
+      onReadyForDisplay={onReadyForDisplay}
+      onLoad={onLoad}
       ref={ref}
-      handleProgress={onProgress}
+      onProgress={onProgress}
       source={useCDN(TURN_KEY + source)}
       paused={isVideoOnScreen ? !isPlaying : true}
     />

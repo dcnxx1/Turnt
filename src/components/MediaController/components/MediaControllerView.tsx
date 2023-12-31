@@ -50,7 +50,7 @@ export default function MediaControllerView({tabHeight}: MediaControllerView) {
             />
           </View>
           <Flex style={Style.timelineSideBarContainer}>
-            <TimelineSliderBar videoDuration={activeTurn.duration} />
+            <TimelineSliderBar title={activeTurn.title} videoDuration={activeTurn.duration} />
           </Flex>
           <Flex style={Style.buttonContainer}>
             <PlayPreviousButton onPress={onPressPrevious} />

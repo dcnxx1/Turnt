@@ -57,10 +57,12 @@ export default function EditorVideoManager({
     <>
       <View style={Style.videoContainer}>
         <Pressable onPress={togglePlayPause}>
-          {fileType === 'Audio' && <ImageBlurBackground style={Style.video} source={videoCover} />}
+          {fileType === 'Audio' && (
+            <ImageBlurBackground style={Style.video} source={videoCover} />
+          )}
           <VideoPlayer
             ref={videoRef}
-            handleProgress={onProgress}
+            onProgress={onProgress}
             playInBackground={false}
             playWhenInactive={false}
             style={fileType === 'Audio' ? {height: 0, width: 0} : Style.video}

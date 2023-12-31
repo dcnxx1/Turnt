@@ -1,22 +1,32 @@
 import {FlashList, ListRenderItem, ViewToken} from '@shopify/flash-list';
 import {useEffect, useRef, useState} from 'react';
-import {Dimensions, ViewabilityConfig} from 'react-native';
-import {FileType, ITurn} from '../../models/turn';
-import {useTurnContext} from '../../shared/context/TurnContext';
+import {
+  Dimensions,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  ViewabilityConfig,
+} from 'react-native';
+import {OnLoadData} from 'react-native-video';
+import {ITurn} from '../../models/turn';
+import {useActiveTurnStore, useSeek, useVideoStore} from '../../store';
+import useVideoListIndexDispatch from '../../store/useVideoListIndexDispatch';
 import SkeletonScreen from '../SkeletonScreen/SkeletonScreen';
 import VideoPlayerManager from '../Video/VideoPlayerManager';
 import SkeletonFlashList from './SkeletonFlashList';
-import useVideoListIndexDispatch from '../../store/useVideoListIndexDispatch';
-import {useActiveTurnStore} from '../../store';
 
 type CollectionTurnProps = {
   data: ITurn[];
 };
 
+type OnScrollEvent = NativeSyntheticEvent<NativeScrollEvent>;
+
+const {height: SCREEN_HEIGHT} = Dimensions.get('screen');
+
 export default function VideoListManager({data}: CollectionTurnProps) {
   const {setActiveTurn} = useActiveTurnStore();
   const {index, increment, setIndex} = useVideoListIndexDispatch();
-
+  const {resetProgress, progress} = useVideoStore();
+  const {resetSeek} = useSeek();
   const ref = useRef<FlashList<ITurn>>(null);
 
   useEffect(() => {
@@ -28,11 +38,12 @@ export default function VideoListManager({data}: CollectionTurnProps) {
     }
   }, [index, ref]);
 
+  const onLoad = (videoData: OnLoadData) => {};
+
   const renderItem: ListRenderItem<ITurn> = ({item}) => {
     return (
       <VideoPlayerManager
-        fileType={item.type as FileType}
-        videoCover={item.cover}
+        onLoad={onLoad}
         source={item.source}
         videoId={item.turn_id}
         onEnd={increment}
@@ -71,9 +82,14 @@ export default function VideoListManager({data}: CollectionTurnProps) {
     viewAreaCoveragePercentThreshold: 95,
   }).current;
 
+  const onScroll = (ev: OnScrollEvent) => {
+   
+  };
+
   const content = (
     <SkeletonFlashList
-      extraData={[...data]}
+      onScroll={onScroll}
+      extraData={data}
       ref={ref}
       decelerationRate={'fast'}
       data={data}
@@ -82,9 +98,9 @@ export default function VideoListManager({data}: CollectionTurnProps) {
         width: Dimensions.get('screen').width,
         height: Dimensions.get('screen').height,
       }}
-      bounces={false}
       onViewableItemsChanged={onViewableItemsChanged}
       viewabilityConfig={viewConfigRef}
+      bounces={false}
       renderItem={renderItem}
       keyExtractor={keyExtractor}
     />
