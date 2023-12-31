@@ -36,7 +36,6 @@ export type SkeletonFlashListProps<T> = {
   bounces?: boolean;
   data?: readonly T[];
   hasSafeAreaInsets?: boolean;
-  onScroll: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
   decelerationRate?: number | 'fast' | 'normal' | undefined;
   showScroll?: boolean;
   FULL_SCREEN?: boolean;
@@ -56,7 +55,6 @@ export default forwardRef<FlashList<any>, SkeletonFlashListProps<any>>(
         height: screenHeight,
       },
       contentContainerStyle,
-      onScroll,
       enableSnap,
       bounces = false,
       decelerationRate,
@@ -75,7 +73,6 @@ export default forwardRef<FlashList<any>, SkeletonFlashListProps<any>>(
       <FlashList
         ref={ref}
         data={data}
-        onScroll={onScroll}
         onViewableItemsChanged={onViewableItemsChanged}
         showsHorizontalScrollIndicator={showScroll}
         keyExtractor={keyExtractor}

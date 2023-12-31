@@ -8,11 +8,10 @@ import {
 export default function useInitalizeApp(): [boolean, string] {
   const [isInitializing, setInitializing] = useState(true);
   const [initialRoute, setInitialRoute] = useState('');
-
+  
   async function initialize() {
     getLocalUserProfile();
     setInitialRoute(initialRouteSetter());
-
     await setupTrackPlayer();
 
     try {

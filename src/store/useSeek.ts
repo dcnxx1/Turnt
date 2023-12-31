@@ -4,7 +4,6 @@ type Seek = {
   isSeeking: boolean;
   setIsSeeking: (isSeeking: boolean) => void;
   setSeekTo: (seekTo: number) => void;
-  resetSeek: () => void;
 };
 
 const useSeek = create<Seek>(set => ({
@@ -12,7 +11,6 @@ const useSeek = create<Seek>(set => ({
   isSeeking: false,
   setIsSeeking: (isSeeking: boolean) => set({isSeeking}),
   setSeekTo: (seek: number) => set({seekTo: seek}),
-  resetSeek: () => set({seekTo: 0}),
 }));
 
 export default useSeek;

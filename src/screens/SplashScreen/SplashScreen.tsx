@@ -1,4 +1,5 @@
-import {Animated, Dimensions, StyleSheet} from 'react-native';
+import {Dimensions, StyleSheet} from 'react-native';
+import Animated, {FadeIn, FadeOut, Easing} from 'react-native-reanimated';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import SkeletonScreen, {
   withLinearGradient,
@@ -14,7 +15,9 @@ export default function SplashScreen() {
 
   return (
     <SafeAreaProvider style={{flex: 1}}>
-      <Animated.View style={Style.container}>
+      <Animated.View
+        exiting={FadeOut.duration(5000).easing(Easing.ease)}
+        style={Style.container}>
         <LinearGradientScreen
           content={content}
           gradient={[theme.color.turner, theme.color.turnerPurple]}

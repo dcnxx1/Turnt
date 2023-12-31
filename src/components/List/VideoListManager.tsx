@@ -18,15 +18,9 @@ type CollectionTurnProps = {
   data: ITurn[];
 };
 
-type OnScrollEvent = NativeSyntheticEvent<NativeScrollEvent>;
-
-const {height: SCREEN_HEIGHT} = Dimensions.get('screen');
-
 export default function VideoListManager({data}: CollectionTurnProps) {
   const {setActiveTurn} = useActiveTurnStore();
   const {index, increment, setIndex} = useVideoListIndexDispatch();
-  const {resetProgress, progress} = useVideoStore();
-  const {resetSeek} = useSeek();
   const ref = useRef<FlashList<ITurn>>(null);
 
   useEffect(() => {
@@ -82,13 +76,8 @@ export default function VideoListManager({data}: CollectionTurnProps) {
     viewAreaCoveragePercentThreshold: 95,
   }).current;
 
-  const onScroll = (ev: OnScrollEvent) => {
-   
-  };
-
   const content = (
     <SkeletonFlashList
-      onScroll={onScroll}
       extraData={data}
       ref={ref}
       decelerationRate={'fast'}

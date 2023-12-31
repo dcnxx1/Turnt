@@ -1,8 +1,9 @@
 import {NavigationContainer} from '@react-navigation/native';
-import {ReactNode} from 'react';
+import {ReactNode, useEffect, useRef} from 'react';
 import {Navigation} from '../nav';
 import SplashScreen from '../screens/SplashScreen/SplashScreen';
 import useInitalizeApp from './useIntializeApp';
+import RNBootSplash from 'react-native-bootsplash';
 
 type Props = {
   children: ReactNode;
@@ -10,12 +11,20 @@ type Props = {
 
 const AppContent = () => {
   const [isIntializing, initialRoute] = useInitalizeApp();
+  const epochRef = useRef(Date.now());
 
-  if (isIntializing) {
-    return <SplashScreen />;
-  }
+  useEffect(() => {
+    const elapsedTime = Date.now() - epochRef.current;
+    if (!isIntializing) {
+      setTimeout(() => {
+        RNBootSplash.hide({fade: true});
+      }, Math.max(100, 100 - elapsedTime));
+    }
+  }, [epochRef, isIntializing]);
 
-  return (
+  return isIntializing ? (
+    <SplashScreen />
+  ) : (
     <NavigationContainer>
       <Navigation initialRoute={initialRoute} />
     </NavigationContainer>
