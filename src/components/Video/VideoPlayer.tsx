@@ -11,7 +11,7 @@ export type VideoPlayerProps = {
 
   onEnd?: () => void;
   onProgress: (data: OnProgressData) => void;
-  onReadyForDisplay: () => void;
+  onReadyForDisplay?: () => void;
   onLoad: (data: OnLoadData) => void;
 };
 

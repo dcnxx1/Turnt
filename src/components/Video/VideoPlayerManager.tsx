@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
-import {Pressable, StyleSheet} from 'react-native';
+import {Pressable, StyleSheet, View} from 'react-native';
 import Video, {OnLoadData, OnProgressData} from 'react-native-video';
 import {useCDN} from '../../api/api';
 import {ITurn} from '../../models/turn';

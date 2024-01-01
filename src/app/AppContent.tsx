@@ -1,8 +1,8 @@
-import { NavigationContainer } from '@react-navigation/native';
-import { ReactNode, useEffect, useRef } from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {ReactNode, useEffect, useRef} from 'react';
 import RNBootSplash from 'react-native-bootsplash';
-import { Navigation } from '../nav';
-import useInitalizeApp from './useIntializeApp';
+import {Navigation} from '../nav';
+import useInitalizeApp from './useInitializeApp';
 
 type Props = {
   children: ReactNode;
@@ -14,7 +14,7 @@ const AppContent = () => {
 
   useEffect(() => {
     const elapsedTime = Date.now() - epochRef.current;
-    if (!isIntializing) {
+    if (!isIntializing && initialRoute) {
       setTimeout(() => {
         RNBootSplash.hide({fade: true});
       }, Math.max(100, 100 - elapsedTime));
@@ -23,7 +23,7 @@ const AppContent = () => {
 
   return (
     <NavigationContainer>
-      <Navigation initialRoute={'HomeStack'} />
+      <Navigation initialRoute={initialRoute} />
     </NavigationContainer>
   );
 };

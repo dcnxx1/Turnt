@@ -1,14 +1,14 @@
 import {create} from 'zustand';
 
-type PlaybackType = 'Video' | 'Audio';
+type PlayFrom = 'Home' | 'Playlist';
 
 type GlobalPlaybackService = {
-  playback: PlaybackType;
-  setPlayback: (playback: PlaybackType) => void;
+  playingFrom: PlayFrom;
+  setPlayback: (playback: PlayFrom) => void;
 };
 
 const useGlobalPlaybackStore = create<GlobalPlaybackService>(set => ({
-  playback: 'Video',
-  setPlayback: (playback: PlaybackType) => set({playback}),
+  playingFrom: 'Home',
+  setPlayback: (playingFrom: PlayFrom) => set({playingFrom}),
 }));
 export default useGlobalPlaybackStore;
