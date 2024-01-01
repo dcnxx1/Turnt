@@ -3,20 +3,34 @@ import {
   setIntialRoute as initialRouteSetter,
   getLocalUserProfile,
   setupTrackPlayer,
+  addTrackPlayerTracks,
 } from './boot';
+import {useQueryClient} from '@tanstack/react-query';
+import {getFeed} from '../api/collection';
+import {ITurn} from '../models/turn';
+import {useActiveTurnStore} from '../store';
 
 export default function useInitalizeApp(): [boolean, string] {
   const [isInitializing, setInitializing] = useState(true);
   const [initialRoute, setInitialRoute] = useState('');
-  
-  async function initialize() {
-    getLocalUserProfile();
-    setInitialRoute(initialRouteSetter());
-    await setupTrackPlayer();
+  const queryClient = useQueryClient();
+  const {setActiveTurn} = useActiveTurnStore();
+  queryClient.prefetchQuery({queryKey: ['feed'], queryFn: getFeed});
 
+  async function initialize() {
     try {
+      getLocalUserProfile();
+      setInitialRoute(initialRouteSetter());
+      await setupTrackPlayer();
+      const cachedData: ITurn[] | undefined = queryClient.getQueryData([
+        'feed',
+      ]);
+      if (cachedData) {
+        setActiveTurn(cachedData[0]);
+        addTrackPlayerTracks(cachedData);
+      }
     } catch (err) {
-      setInitializing(false);
+      console.log('ERR initializing app :>>', err);
     } finally {
       setInitializing(false);
     }

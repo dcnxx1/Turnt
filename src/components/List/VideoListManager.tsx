@@ -45,10 +45,6 @@ export default function VideoListManager({data}: CollectionTurnProps) {
     );
   };
 
-  useEffect(() => {
-    setActiveTurn(data[0]);
-  }, []);
-
   const keyExtractor = ({turn_id}: ITurn) => {
     return String(turn_id);
   };

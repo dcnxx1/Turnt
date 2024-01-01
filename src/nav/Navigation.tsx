@@ -97,7 +97,10 @@ export default function Navigation({initialRoute}: Props) {
   return (
     <PaperProvider>
       <RootStack.Navigator
-        screenOptions={screenOptions}
+        screenOptions={{
+          ...screenOptions,
+          animationEnabled: false,
+        }}
         initialRouteName={initialRoute}>
         {me.user?.user_id ? (
           <RootStack.Screen

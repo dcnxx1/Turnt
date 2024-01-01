@@ -20,13 +20,11 @@ const AppContent = () => {
         RNBootSplash.hide({fade: true});
       }, Math.max(100, 100 - elapsedTime));
     }
-  }, [epochRef, isIntializing]);
+  }, [epochRef, isIntializing, initialRoute]);
 
-  return isIntializing ? (
-    <SplashScreen />
-  ) : (
+  return (
     <NavigationContainer>
-      <Navigation initialRoute={initialRoute} />
+      <Navigation initialRoute={'HomeStack'} />
     </NavigationContainer>
   );
 };

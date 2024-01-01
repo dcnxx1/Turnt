@@ -24,9 +24,10 @@ export async function setupTrackPlayer() {
   }
 }
 
-export async function addTrackPlayerTracks(tracks: Track[]) {
+export async function addTrackPlayerTracks(turns: ITurn[]) {
+  const _tracks = turnArrayToTracksMapper(turns);
   try {
-    await TrackPlayer.add(tracks);
+    await TrackPlayer.add(_tracks);
   } catch (err) {
     throw new Error('ERR LOAD TRACKS :>> ' + err);
   }
