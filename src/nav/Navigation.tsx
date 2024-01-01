@@ -15,11 +15,9 @@ import {
 import AccountSetupScreen from '../screens/AccountSetup/AccountSetupScreen';
 import AuthScreen from '../screens/Auth/AuthScreen';
 
+import useLocalProfile from '../store/useLocalProfile';
 import {AccountSetupParams, EditorParams, HomeParams} from './navparams';
 import {NavScreenNames, RootNavNames} from './types';
-import useLocalProfile from '../store/useLocalProfile';
-import {useEffect} from 'react';
-import {removeLocalUserProfile} from '../app/boot';
 
 const HomeStack = createBottomTabNavigator<HomeParams>();
 const RootStack = createStackNavigator();
@@ -97,10 +95,7 @@ export default function Navigation({initialRoute}: Props) {
   return (
     <PaperProvider>
       <RootStack.Navigator
-        screenOptions={{
-          ...screenOptions,
-          animationEnabled: false,
-        }}
+        screenOptions={screenOptions}
         initialRouteName={initialRoute}>
         {me.user?.user_id ? (
           <RootStack.Screen

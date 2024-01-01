@@ -22,12 +22,12 @@ export default function useInitalizeApp(): [boolean, string] {
       getLocalUserProfile();
       setInitialRoute(initialRouteSetter());
       await setupTrackPlayer();
-      const cachedData: ITurn[] | undefined = queryClient.getQueryData([
+      const userFeed: ITurn[] | undefined = queryClient.getQueryData([
         'feed',
       ]);
-      if (cachedData) {
-        setActiveTurn(cachedData[0]);
-        addTrackPlayerTracks(cachedData);
+      if (userFeed) {
+        setActiveTurn(userFeed[0]);
+        addTrackPlayerTracks(userFeed);
       }
     } catch (err) {
       console.log('ERR initializing app :>>', err);

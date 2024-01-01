@@ -13,6 +13,7 @@ import {useActiveTurnStore} from '../../store';
 import theme from '../../theme';
 import EditorScreen, {EditorFormValuesType} from './EditorScreen';
 import useCreateTurn from './hooks/useCreateTurn';
+import useLocalProfile from '../../store/useLocalProfile';
 const LinearGradientScreen = withLinearGradient(SkeletonScreen);
 
 export default function Editor(): JSX.Element {
@@ -21,11 +22,11 @@ export default function Editor(): JSX.Element {
   const queryClient = useQueryClient();
   const navigation = useNavigation<StackNavigationProp<EditorParams>>();
   const {setActiveTurn} = useActiveTurnStore();
-
+  const me = useLocalProfile();
   const onPressSubmitWithoutErrors = (fieldValues: EditorFormValuesType) => {
     createTurnMutation(
       {
-        artist_id: '',
+        artist_id: me.user?.user_id ?? '',
         cover: fieldValues.cover,
         duration: params?.duration ?? 0,
         genre: fieldValues.genre as Genre,
