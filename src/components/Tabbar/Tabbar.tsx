@@ -4,6 +4,7 @@ import MediaController from '../MediaController/MediaController';
 import {useState} from 'react';
 import {LayoutChangeEvent} from 'react-native';
 import PlaylistSheet from '../Playlist/PlaylistSheet';
+import usePlaybackSourceStore from '../../store/usePlaybackSourceStore';
 
 type TabbarProps = {
   [P in keyof BottomTabBarProps]: BottomTabBarProps[P];
@@ -11,14 +12,20 @@ type TabbarProps = {
 
 export default function Tabbar(props: TabbarProps) {
   const [tabHeight, setTabHeight] = useState(0);
+  const playbackSource = usePlaybackSourceStore(state => state.playbackSource);
+
   const onLayoutBottomTab = (event: LayoutChangeEvent) => {
     const bottomTabHeight = event.nativeEvent.layout.height;
     setTabHeight(bottomTabHeight);
   };
+
   return (
     <>
-      <PlaylistSheet tabHeight={tabHeight} />
-      <MediaController tabHeight={tabHeight} />
+      {playbackSource === 'Home' ? (
+        <MediaController tabHeight={tabHeight} />
+      ) : (
+        <PlaylistSheet tabHeight={tabHeight} />
+      )}
       <BottomTab onLayout={onLayoutBottomTab} {...props} />
     </>
   );

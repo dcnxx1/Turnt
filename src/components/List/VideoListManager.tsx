@@ -1,11 +1,10 @@
-import { FlashList, ListRenderItem, ViewToken } from '@shopify/flash-list';
-import { useEffect, useRef } from 'react';
-import { Dimensions, ViewabilityConfig } from 'react-native';
-import { OnLoadData } from 'react-native-video';
-import { ITurn } from '../../models/turn';
-import { useActiveTurnStore } from '../../store';
+import {FlashList, ListRenderItem, ViewToken} from '@shopify/flash-list';
+import {useEffect, useRef} from 'react';
+import {Dimensions, ViewabilityConfig} from 'react-native';
+import {OnLoadData} from 'react-native-video';
+import {ITurn} from '../../models/turn';
+import {useActiveTurnStore} from '../../store';
 import useVideoListIndexDispatch from '../../store/useVideoListIndexDispatch';
-import SkeletonScreen from '../SkeletonScreen/SkeletonScreen';
 import VideoPlayerManager from '../Video/VideoPlayerManager';
 import SkeletonFlashList from './SkeletonFlashList';
 
@@ -67,7 +66,7 @@ export default function VideoListManager({data}: CollectionTurnProps) {
     viewAreaCoveragePercentThreshold: 95,
   }).current;
 
-  const content = (
+  return (
     <SkeletonFlashList
       extraData={data}
       ref={ref}
@@ -85,6 +84,4 @@ export default function VideoListManager({data}: CollectionTurnProps) {
       keyExtractor={keyExtractor}
     />
   );
-
-  return <SkeletonScreen content={content} />;
 }
