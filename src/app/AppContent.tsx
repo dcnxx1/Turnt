@@ -9,17 +9,17 @@ type Props = {
 };
 
 const AppContent = () => {
-  const [isIntializing, initialRoute] = useInitalizeApp();
+  const [isInitializing, initialRoute] = useInitalizeApp();
   const epochRef = useRef(Date.now());
 
   useEffect(() => {
     const elapsedTime = Date.now() - epochRef.current;
-    if (!isIntializing && initialRoute) {
+    if (!isInitializing && initialRoute) {
       setTimeout(() => {
         RNBootSplash.hide({fade: true});
       }, Math.max(100, 100 - elapsedTime));
     }
-  }, [epochRef, isIntializing, initialRoute]);
+  }, [epochRef, isInitializing, initialRoute]);
 
   return (
     <NavigationContainer>

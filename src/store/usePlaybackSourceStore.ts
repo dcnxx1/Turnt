@@ -1,6 +1,6 @@
 import {create} from 'zustand';
 
-type Source = 'Home' | 'Playlist';
+export type Source = 'Home' | 'Playlist';
 
 type PlaybackSource = {
   playbackSource: Source;

@@ -3,7 +3,7 @@ import {BlurView} from '@react-native-community/blur';
 import {useCallback, useMemo} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {useActiveTurnStore, useVideoStore} from '../../../store';
-import useVideoListIndexDispatch from '../../../store/useVideoListIndexDispatch';
+import useVideoListManagerDispatcherStore from '../../../store/useVideoListManagerDispatcherStore';
 import Flex from '../../Misc/Flex';
 import {blurViewConfig, bottomSheetConfig} from '../configs';
 import MediaControllerArtistSong from './MediaControllerArtistSong';
@@ -21,7 +21,7 @@ type MediaControllerView = {
 export default function MediaControllerView({tabHeight}: MediaControllerView) {
   const snapPoints = useMemo(() => ['4%', '35%'], []);
   const {isPlaying, setIsPlaying} = useVideoStore();
-  const {increment, decrement} = useVideoListIndexDispatch();
+  const {increment, decrement} = useVideoListManagerDispatcherStore();
   const {activeTurn} = useActiveTurnStore();
 
   const onPressTogglePlayPause = () => {
@@ -50,7 +50,10 @@ export default function MediaControllerView({tabHeight}: MediaControllerView) {
             />
           </View>
           <Flex style={Style.timelineSideBarContainer}>
-            <TimelineSliderBar title={activeTurn.title} videoDuration={activeTurn.duration} />
+            <TimelineSliderBar
+              title={activeTurn.title}
+              videoDuration={activeTurn.duration}
+            />
           </Flex>
           <Flex style={Style.buttonContainer}>
             <PlayPreviousButton onPress={onPressPrevious} />

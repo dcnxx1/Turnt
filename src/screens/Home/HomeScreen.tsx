@@ -19,7 +19,7 @@ function HomeScreen(): JSX.Element {
   });
 
   const content = turns ? (
-    <VideoListManager data={turns} />
+    <VideoListManager source={'Home'} data={turns} />
   ) : (
     <Text>Loading...</Text>
   );

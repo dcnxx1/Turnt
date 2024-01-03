@@ -4,41 +4,29 @@ import {Dimensions, ViewabilityConfig} from 'react-native';
 import {OnLoadData} from 'react-native-video';
 import {ITurn} from '../../models/turn';
 import {useActiveTurnStore} from '../../store';
-import useVideoListIndexDispatch from '../../store/useVideoListIndexDispatch';
+import useVideoListManagerDispatcherStore from '../../store/useVideoListManagerDispatcherStore';
 import VideoPlayerManager from '../Video/VideoPlayerManager';
 import SkeletonFlashList from './SkeletonFlashList';
 import TrackPlayer from 'react-native-track-player';
 import {turnToTrackMapper} from '../../utils';
+import {Source} from '../../store/usePlaybackSourceStore';
+
 
 type CollectionTurnProps = {
   data: ITurn[];
+  source: Source;
 };
 
-interface ReducerState {
-  index: number;
-}
-interface Action {
-  type: 'increment' | 'decrement';
-}
-
-function reducer(state: ReducerState, action: Action) {
-  const {type} = action;
-  switch (type) {
-    default:
-      return state;
-  }
-}
-
-export default function VideoListManager({data}: CollectionTurnProps) {
-  
-  const [state, dispatch] = useReducer(reducer, {index: 0});
-
+export default function VideoListManager({data, source}: CollectionTurnProps) {
   const {setActiveTurn} = useActiveTurnStore();
-  const [videoOnScreen, setVideoOnScreen] = useState();
-  const [listIndex, setListIndex] = useState();
-  const {index, increment, setIndex} = useVideoListIndexDispatch();
-  const ref = useRef<FlashList<ITurn>>(null);
+  const [activeVideoOnScreen, setActiveVideoOnScreen] = useState(data[0]);
 
+  const {increment, setIndex} = useVideoListManagerDispatcherStore();
+  const index = useVideoListManagerDispatcherStore(state =>
+    source === 'Home' ? state.index : state.playlistIndex,
+  );
+
+  const ref = useRef<FlashList<ITurn>>(null);
   useEffect(() => {
     if (ref.current) {
       ref.current.scrollToIndex({

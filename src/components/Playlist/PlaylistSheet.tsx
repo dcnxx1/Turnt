@@ -19,7 +19,7 @@ export default function PlaylistSheet({tabHeight}: Props) {
     <BottomSheet index={1} bottomInset={tabHeight} snapPoints={snapPoints}>
       <View style={Style.container}>
         {playlistData ? (
-          <VideoListManager data={playlistData} />
+          <VideoListManager source={'Playlist'} data={playlistData} />
         ) : (
           <Text>Loading...</Text>
         )}
