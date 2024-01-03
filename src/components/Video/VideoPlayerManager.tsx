@@ -6,6 +6,7 @@ import {ITurn} from '../../models/turn';
 import {TURN_KEY} from '../../s3';
 import {useActiveTurnStore, useSeek, useVideoStore} from '../../store';
 import VideoPlayer from './VideoPlayer';
+import TrackPlayer from 'react-native-track-player';
 
 type Props = {
   videoId: ITurn['turn_id'];
@@ -43,12 +44,13 @@ export default function VideoPlayerManager({
     setSeekTo(0);
   }, [isVideoOnScreen]);
 
-  const onProgress = ({currentTime}: OnProgressData) => {
+  const onProgress = async ({currentTime}: OnProgressData) => {
     if (isSeeking) return;
     if (isVideoOnScreen && currentTime >= duration) {
       onEnd();
     }
     isVideoOnScreen && setProgress(currentTime);
+    (await TrackPlayer.seekTo(seekTo));
   };
 
   const onReadyForDisplay = () => {};

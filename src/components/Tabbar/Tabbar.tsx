@@ -21,7 +21,7 @@ export default function Tabbar(props: TabbarProps) {
 
   return (
     <>
-      {playbackSource === 'Home' ? (
+      {playbackSource === 'Playlist' ? (
         <MediaController tabHeight={tabHeight} />
       ) : (
         <PlaylistSheet tabHeight={tabHeight} />
