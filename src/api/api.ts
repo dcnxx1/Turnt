@@ -17,6 +17,10 @@ export const queryKey = {
   findCode: 'findCode',
   findUsername: 'findUsername',
   createAccount: 'createAccount',
+  profile: 'profile',
+  feed: 'feed',
+  playlist: 'playlist',
+  myUploads: 'myUploads',
 };
 
 export const TURN_IMPRESSION_TIME_LIMIT = 30;

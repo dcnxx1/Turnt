@@ -10,13 +10,12 @@ type VideoListManagerStore = {
 };
 
 const useVideoListManagerDispatcherStore = create<VideoListManagerStore>(
-  (set) => {
-    const playbackStore = usePlaybackSourceStore.getState();
-
+  set => {
     return {
       index: 0,
       playlistIndex: 0,
       increment: () => {
+        const playbackStore = usePlaybackSourceStore.getState();
         const {playbackSource} = playbackStore;
         set(state =>
           playbackSource === 'Home'
@@ -25,6 +24,7 @@ const useVideoListManagerDispatcherStore = create<VideoListManagerStore>(
         );
       },
       decrement: () => {
+        const playbackStore = usePlaybackSourceStore.getState();
         const {playbackSource} = playbackStore;
         set(state =>
           playbackSource === 'Home'
@@ -33,6 +33,7 @@ const useVideoListManagerDispatcherStore = create<VideoListManagerStore>(
         );
       },
       setIndex: (index: number) => {
+        const playbackStore = usePlaybackSourceStore.getState();
         const {playbackSource} = playbackStore;
         playbackSource === 'Home' ? set({index}) : set({playlistIndex: index});
       },

@@ -8,7 +8,7 @@ type PlaybackSource = {
 };
 
 const usePlaybackSourceStore = create<PlaybackSource>(set => ({
-  playbackSource: 'Playlist',
+  playbackSource: 'Home',
   setPlaybackSource: (playbackSource: Source) => set({playbackSource}),
 }));
 export default usePlaybackSourceStore;

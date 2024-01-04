@@ -1,20 +1,37 @@
 import {FlashList, ListRenderItem, ViewToken} from '@shopify/flash-list';
-import {useEffect, useReducer, useRef, useState} from 'react';
+import {createContext, useContext, useEffect, useRef, useState} from 'react';
 import {Dimensions, ViewabilityConfig} from 'react-native';
+import TrackPlayer from 'react-native-track-player';
 import {OnLoadData} from 'react-native-video';
 import {ITurn} from '../../models/turn';
 import {useActiveTurnStore} from '../../store';
+import {Source} from '../../store/usePlaybackSourceStore';
 import useVideoListManagerDispatcherStore from '../../store/useVideoListManagerDispatcherStore';
+import {turnToTrackMapper} from '../../utils';
 import VideoPlayerManager from '../Video/VideoPlayerManager';
 import SkeletonFlashList from './SkeletonFlashList';
-import TrackPlayer from 'react-native-track-player';
-import {turnToTrackMapper} from '../../utils';
-import {Source} from '../../store/usePlaybackSourceStore';
-
 
 type CollectionTurnProps = {
   data: ITurn[];
   source: Source;
+};
+
+type VideoListManagerContext = {
+  activeVideoOnScreen: ITurn;
+};
+
+const VideoListContext = createContext<VideoListManagerContext>(
+  {} as VideoListManagerContext,
+);
+
+export const useVideoListContext = () => {
+  const context = useContext(VideoListContext);
+  if (!context) {
+    throw new Error(
+      "useVideoListContext needs to be used within it's provider",
+    );
+  }
+  return context;
 };
 
 export default function VideoListManager({data, source}: CollectionTurnProps) {
@@ -49,11 +66,11 @@ export default function VideoListManager({data, source}: CollectionTurnProps) {
     );
   };
 
-  const keyExtractor = ({turn_id}: ITurn) => {
+  const keyExtractor = ({turn_id, title}: ITurn) => {
     return String(turn_id);
   };
 
-  const onViewableItemsChanged = async (info: {
+  const onViewableItemsChanged = (info: {
     changed: ViewToken[];
     viewableItems: ViewToken[];
   }) => {
@@ -64,7 +81,8 @@ export default function VideoListManager({data, source}: CollectionTurnProps) {
       const {item, index} = info.viewableItems[0];
       if (item !== null) {
         const currentActiveTurn = item as ITurn;
-        await TrackPlayer.load(turnToTrackMapper(currentActiveTurn));
+        TrackPlayer.load(turnToTrackMapper(currentActiveTurn));
+        setActiveVideoOnScreen(currentActiveTurn);
         setActiveTurn(currentActiveTurn);
       }
       if (index !== null) {
@@ -78,21 +96,22 @@ export default function VideoListManager({data, source}: CollectionTurnProps) {
   }).current;
 
   return (
-    <SkeletonFlashList
-      extraData={data}
-      ref={ref}
-      decelerationRate={'fast'}
-      data={data}
-      estimatedItemSize={Dimensions.get('screen').height}
-      estimatedListSize={{
-        width: Dimensions.get('screen').width,
-        height: Dimensions.get('screen').height,
-      }}
-      onViewableItemsChanged={onViewableItemsChanged}
-      viewabilityConfig={viewConfigRef}
-      bounces={false}
-      renderItem={renderItem}
-      keyExtractor={keyExtractor}
-    />
+    <VideoListContext.Provider value={{activeVideoOnScreen}}>
+      <SkeletonFlashList
+        ref={ref}
+        decelerationRate={'fast'}
+        data={data}
+        estimatedItemSize={Dimensions.get('screen').height}
+        estimatedListSize={{
+          width: Dimensions.get('screen').width,
+          height: Dimensions.get('screen').height,
+        }}
+        onViewableItemsChanged={onViewableItemsChanged}
+        viewabilityConfig={viewConfigRef}
+        bounces={false}
+        renderItem={renderItem}
+        keyExtractor={keyExtractor}
+      />
+    </VideoListContext.Provider>
   );
 }

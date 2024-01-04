@@ -50,7 +50,7 @@ function SkeletonScreen({
     paddingBottom: hasSafeAreaInsets ? padding.bottom : 0,
   };
   return (
-    <Flex style={[optionalPadding]}>
+    <Flex style={optionalPadding}>
       {header && <SectionScreen style={headerStyle} children={header} />}
       <View style={[contentStyle, , Style.container]}>{content}</View>
       {footer && <SectionScreen style={footerStyle} children={footer} />}

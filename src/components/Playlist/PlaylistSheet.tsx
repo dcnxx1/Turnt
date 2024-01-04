@@ -5,6 +5,7 @@ import {StyleSheet, View} from 'react-native';
 import {ITurn} from '../../models/turn';
 import VideoListManager from '../List/VideoListManager';
 import {Text} from 'react-native-paper';
+import MediaController from '../MediaController/MediaController';
 
 type Props = {
   tabHeight: number;

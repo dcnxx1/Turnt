@@ -1,12 +1,13 @@
-import {useCallback, useEffect, useRef, useState} from 'react';
-import {Pressable, StyleSheet, View} from 'react-native';
+import {useEffect, useRef} from 'react';
+import {Pressable, StyleSheet} from 'react-native';
+import TrackPlayer from 'react-native-track-player';
 import Video, {OnLoadData, OnProgressData} from 'react-native-video';
 import {useCDN} from '../../api/api';
 import {ITurn} from '../../models/turn';
 import {TURN_KEY} from '../../s3';
-import {useActiveTurnStore, useSeek, useVideoStore} from '../../store';
+import {useSeek, useVideoStore} from '../../store';
+import {useVideoListContext} from '../List/VideoListManager';
 import VideoPlayer from './VideoPlayer';
-import TrackPlayer from 'react-native-track-player';
 
 type Props = {
   videoId: ITurn['turn_id'];
@@ -22,8 +23,9 @@ export default function VideoPlayerManager({
   onLoad,
 }: Props) {
   const {
-    activeTurn: {turn_id, duration},
-  } = useActiveTurnStore();
+    activeVideoOnScreen: {turn_id, duration},
+  } = useVideoListContext();
+
   const {isPlaying, setIsPlaying} = useVideoStore();
   const {setProgress} = useVideoStore();
   const ref = useRef<Video>(null);
@@ -50,20 +52,22 @@ export default function VideoPlayerManager({
       onEnd();
     }
     isVideoOnScreen && setProgress(currentTime);
-    (await TrackPlayer.seekTo(seekTo));
+    await TrackPlayer.seekTo(seekTo);
   };
 
   const onReadyForDisplay = () => {};
 
   return (
-    <VideoPlayer
-      onReadyForDisplay={onReadyForDisplay}
-      onLoad={onLoad}
-      ref={ref}
-      onProgress={onProgress}
-      source={useCDN(TURN_KEY + source)}
-      paused={isVideoOnScreen ? !isPlaying : true}
-    />
+    <Pressable onPress={() => setIsPlaying(!isPlaying)}>
+      <VideoPlayer
+        onReadyForDisplay={onReadyForDisplay}
+        onLoad={onLoad}
+        ref={ref}
+        onProgress={onProgress}
+        source={useCDN(TURN_KEY + source)}
+        paused={isVideoOnScreen ? !isPlaying : true}
+      />
+    </Pressable>
   );
 }
 

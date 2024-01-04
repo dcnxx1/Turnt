@@ -4,7 +4,6 @@ import {Text} from 'react-native-paper';
 import {getFeed} from '../../api/collection';
 import {SkeletonScreen} from '../../components';
 import VideoListManager from '../../components/List/VideoListManager';
-import TurnContextProvider from '../../shared/context/TurnContext';
 export type TestData = {
   source: string;
   id: number;

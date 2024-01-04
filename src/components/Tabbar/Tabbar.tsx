@@ -21,9 +21,11 @@ export default function Tabbar(props: TabbarProps) {
 
   return (
     <>
-      <MediaController tabHeight={tabHeight} />
-
-      <PlaylistSheet tabHeight={tabHeight} />
+      {playbackSource === 'Home' ? (
+        <MediaController tabHeight={tabHeight} />
+      ) : (
+        <PlaylistSheet tabHeight={tabHeight} />
+      )}
 
       <BottomTab onLayout={onLayoutBottomTab} {...props} />
     </>
