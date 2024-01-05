@@ -4,13 +4,9 @@ import {
   ListRenderItem,
   ViewToken,
 } from '@shopify/flash-list';
-import { forwardRef } from 'react';
-import {
-  Dimensions,
-  LayoutChangeEvent,
-  ViewabilityConfig
-} from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import {forwardRef} from 'react';
+import {Dimensions, LayoutChangeEvent, ViewabilityConfig} from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const screenWidth = Dimensions.get('screen').width;
 const screenHeight = Dimensions.get('screen').height;
