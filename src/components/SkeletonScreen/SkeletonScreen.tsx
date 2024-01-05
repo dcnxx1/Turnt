@@ -1,24 +1,9 @@
-import {ComponentType, ReactElement, ReactNode, useState} from 'react';
-import {
-  Dimensions,
-  Pressable,
-  ScrollView,
-  StyleProp,
-  StyleSheet,
-  View,
-  ViewStyle,
-} from 'react-native';
+import {ComponentType, ReactElement, ReactNode} from 'react';
+import {Dimensions, StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
 import {LinearGradient} from 'react-native-linear-gradient';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import Flex from '../Misc/Flex';
 import SectionScreen, {ScreenSectionProps} from '../Misc/SectionScreen';
-import {
-  Dialog,
-  PaperProvider,
-  Portal,
-  Provider,
-  Text,
-} from 'react-native-paper';
 
 import {theme} from '../../constants';
 
