@@ -1,25 +1,30 @@
 import {useQueryClient} from '@tanstack/react-query';
-import {Image, StyleSheet, View} from 'react-native';
-import {Text} from 'react-native-paper';
+import {StyleSheet} from 'react-native';
 import {queryKey, useCDN} from '../../api/api';
 import {Profile as UserProfile} from '../../api/profile';
-import Avatar, {AvatarWithUsername} from '../../components/Images/Avatar';
+import {AvatarWithUsername} from '../../components/Images/Avatar';
+import SavedSongList from '../../components/Playlist/SavedSongList';
+import {ITurn} from '../../models/turn';
 export default function ProfileScreen() {
   const queryClient = useQueryClient();
 
   const me: UserProfile | undefined = queryClient.getQueryData([
     queryKey.profile,
   ]);
+  const savedSongs: ITurn[] | undefined = queryClient.getQueryData([
+    'playlist',
+  ]);
 
   return (
-    <View style={Style.container}>
+    <>
       <AvatarWithUsername
         source={me?.avatar && useCDN(me.avatar)}
         username={me?.alias ? me.alias : ''}
         spacing={10}
       />
-      <Text>Some text!</Text>
-    </View>
+
+      <SavedSongList  data={savedSongs ? savedSongs : []} />
+    </>
   );
 }
 

@@ -4,15 +4,13 @@ import {
   ListRenderItem,
   ViewToken,
 } from '@shopify/flash-list';
-import {forwardRef} from 'react';
+import { forwardRef } from 'react';
 import {
   Dimensions,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
-  ViewabilityConfig,
-  ViewabilityConfigCallbackPairs,
+  LayoutChangeEvent,
+  ViewabilityConfig
 } from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const screenWidth = Dimensions.get('screen').width;
 const screenHeight = Dimensions.get('screen').height;
@@ -38,6 +36,7 @@ export type SkeletonFlashListProps<T> = {
   hasSafeAreaInsets?: boolean;
   decelerationRate?: number | 'fast' | 'normal' | undefined;
   showScroll?: boolean;
+  onLayout?: (ev: LayoutChangeEvent) => void;
   FULL_SCREEN?: boolean;
   viewabilityConfig?: ViewabilityConfig | null | undefined;
   extraData?: T;
@@ -56,6 +55,7 @@ export default forwardRef<FlashList<any>, SkeletonFlashListProps<any>>(
       },
       contentContainerStyle,
       enableSnap,
+      onLayout,
       bounces = false,
       decelerationRate,
       snapToAlignment,
@@ -71,6 +71,7 @@ export default forwardRef<FlashList<any>, SkeletonFlashListProps<any>>(
     const padding = useSafeAreaInsets();
     return (
       <FlashList
+        onLayout={onLayout}
         ref={ref}
         data={data}
         onViewableItemsChanged={onViewableItemsChanged}

@@ -1,14 +1,13 @@
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useQueryClient} from '@tanstack/react-query';
-import {Pressable, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {queryKey} from '../../api/api';
 import {Profile as UserProfile} from '../../api/profile';
 import GenericScreen from '../../components/SkeletonScreen/GenericScreen';
 import {HomeParams} from '../../nav/navparams';
 import theme from '../../theme';
 import ProfileScreen from './ProfileScreen';
-import {Text} from 'react-native-paper';
 
 export default function Profile(): JSX.Element {
   const navigation = useNavigation<StackNavigationProp<HomeParams>>();
@@ -25,12 +24,7 @@ export default function Profile(): JSX.Element {
   const content = <ProfileScreen />;
 
   return (
-    <GenericScreen
-      safeAreaInsets
-      scrollable
-      style={Style.container}
-      content={content}
-    />
+    <GenericScreen safeAreaInsets style={Style.container} content={content} />
   );
 }
 

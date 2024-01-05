@@ -12,6 +12,7 @@ import {getProfile} from '../api/profile';
 import {getFeed} from '../api/collection';
 import {queryKey} from '../api/api';
 import {RootNavNames, RootNavs} from '../nav/types';
+import {getPlaylistWithUserId} from '../api/playlist';
 
 export default function useInitalizeApp(): [boolean, string | undefined] {
   const [isInitializing, setInitializing] = useState(true);
@@ -26,6 +27,10 @@ export default function useInitalizeApp(): [boolean, string | undefined] {
         queryClient.prefetchQuery({
           queryKey: [queryKey.profile],
           queryFn: () => getProfile(me.user_id),
+        });
+        queryClient.prefetchQuery({
+          queryKey: [queryKey.playlist],
+          queryFn: () => getPlaylistWithUserId(me.user_id),
         });
         const fetchFeed = await getFeed();
         const cachedFeed: ITurn[] | undefined = queryClient.setQueryData(
