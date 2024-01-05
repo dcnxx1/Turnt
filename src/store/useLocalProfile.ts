@@ -1,7 +1,7 @@
 import {create} from 'zustand';
 import {UserStorage} from '../app/boot';
 
-type LocalProfile = {
+export type LocalProfile = {
   user: UserStorage | undefined;
   setUser: (user: UserStorage) => void;
 };

@@ -18,6 +18,8 @@ export type NavNameTypes =
   | 'AccountSetupScreen'
   | 'FileSelectScreen';
 
+  export type RootNavs = 'SetupStack' | 'EditorStack' | 'HomeStack' | 'AuthStack'
+
 export enum RootNavNames {
   SetupStack = 'SetupStack',
   EditorStack = 'EditorStack',
