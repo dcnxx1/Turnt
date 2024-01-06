@@ -3,14 +3,15 @@ import {createSlice, configureStore} from '@reduxjs/toolkit';
 const videoPlayerListSlice = createSlice({
   name: 'videoPlayerList',
   initialState: {
-    index: 0,
+    feedIndex: 0,
+    playlistIndex: 0,
   },
   reducers: {
-    increment: ({index}) => {
-      index += 1;
+    increment: ({feedIndex, playlistIndex}) => {
+      feedIndex += 1;
     },
-    decrement: ({index}) => {
-      index -= 1;
+    decrement: ({feedIndex}) => {
+      feedIndex -= 1;
     },
   },
 });

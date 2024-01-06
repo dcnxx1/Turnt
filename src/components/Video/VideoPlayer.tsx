@@ -1,4 +1,4 @@
-import {forwardRef} from 'react';
+import {forwardRef, useImperativeHandle} from 'react';
 import {Dimensions, StyleProp, StyleSheet, ViewStyle} from 'react-native';
 import Video, {OnLoadData, OnProgressData} from 'react-native-video';
 
@@ -12,7 +12,7 @@ export type VideoPlayerProps = {
   onEnd?: () => void;
   onProgress: (data: OnProgressData) => void;
   onReadyForDisplay?: () => void;
-  onLoad: (data: OnLoadData) => void;
+  onLoad?: (data: OnLoadData) => void;
 };
 
 const SCREEN_WIDTH = Dimensions.get('screen').width;

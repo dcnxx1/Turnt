@@ -29,6 +29,7 @@ export default function SavedSongList({data}: Props) {
   };
 
   const renderItem: ListRenderItem<ITurn> = ({item, index}) => {
+    console.log("renderItem called!")
     return (
       <PlaylistItem
         index={index}

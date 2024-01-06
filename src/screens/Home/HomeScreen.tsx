@@ -4,6 +4,7 @@ import {Text} from 'react-native-paper';
 import {getFeed} from '../../api/collection';
 import {SkeletonScreen} from '../../components';
 import VideoListManager from '../../components/List/VideoListManager';
+import useVideoListManagerDispatcherStore from '../../store/useVideoListManagerDispatcherStore';
 export type TestData = {
   source: string;
   id: number;
@@ -16,11 +17,9 @@ function HomeScreen(): JSX.Element {
     queryFn: () => getFeed(),
     initialData: queryClient.getQueryData(['feed']),
   });
-
-  const content = turns ? (
-    <VideoListManager source={'Home'} data={turns} />
-  ) : (
-    <Text>Loading...</Text>
+  const index = useVideoListManagerDispatcherStore(state => state.index);
+  const content = (
+    <VideoListManager index={index} id={'Home'} data={turns ?? []} />
   );
 
   return <SkeletonScreen contentStyle={Style.container} content={content} />;

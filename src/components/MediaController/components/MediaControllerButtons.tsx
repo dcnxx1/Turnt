@@ -1,17 +1,8 @@
 import {Image, StyleSheet} from 'react-native';
 import {Text, Button} from 'react-native-paper';
-import {useImpression} from '../../../store';
-import usePlaybackSourceStore from '../../../store/usePlaybackSourceStore';
-
 export function MediaImpressionButton() {
-  const {isImpression, setImpression} = useImpression();
-
-  const handleImpression = () => {
-    setImpression(!isImpression);
-  };
-
   return (
-    <Button onPress={handleImpression}>
+    <Button onPress={() => undefined}>
       <Image source={{uri: 'https://unsplash.it/200/200'}} />
     </Button>
   );

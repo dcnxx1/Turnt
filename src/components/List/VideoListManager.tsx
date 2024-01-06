@@ -13,7 +13,8 @@ import SkeletonFlashList from './SkeletonFlashList';
 
 type CollectionTurnProps = {
   data: ITurn[];
-  source: Source;
+  id: Source;
+  index: number;
 };
 
 type VideoListManagerContext = {
@@ -34,16 +35,17 @@ export const useVideoListContext = () => {
   return context;
 };
 
-export default function VideoListManager({data, source}: CollectionTurnProps) {
+export default function VideoListManager({
+  data,
+  id,
+  index,
+}: CollectionTurnProps) {
   const {setActiveTurn} = useActiveTurnStore();
   const [activeVideoOnScreen, setActiveVideoOnScreen] = useState(data[0]);
+  const ref = useRef<FlashList<ITurn>>(null);
 
   const {increment, setIndex} = useVideoListManagerDispatcherStore();
-  const index = useVideoListManagerDispatcherStore(state =>
-    source === 'Home' ? state.index : state.playlistIndex,
-  );
 
-  const ref = useRef<FlashList<ITurn>>(null);
   useEffect(() => {
     if (ref.current) {
       ref.current.scrollToIndex({
@@ -55,9 +57,10 @@ export default function VideoListManager({data, source}: CollectionTurnProps) {
 
   const onLoad = (videoData: OnLoadData) => {};
 
-  const renderItem: ListRenderItem<ITurn> = ({item}) => {
+  const renderItem: ListRenderItem<ITurn> = ({item, index}) => {
     return (
       <VideoPlayerManager
+        id={id}
         onLoad={onLoad}
         source={item.source}
         videoId={item.turn_id}
@@ -87,6 +90,7 @@ export default function VideoListManager({data, source}: CollectionTurnProps) {
       }
       if (index !== null) {
         setIndex(index);
+        console.log("index :>>", index ,{"with id :>>": id})
       }
     }
   };

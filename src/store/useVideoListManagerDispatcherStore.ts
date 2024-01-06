@@ -1,6 +1,18 @@
 import {create} from 'zustand';
 import usePlaybackSourceStore from './usePlaybackSourceStore';
 
+type State = {
+  feedIndex: number;
+  playlistIndex: number;
+  discoverIndex: number;
+};
+
+type Action = {
+  increment: () => void;
+  decrement: () => void;
+  setIndex: (index: number) => void;
+};
+
 type VideoListManagerStore = {
   index: number;
   playlistIndex: number;
@@ -35,7 +47,7 @@ const useVideoListManagerDispatcherStore = create<VideoListManagerStore>(
       setIndex: (index: number) => {
         const playbackStore = usePlaybackSourceStore.getState();
         const {playbackSource} = playbackStore;
-        playbackSource === 'Home' ? set({index}) : set({playlistIndex: index});
+        set(playbackSource === 'Home' ? {index} : {playlistIndex: index});
       },
     };
   },
