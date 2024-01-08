@@ -10,41 +10,19 @@ import useVideoListManagerDispatcherStore from '../../store/useVideoListManagerD
 import {turnToTrackMapper} from '../../utils';
 import VideoPlayerManager from '../Video/VideoPlayerManager';
 import SkeletonFlashList from './SkeletonFlashList';
+import {useDispatch} from 'react-redux';
 
-type CollectionTurnProps = {
+import {useVideoListContext} from '../../shared/context/VideoListManagerProvider';
+
+type VideoListManagerProps = {
   data: ITurn[];
-  id: Source;
-  index: number;
 };
 
-type VideoListManagerContext = {
-  activeVideoOnScreen: ITurn;
-};
+export default function VideoListManager({data}: VideoListManagerProps) {
+  const {setNewActiveVideo} = useVideoListContext();
 
-const VideoListContext = createContext<VideoListManagerContext>(
-  {} as VideoListManagerContext,
-);
-
-export const useVideoListContext = () => {
-  const context = useContext(VideoListContext);
-  if (!context) {
-    throw new Error(
-      "useVideoListContext needs to be used within it's provider",
-    );
-  }
-  return context;
-};
-
-export default function VideoListManager({
-  data,
-  id,
-  index,
-}: CollectionTurnProps) {
-  const {setActiveTurn} = useActiveTurnStore();
-  const [activeVideoOnScreen, setActiveVideoOnScreen] = useState(data[0]);
   const ref = useRef<FlashList<ITurn>>(null);
-
-  const {increment, setIndex} = useVideoListManagerDispatcherStore();
+  const {index, setNewIndex, incrementIndex} = useVideoListContext();
 
   useEffect(() => {
     if (ref.current) {
@@ -58,15 +36,7 @@ export default function VideoListManager({
   const onLoad = (videoData: OnLoadData) => {};
 
   const renderItem: ListRenderItem<ITurn> = ({item, index}) => {
-    return (
-      <VideoPlayerManager
-        id={id}
-        onLoad={onLoad}
-        source={item.source}
-        videoId={item.turn_id}
-        onEnd={increment}
-      />
-    );
+    return <VideoPlayerManager source={item.source} videoId={item.turn_id} />;
   };
 
   const keyExtractor = ({turn_id, title}: ITurn) => {
@@ -85,12 +55,10 @@ export default function VideoListManager({
       if (item !== null) {
         const currentActiveTurn = item as ITurn;
         TrackPlayer.load(turnToTrackMapper(currentActiveTurn));
-        setActiveVideoOnScreen(currentActiveTurn);
-        setActiveTurn(currentActiveTurn);
+        setNewActiveVideo(item);
       }
       if (index !== null) {
-        setIndex(index);
-        console.log("index :>>", index ,{"with id :>>": id})
+        setNewIndex(index);
       }
     }
   };
@@ -100,22 +68,20 @@ export default function VideoListManager({
   }).current;
 
   return (
-    <VideoListContext.Provider value={{activeVideoOnScreen}}>
-      <SkeletonFlashList
-        ref={ref}
-        decelerationRate={'fast'}
-        data={data}
-        estimatedItemSize={Dimensions.get('screen').height}
-        estimatedListSize={{
-          width: Dimensions.get('screen').width,
-          height: Dimensions.get('screen').height,
-        }}
-        onViewableItemsChanged={onViewableItemsChanged}
-        viewabilityConfig={viewConfigRef}
-        bounces={false}
-        renderItem={renderItem}
-        keyExtractor={keyExtractor}
-      />
-    </VideoListContext.Provider>
+    <SkeletonFlashList
+      ref={ref}
+      decelerationRate={'fast'}
+      data={data}
+      estimatedItemSize={Dimensions.get('screen').height}
+      estimatedListSize={{
+        width: Dimensions.get('screen').width,
+        height: Dimensions.get('screen').height,
+      }}
+      onViewableItemsChanged={onViewableItemsChanged}
+      viewabilityConfig={viewConfigRef}
+      bounces={false}
+      renderItem={renderItem}
+      keyExtractor={keyExtractor}
+    />
   );
 }

@@ -1,11 +1,10 @@
-import {useEffect, useRef, useState} from 'react';
+import {useEffect, useRef} from 'react';
 import Video, {OnProgressData} from 'react-native-video';
-import {VideoPlayerProps} from '../Video/VideoPlayer';
-import {useSeek, useVideoStore} from '../../store';
-import {View} from 'react-native';
 import {useCDN} from '../../api/api';
 import {TURN_KEY} from '../../s3';
-import usePlaybackSourceStore, { Source } from '../../store/usePlaybackSourceStore';
+import {useVideoListContext} from '../../shared/context/VideoListManagerProvider';
+import {useSeek, useVideoStore} from '../../store';
+import {VideoPlayerProps} from '../Video/VideoPlayer';
 
 export default function withSyncMediaController(
   VideoPlayer: React.ForwardRefExoticComponent<
@@ -15,17 +14,14 @@ export default function withSyncMediaController(
   return ({
     source,
     isVideoOnScreen,
-    id,
   }: Omit<VideoPlayerProps, 'onProgress' | 'paused'> & {
     isVideoOnScreen: boolean;
-    id: Source,
   }) => {
     const ref = useRef<Video>(null);
     const {seekTo, setSeekTo, isSeeking} = useSeek();
     const setProgress = useVideoStore(state => state.setProgress);
-    const isPlaying = useVideoStore(state => state.isPlaying);
-    const setIsPlaying = useVideoStore(state => state.setIsPlaying);
-    const playbackSource = usePlaybackSourceStore(state => state.playbackSource)
+    const {isPlaying, setPlaying} = useVideoListContext();
+
     useEffect(() => {
       if (ref.current) {
         ref.current.seek(seekTo);
@@ -34,7 +30,7 @@ export default function withSyncMediaController(
 
     useEffect(() => {
       if (isVideoOnScreen && !isPlaying) {
-        setIsPlaying(true);
+        setPlaying(true);
       }
       setProgress(0);
       setSeekTo(0);
@@ -50,7 +46,7 @@ export default function withSyncMediaController(
         onProgress={onProgress}
         source={useCDN(TURN_KEY + source)}
         ref={ref}
-        paused={playbackSource === id ? isVideoOnScreen ? !isPlaying : true : true}
+        paused={isVideoOnScreen ? !isPlaying : true}
       />
     );
   };

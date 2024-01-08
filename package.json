@@ -51,6 +51,7 @@
     "react-native-splash-screen": "^3.3.0",
     "react-native-track-player": "^4.0.1",
     "react-native-video": "^5.2.1",
+    "react-redux": "^9.0.4",
     "redux": "^5.0.1",
     "zod": "^3.22.4",
     "zustand": "^4.4.7"

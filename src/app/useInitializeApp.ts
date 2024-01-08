@@ -13,12 +13,14 @@ import {getFeed} from '../api/collection';
 import {queryKey} from '../api/api';
 import {RootNavNames, RootNavs} from '../nav/types';
 import {getPlaylistWithUserId} from '../api/playlist';
+import {useDispatch} from 'react-redux';
+import {setActiveVideoOnScreen} from '../redux/videoListManagerSlices/targetSlice';
 
 export default function useInitalizeApp(): [boolean, string | undefined] {
   const [isInitializing, setInitializing] = useState(true);
   const [initialRoute, setInitialRoute] = useState<RootNavs>();
   const queryClient = useQueryClient();
-
+  const dispatch = useDispatch();
   async function initialize() {
     try {
       const me = getLocalUserProfile();
@@ -40,6 +42,7 @@ export default function useInitalizeApp(): [boolean, string | undefined] {
         if (cachedFeed) {
           console.log('user feed exists :>>', cachedFeed.length);
           useActiveTurnStore.getState().setActiveTurn(cachedFeed[0]);
+          dispatch(setActiveVideoOnScreen(cachedFeed[0]));
           addTrackPlayerTracks(cachedFeed);
         }
         setInitialRoute('HomeStack');

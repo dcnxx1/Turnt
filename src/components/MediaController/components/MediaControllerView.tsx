@@ -13,6 +13,12 @@ import {
   TogglePlayPauseButton,
 } from './MediaControllerButtons';
 import TimelineSliderBar from './TimelineSliderBar';
+import {useDispatch} from 'react-redux';
+import {
+  decrement,
+  increment,
+  toggleIsPlaying,
+} from '../../../redux/videoListManagerSlices/targetSlice';
 
 type MediaControllerView = {
   tabHeight: number;
@@ -20,19 +26,18 @@ type MediaControllerView = {
 
 export default function MediaControllerView({tabHeight}: MediaControllerView) {
   const snapPoints = useMemo(() => ['4%', '35%'], []);
-  const {isPlaying, setIsPlaying} = useVideoStore();
-  const {increment, decrement} = useVideoListManagerDispatcherStore();
   const {activeTurn} = useActiveTurnStore();
+  const dispatch = useDispatch();
 
   const onPressTogglePlayPause = () => {
-    setIsPlaying(!isPlaying);
+    dispatch(toggleIsPlaying());
   };
 
   const onPressNext = useCallback(() => {
-    increment();
+    dispatch(increment());
   }, []);
   const onPressPrevious = useCallback(() => {
-    decrement();
+    dispatch(decrement());
   }, []);
 
   return (
