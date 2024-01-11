@@ -2,11 +2,12 @@ import {useLayout} from '@react-native-community/hooks';
 import {FlashList, ListRenderItem} from '@shopify/flash-list';
 import {useRef} from 'react';
 import {Dimensions} from 'react-native';
+import {useDispatch} from 'react-redux';
 import {ITurn} from '../../models/turn';
+import _ from 'lodash';
 import SkeletonFlashList from '../List/SkeletonFlashList';
 import PlaylistItem from './PlaylistItem';
-import usePlaylistSheetStore from '../../store/usePlaylistSheetStore';
-import usePlaybackSourceStore from '../../store/usePlaybackSourceStore';
+import {setPosition} from '../../redux/playlistSheetSlice';
 
 type Props = {
   data: ITurn[];
@@ -20,16 +21,14 @@ const ESTIMATED_SONG_ITEM_SIZE = 200;
 export default function SavedSongList({data}: Props) {
   const ref = useRef<FlashList<SongList>>(null);
   const flashListLayout = useLayout();
-  const expand = usePlaylistSheetStore(state => state.expandPlaylistSheet);
-  const setPlayback = usePlaybackSourceStore(state => state.setPlaybackSource);
+  const dispatch = useDispatch();
 
   const onPressPlaylistItem = (turn_id: string, index: number) => {
-    expand();
-    setPlayback('Playlist');
-  };
+    console.log('onPressPLaylistItem ');
+    dispatch(setPosition('FullScreen'));
+  }
 
   const renderItem: ListRenderItem<ITurn> = ({item, index}) => {
-    console.log("renderItem called!")
     return (
       <PlaylistItem
         index={index}

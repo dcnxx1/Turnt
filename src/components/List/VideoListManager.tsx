@@ -1,28 +1,32 @@
-import {FlashList, ListRenderItem, ViewToken} from '@shopify/flash-list';
-import {createContext, useContext, useEffect, useRef, useState} from 'react';
-import {Dimensions, ViewabilityConfig} from 'react-native';
+import { FlashList, ListRenderItem, ViewToken } from '@shopify/flash-list';
+import { useEffect, useRef, useState } from 'react';
+import { Dimensions, ViewabilityConfig } from 'react-native';
 import TrackPlayer from 'react-native-track-player';
-import {OnLoadData} from 'react-native-video';
-import {ITurn} from '../../models/turn';
-import {useActiveTurnStore} from '../../store';
-import {Source} from '../../store/usePlaybackSourceStore';
-import useVideoListManagerDispatcherStore from '../../store/useVideoListManagerDispatcherStore';
-import {turnToTrackMapper} from '../../utils';
+import { OnLoadData } from 'react-native-video';
+import { ITurn } from '../../models/turn';
+import { turnToTrackMapper } from '../../utils';
 import VideoPlayerManager from '../Video/VideoPlayerManager';
 import SkeletonFlashList from './SkeletonFlashList';
-import {useDispatch} from 'react-redux';
 
-import {useVideoListContext} from '../../shared/context/VideoListManagerProvider';
+import VideoListManagerProvider from '../../shared/context/VideoListManagerProvider';
+import { useActiveTurnStore } from '../../store';
 
 type VideoListManagerProps = {
   data: ITurn[];
+  index: number;
+  setIndex: (index: number) => void;
 };
 
-export default function VideoListManager({data}: VideoListManagerProps) {
-  const {setNewActiveVideo} = useVideoListContext();
+export default function VideoListManager({
+  data,
+  index,
+  setIndex,
+}: VideoListManagerProps) {
+  const {setActiveTurn: setActiverrTurn} = useActiveTurnStore();
 
   const ref = useRef<FlashList<ITurn>>(null);
-  const {index, setNewIndex, incrementIndex} = useVideoListContext();
+
+  const [activeTurn, setActiveTurn] = useState<ITurn>();
 
   useEffect(() => {
     if (ref.current) {
@@ -55,10 +59,12 @@ export default function VideoListManager({data}: VideoListManagerProps) {
       if (item !== null) {
         const currentActiveTurn = item as ITurn;
         TrackPlayer.load(turnToTrackMapper(currentActiveTurn));
-        setNewActiveVideo(item);
+
+        setActiveTurn(currentActiveTurn);
+        setActiverrTurn(currentActiveTurn);
       }
       if (index !== null) {
-        setNewIndex(index);
+        setIndex(index);
       }
     }
   };
@@ -68,20 +74,22 @@ export default function VideoListManager({data}: VideoListManagerProps) {
   }).current;
 
   return (
-    <SkeletonFlashList
-      ref={ref}
-      decelerationRate={'fast'}
-      data={data}
-      estimatedItemSize={Dimensions.get('screen').height}
-      estimatedListSize={{
-        width: Dimensions.get('screen').width,
-        height: Dimensions.get('screen').height,
-      }}
-      onViewableItemsChanged={onViewableItemsChanged}
-      viewabilityConfig={viewConfigRef}
-      bounces={false}
-      renderItem={renderItem}
-      keyExtractor={keyExtractor}
-    />
+
+      <SkeletonFlashList
+        ref={ref}
+        decelerationRate={'fast'}
+        data={data}
+        estimatedItemSize={Dimensions.get('screen').height}
+        estimatedListSize={{
+          width: Dimensions.get('screen').width,
+          height: Dimensions.get('screen').height,
+        }}
+        onViewableItemsChanged={onViewableItemsChanged}
+        viewabilityConfig={viewConfigRef}
+        bounces={false}
+        renderItem={renderItem}
+        keyExtractor={keyExtractor}
+      />
+
   );
 }

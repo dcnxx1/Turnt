@@ -14,11 +14,14 @@ const playlistSlice = createSlice({
       index -= 1;
     },
     togglePlay: ({isPlaying}) => {
-      isPlaying = !isPlaying
+      isPlaying = !isPlaying;
     },
     setIsPlaying: ({isPlaying}, {payload}) => {
-      isPlaying = payload
-    }
+      isPlaying = payload;
+    },
+    setPlaylistIndex: ({index}, action) => {
+      index = action.payload;
+    },
   },
 });
 

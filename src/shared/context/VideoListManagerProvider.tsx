@@ -1,4 +1,4 @@
-import {ReactNode, createContext, useContext, useEffect, useState} from 'react';
+import {ReactNode, createContext, useContext, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../redux/store';
 import {
@@ -14,17 +14,12 @@ export type NameSpace = 'home' | 'playlist';
 
 type Props = {
   children: ReactNode;
+  defaultTurn?: ITurn;
   nameSpace: NameSpace;
 };
 
 type TVideoListContext = {
-  index: number;
-  isPlaying: boolean;
-  activeVideo: ITurn;
-  setNewIndex: (index: number) => void;
-  setPlaying: (isPlaying: boolean) => void;
-  setNewActiveVideo: (activeTurn: ITurn) => void;
-  incrementIndex: () => void;
+  activeTurn: ITurn;
 };
 
 const VideoListContext = createContext<TVideoListContext>(
@@ -40,44 +35,9 @@ export const useVideoListContext = () => {
   return context;
 };
 
-export default function VideoListManagerProvider({children, nameSpace}: Props) {
-  const state = useSelector((state: RootState) => state.targetSlice[nameSpace]);
-  const dispatch = useDispatch();
-  const activeVideo = state.activeVideoOnScreen;
-
-  const isPlaying = state.isPlaying;
-  const index = state.index;
-  const setActiveTurn = useActiveTurnStore(state => state.setActiveTurn);
-  useEffect(() => {
-    setActiveTurn(activeVideo);
-  }, [activeVideo]);
-
-  useEffect(() => {
-    console.log('isPlaying :>>', isPlaying);
-  }, [isPlaying]);
-  const setNewIndex = (newIndex: number) => {
-    dispatch(setIndex(newIndex));
-  };
-  const setPlaying = (newIsPlaying: boolean) => {
-    dispatch(setIsPlaying(newIsPlaying));
-  };
-  const setNewActiveVideo = (activeTurn: ITurn) => {
-    dispatch(setActiveVideoOnScreen(activeTurn));
-  };
-  const incrementIndex = () => {
-    dispatch(increment());
-  };
+export default function VideoListManagerProvider({children}: Props) {
   return (
-    <VideoListContext.Provider
-      value={{
-        isPlaying,
-        setPlaying,
-        index,
-        setNewIndex,
-        setNewActiveVideo,
-        activeVideo,
-        incrementIndex,
-      }}>
+    <VideoListContext.Provider >
       {children}
     </VideoListContext.Provider>
   );

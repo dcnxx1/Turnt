@@ -8,11 +8,14 @@ import GenericScreen from '../../components/SkeletonScreen/GenericScreen';
 import {HomeParams} from '../../nav/navparams';
 import theme from '../../theme';
 import ProfileScreen from './ProfileScreen';
+import {useDispatch} from 'react-redux';
+import {Text} from 'react-native-paper';
+import {setPosition} from '../../redux/playlistSheetSlice';
 
 export default function Profile(): JSX.Element {
   const navigation = useNavigation<StackNavigationProp<HomeParams>>();
   const queryClient = useQueryClient();
-
+  const dispatch = useDispatch();
   const me: UserProfile | undefined = queryClient.getQueryData([
     queryKey.profile,
   ]);
@@ -21,7 +24,11 @@ export default function Profile(): JSX.Element {
     navigation.navigate('EditorStack');
   };
 
-  const content = <ProfileScreen />;
+  const content = (
+    <>
+      <ProfileScreen />
+    </>
+  );
 
   return (
     <GenericScreen safeAreaInsets style={Style.container} content={content} />

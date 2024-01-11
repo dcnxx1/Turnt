@@ -1,10 +1,9 @@
 import {BottomTabBarProps} from '@react-navigation/bottom-tabs';
-import BottomTab from './BottomTab';
-import MediaController from '../MediaController/MediaController';
 import {useState} from 'react';
 import {LayoutChangeEvent} from 'react-native';
+import MediaController from '../MediaController/MediaController';
 import PlaylistSheet from '../Playlist/PlaylistSheet';
-import usePlaybackSourceStore from '../../store/usePlaybackSourceStore';
+import BottomTab from './BottomTab';
 
 type TabbarProps = {
   [P in keyof BottomTabBarProps]: BottomTabBarProps[P];
@@ -12,7 +11,6 @@ type TabbarProps = {
 
 export default function Tabbar(props: TabbarProps) {
   const [tabHeight, setTabHeight] = useState(0);
-  const playbackSource = usePlaybackSourceStore(state => state.playbackSource);
 
   const onLayoutBottomTab = (event: LayoutChangeEvent) => {
     const bottomTabHeight = event.nativeEvent.layout.height;
@@ -21,11 +19,9 @@ export default function Tabbar(props: TabbarProps) {
 
   return (
     <>
-      {playbackSource === 'Home' ? (
-        <MediaController tabHeight={tabHeight} />
-      ) : (
-        <PlaylistSheet tabHeight={tabHeight} />
-      )}
+      <MediaController tabHeight={tabHeight} />
+
+      <PlaylistSheet tabHeight={tabHeight} />
 
       <BottomTab onLayout={onLayoutBottomTab} {...props} />
     </>

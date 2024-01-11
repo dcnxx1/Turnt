@@ -1,14 +1,8 @@
 import {createSlice} from '@reduxjs/toolkit';
-import { ITurn } from '../../models/turn';
+import {ITurn} from '../../models/turn';
 
 export type PlayingFrom = 'Home' | 'Playlist';
 
-function targetState(playingFrom: PlayingFrom) {
-  switch (playingFrom) {
-    case 'Home': {
-    }
-  }
-}
 
 type PlayingFromAction = {
   payload: PlayingFrom;
@@ -57,8 +51,17 @@ const targetSlice = createSlice({
         ? (home.isPlaying = action.payload)
         : (playlist.isPlaying = action.payload);
     },
-    setIsPlayingFrom: ({playingFrom}, action: PlayingFromAction) => {
+    setIsPlayingFrom: (
+      {playingFrom, home, playlist},
+      action: PlayingFromAction,
+    ) => {
       playingFrom = action.payload;
+      if (playingFrom === 'Home') {
+        if (home.isPlaying) home.isPlaying = false;
+      }
+      if (playingFrom === 'Playlist') {
+        if (playlist.isPlaying) playlist.isPlaying = false;
+      }
     },
     setActiveVideoOnScreen: ({playingFrom, home, playlist}, action) => {
       playingFrom === 'Home'
@@ -75,7 +78,7 @@ export const {
   toggleIsPlaying,
   setIsPlaying,
   setIsPlayingFrom,
-  setActiveVideoOnScreen
+  setActiveVideoOnScreen,
 } = targetSlice.actions;
 
 export default targetSlice.reducer;

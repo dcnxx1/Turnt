@@ -19,9 +19,13 @@ const homeSlice = createSlice({
     setIsPlaying: ({isPlaying}, {payload}) => {
       isPlaying = payload;
     },
+    setHomeIndex: ({index}, action) => {
+      index = action.payload;
+    },
   },
 });
 
-export const {increment, decrement} = homeSlice.actions;
+export const {increment, decrement, setHomeIndex, togglePlay, setIsPlaying} =
+  homeSlice.actions;
 
 export default homeSlice.reducer;

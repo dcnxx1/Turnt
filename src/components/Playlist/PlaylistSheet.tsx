@@ -1,11 +1,13 @@
 import BottomSheet from '@gorhom/bottom-sheet';
 import {useQueryClient} from '@tanstack/react-query';
-import {useMemo} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {useEffect, useMemo} from 'react';
+import {StyleSheet, Text, View} from 'react-native';
 import {ITurn} from '../../models/turn';
+import usePlaylistSheet from './hooks/usePlaylistSheet';
+import VideoListManagerProvider from '../../shared/context/VideoListManagerProvider';
 import VideoListManager from '../List/VideoListManager';
-import usePlaylistSheetStore from '../../store/usePlaylistSheetStore';
-import useVideoListManagerDispatcherStore from '../../store/useVideoListManagerDispatcherStore';
+import {useDispatch, useSelector} from 'react-redux';
+import {RootState} from '../../redux/store';
 
 type Props = {
   tabHeight: number;
@@ -13,21 +15,26 @@ type Props = {
 
 export default function PlaylistSheet({tabHeight}: Props) {
   const queryClient = useQueryClient();
-  const snapPoints = useMemo(() => ['10%', '95%'], []);
-  const playlistData: ITurn[] | undefined = queryClient.getQueryData(['playlist']);
-  const isCollapsed = usePlaylistSheetStore(state => state.isCollapsed);
-  const playlistIndex = useVideoListManagerDispatcherStore(state => state.playlistIndex)
+  const snapPoints = useMemo(() => ['10%', '86%'], []);
+  const [ref, onChangeBottomSheetPosition] = usePlaylistSheet();
+  const index = useSelector((state: RootState) => state.playlistSlice.index);
+
+  const playlistData: ITurn[] | undefined = queryClient.getQueryData([
+    'playlist',
+  ]);
+
   return (
     <BottomSheet
-      index={isCollapsed ? 0 : 1}
+      ref={ref}
+      index={-1}
+      onChange={onChangeBottomSheetPosition}
+      animateOnMount={true}
       bottomInset={tabHeight}
       handleStyle={{
-        backgroundColor: '#00000000'
+        backgroundColor: '#00000000',
       }}
       snapPoints={snapPoints}>
-      <View style={Style.container}>
-        <VideoListManager index={playlistIndex} id={'Playlist'} data={playlistData ?? []} />
-      </View>
+      <View style={Style.container}></View>
     </BottomSheet>
   );
 }

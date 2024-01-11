@@ -1,25 +1,25 @@
 import {useQueryClient} from '@tanstack/react-query';
 import {DependencyList, useEffect, useState} from 'react';
+import {useDispatch} from 'react-redux';
+import {queryKey} from '../api/api';
+import {getFeed} from '../api/collection';
+import {getPlaylistWithUserId} from '../api/playlist';
+import {getProfile} from '../api/profile';
 import {ITurn} from '../models/turn';
+import {RootNavs} from '../nav/types';
+import {setActiveVideoOnScreen} from '../redux/videoListManagerSlices/targetSlice';
 import {useActiveTurnStore} from '../store';
 import {
   addTrackPlayerTracks,
-  getInitialRoute,
   getLocalUserProfile,
   setupTrackPlayer,
 } from './boot';
-import {getProfile} from '../api/profile';
-import {getFeed} from '../api/collection';
-import {queryKey} from '../api/api';
-import {RootNavNames, RootNavs} from '../nav/types';
-import {getPlaylistWithUserId} from '../api/playlist';
-import {useDispatch} from 'react-redux';
-import {setActiveVideoOnScreen} from '../redux/videoListManagerSlices/targetSlice';
 
 export default function useInitalizeApp(): [boolean, string | undefined] {
   const [isInitializing, setInitializing] = useState(true);
   const [initialRoute, setInitialRoute] = useState<RootNavs>();
   const queryClient = useQueryClient();
+  const setActiveTurn = useActiveTurnStore(state => state.setActiveTurn);
   const dispatch = useDispatch();
   async function initialize() {
     try {
@@ -40,9 +40,9 @@ export default function useInitalizeApp(): [boolean, string | undefined] {
           fetchFeed,
         );
         if (cachedFeed) {
-          console.log('user feed exists :>>', cachedFeed.length);
           useActiveTurnStore.getState().setActiveTurn(cachedFeed[0]);
           dispatch(setActiveVideoOnScreen(cachedFeed[0]));
+          setActiveTurn(cachedFeed[0]);
           addTrackPlayerTracks(cachedFeed);
         }
         setInitialRoute('HomeStack');

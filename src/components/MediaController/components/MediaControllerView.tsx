@@ -2,8 +2,13 @@ import BottomSheet from '@gorhom/bottom-sheet';
 import {BlurView} from '@react-native-community/blur';
 import {useCallback, useMemo} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {useActiveTurnStore, useVideoStore} from '../../../store';
-import useVideoListManagerDispatcherStore from '../../../store/useVideoListManagerDispatcherStore';
+import {useDispatch} from 'react-redux';
+import {
+  decrement,
+  increment,
+  toggleIsPlaying,
+} from '../../../redux/videoListManagerSlices/targetSlice';
+import {useActiveTurnStore} from '../../../store';
 import Flex from '../../Misc/Flex';
 import {blurViewConfig, bottomSheetConfig} from '../configs';
 import MediaControllerArtistSong from './MediaControllerArtistSong';
@@ -13,12 +18,6 @@ import {
   TogglePlayPauseButton,
 } from './MediaControllerButtons';
 import TimelineSliderBar from './TimelineSliderBar';
-import {useDispatch} from 'react-redux';
-import {
-  decrement,
-  increment,
-  toggleIsPlaying,
-} from '../../../redux/videoListManagerSlices/targetSlice';
 
 type MediaControllerView = {
   tabHeight: number;
@@ -40,7 +39,7 @@ export default function MediaControllerView({tabHeight}: MediaControllerView) {
     dispatch(decrement());
   }, []);
 
-  return (
+  return activeTurn ? (
     <BottomSheet
       {...bottomSheetConfig}
       bottomInset={tabHeight}
@@ -51,13 +50,13 @@ export default function MediaControllerView({tabHeight}: MediaControllerView) {
           <View style={Style.mediaController}>
             <MediaControllerArtistSong
               artist={'someone'}
-              title={activeTurn.title}
+              title={activeTurn && activeTurn.title}
             />
           </View>
           <Flex style={Style.timelineSideBarContainer}>
             <TimelineSliderBar
-              title={activeTurn.title}
-              videoDuration={activeTurn.duration}
+              title={activeTurn && activeTurn.title}
+              videoDuration={activeTurn && activeTurn.duration}
             />
           </Flex>
           <Flex style={Style.buttonContainer}>
@@ -68,7 +67,7 @@ export default function MediaControllerView({tabHeight}: MediaControllerView) {
         </View>
       </BlurView>
     </BottomSheet>
-  );
+  ) : null;
 }
 
 const Style = StyleSheet.create({
