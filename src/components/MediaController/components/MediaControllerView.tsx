@@ -3,11 +3,7 @@ import {BlurView} from '@react-native-community/blur';
 import {useCallback, useMemo} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {useDispatch} from 'react-redux';
-import {
-  decrement,
-  increment,
-  toggleIsPlaying,
-} from '../../../redux/videoListManagerSlices/targetSlice';
+
 import {useActiveTurnStore} from '../../../store';
 import Flex from '../../Misc/Flex';
 import {blurViewConfig, bottomSheetConfig} from '../configs';
@@ -18,6 +14,12 @@ import {
   TogglePlayPauseButton,
 } from './MediaControllerButtons';
 import TimelineSliderBar from './TimelineSliderBar';
+import {
+  decrement,
+  increment,
+  setActiveSlice,
+  togglePlaying,
+} from '../../../redux/videoListSlice';
 
 type MediaControllerView = {
   tabHeight: number;
@@ -29,15 +31,16 @@ export default function MediaControllerView({tabHeight}: MediaControllerView) {
   const dispatch = useDispatch();
 
   const onPressTogglePlayPause = () => {
-    dispatch(toggleIsPlaying());
+    dispatch(togglePlaying());
   };
 
   const onPressNext = useCallback(() => {
     dispatch(increment());
-  }, []);
+  }, [dispatch]);
+
   const onPressPrevious = useCallback(() => {
     dispatch(decrement());
-  }, []);
+  }, [dispatch]);
 
   return activeTurn ? (
     <BottomSheet

@@ -7,7 +7,6 @@ import {getPlaylistWithUserId} from '../api/playlist';
 import {getProfile} from '../api/profile';
 import {ITurn} from '../models/turn';
 import {RootNavs} from '../nav/types';
-import {setActiveVideoOnScreen} from '../redux/videoListManagerSlices/targetSlice';
 import {useActiveTurnStore} from '../store';
 import {
   addTrackPlayerTracks,
@@ -41,7 +40,7 @@ export default function useInitalizeApp(): [boolean, string | undefined] {
         );
         if (cachedFeed) {
           useActiveTurnStore.getState().setActiveTurn(cachedFeed[0]);
-          dispatch(setActiveVideoOnScreen(cachedFeed[0]));
+         
           setActiveTurn(cachedFeed[0]);
           addTrackPlayerTracks(cachedFeed);
         }

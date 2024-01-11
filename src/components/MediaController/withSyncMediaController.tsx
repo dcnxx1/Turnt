@@ -1,8 +1,8 @@
-import {useEffect, useRef} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import Video, {OnProgressData} from 'react-native-video';
 import {useCDN} from '../../api/api';
 import {TURN_KEY} from '../../s3';
-import {useVideoListContext} from '../../shared/context/VideoListManagerProvider';
+import {useVideoListContext} from '../../shared/context/VideoListContext';
 import {useSeek, useVideoStore} from '../../store';
 import {VideoPlayerProps} from '../Video/VideoPlayer';
 
@@ -20,7 +20,7 @@ export default function withSyncMediaController(
     const ref = useRef<Video>(null);
     const {seekTo, setSeekTo, isSeeking} = useSeek();
     const setProgress = useVideoStore(state => state.setProgress);
-    const {isPlaying, setPlaying} = useVideoListContext();
+    const [isPlaying, setPlaying] = useState(false);
 
     useEffect(() => {
       if (ref.current) {

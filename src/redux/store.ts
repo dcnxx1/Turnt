@@ -1,15 +1,14 @@
 import {configureStore} from '@reduxjs/toolkit';
-import targetSlice from './videoListManagerSlices/targetSlice';
 import playlistSheetSlice from './playlistSheetSlice';
-import playlistSlice from './videoListManagerSlices/playlistSlice';
-import homeSlice from './videoListManagerSlices/homeSlice';
+
+import homeSlice from './listSlices/homeSlice';
+import playlistSlice from './listSlices/playlistSlice';
 
 export const store = configureStore({
   reducer: {
-    targetSlice: targetSlice,
-    playlistSheetSlice: playlistSheetSlice,
-    playlistSlice: playlistSlice,
-    homeSlice: homeSlice,
+    playlistSheetSlice,
+    [homeSlice.reducerPath]: homeSlice.reducer,
+    [playlistSlice.reducerPath]: playlistSlice.reducer,
   },
 });
 

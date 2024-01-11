@@ -1,12 +1,13 @@
 import {useQuery, useQueryClient} from '@tanstack/react-query';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
 import {getFeed} from '../../api/collection';
 import {SkeletonScreen} from '../../components';
-import VideoListManager from '../../components/List/VideoListManager';
-import VideoListManagerProvider from '../../shared/context/VideoListManagerProvider';
-import {useDispatch, useSelector} from 'react-redux';
+import VideoList from '../../components/List/VideoList';
+import {useEffect} from 'react';
+import {queryKey} from '../../api/api';
+import VideoListContext from '../../shared/context/VideoListContext';
 import {RootState} from '../../redux/store';
-import {setHomeIndex} from '../../redux/videoListManagerSlices/homeSlice';
 
 export type TestData = {
   source: string;
@@ -16,22 +17,25 @@ export type TestData = {
 function HomeScreen(): JSX.Element {
   const queryClient = useQueryClient();
   const {data: turns} = useQuery({
-    queryKey: ['feed'],
+    queryKey: [queryKey.feed],
     queryFn: () => getFeed(),
     initialData: queryClient.getQueryData(['feed']),
   });
-  const index = useSelector((state: RootState) => state.homeSlice.index);
-  const dispatch = useDispatch();
-  
-  const setNewIndex = (index: number) => {
-    dispatch(setHomeIndex(index));
-  };
 
-  const content = (
-    <View>
-      
-    </View>
+  const index = useSelector((state: RootState) => state['homeSlice'].index);
+  const playlistIndex = useSelector(
+    (state: RootState) => state.playlistSlice.index,
   );
+
+  useEffect(() => {
+    console.log('index :>>', {index, playlistIndex});
+  }, [index, playlistIndex]);
+
+  const content = turns ? (
+    <VideoListContext id="homeSlice" defaultValue={turns[0]}>
+      <VideoList data={turns} id="homeSlice" />
+    </VideoListContext>
+  ) : null;
 
   return <SkeletonScreen contentStyle={Style.container} content={content} />;
 }
