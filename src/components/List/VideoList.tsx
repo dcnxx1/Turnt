@@ -1,85 +1,57 @@
-import {ListRenderItem} from '@shopify/flash-list';
+import {FlashList, ListRenderItem} from '@shopify/flash-list';
 import {useEffect, useRef} from 'react';
-import {Dimensions, ViewToken, ViewabilityConfig} from 'react-native';
-import {TURN_KEY, useCDN} from '../../api/api';
+import {Dimensions, ViewabilityConfig} from 'react-native';
+import {useSelector} from 'react-redux';
 import {ITurn} from '../../models/turn';
-import {useVideoListContext} from '../../shared/context/VideoListContext';
+import {RootState} from '../../redux/store';
+import withSyncMediaController from '../MediaController/withSyncMediaController';
 import VideoPlayer from '../Video/VideoPlayer';
 import SkeletonFlashList from './SkeletonFlashList';
-import {useDispatch, useSelector} from 'react-redux';
-import {RootState} from '../../redux/store';
-import {increment} from '../../redux/videoListSlice';
+import useVideoList from './hooks/useVideoList';
 
 type Props = {
   data: ITurn[];
   id: 'playlistSlice' | 'homeSlice';
+  animateScrollToIndex?: boolean;
 };
 
-type ComponentProp = {
-  source: string;
-  id: string;
-  selectorId: 'playlistSlice' | 'homeSlice';
-};
+const BECAME_ACTIVE_AT_PERCENT = 95;
+const VideoSyncMediaController = withSyncMediaController(VideoPlayer);
 
-const MiddleComponent = ({source, id, selectorId}: ComponentProp) => {
-  const onProgress = () => {};
-  const {activeTurn} = useVideoListContext();
-  const dispatch = useDispatch();
-  const shouldPlay = activeTurn.turn_id === id
-  const isPlaying = useSelector(
-    (state: RootState) => state[selectorId].isPlaying,
-  );
+export default function VideoList({
+  data,
+  id,
+  animateScrollToIndex = true,
+}: Props) {
+  const [onViewableItemsChanged, keyExtractor] = useVideoList();
+  const ref = useRef<FlashList<ITurn>>(null);
+  const index = useSelector((state: RootState) => state[id].index);
 
-  return (
-    <VideoPlayer
-      onEnd={() => dispatch(increment())}
-      source={useCDN(TURN_KEY + source)}
-      paused={shouldPlay ? !isPlaying: true}
-      onProgress={onProgress}
-    />
-  );
-};
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.scrollToIndex({
+        animated: animateScrollToIndex,
+        index: index,
+      });
+    }
+  }, [ref, index]);
 
-export default function VideoList({data, id}: Props) {
-  const {setActiveTurn} = useVideoListContext();
-  const state = useSelector((state: RootState) => state[id]);
-  const dispatch = useDispatch();
   const renderItem: ListRenderItem<ITurn> = ({
     item: {turn_id, source},
     index,
   }) => {
-    return <MiddleComponent selectorId={id} source={source} id={turn_id} />;
-  };
-
-  const keyExtractor = (item: ITurn) => {
-    return item.turn_id;
-  };
-
-  const onViewableItemsChanged = (info: {
-    changed: ViewToken[];
-    viewableItems: ViewToken[];
-  }) => {
-    if (
-      info.viewableItems.length &&
-      info.viewableItems[0].index !== undefined
-    ) {
-      const {item, index} = info.viewableItems[0];
-      if (item !== null) {
-        const currentActiveTurn = item as ITurn;
-        setActiveTurn(currentActiveTurn);
-      }
-      if (index !== null) {
-        dispatch(increment());
-      }
-    }
+    return (
+      <VideoSyncMediaController id={id} videoId={turn_id} source={source} />
+    );
   };
 
   const viewConfigRef = useRef<ViewabilityConfig>({
-    viewAreaCoveragePercentThreshold: 95,
+    viewAreaCoveragePercentThreshold: BECAME_ACTIVE_AT_PERCENT,
   }).current;
 
   return (
     <SkeletonFlashList
+      ref={ref}
       renderItem={renderItem}
       keyExtractor={keyExtractor}
       viewabilityConfig={viewConfigRef}

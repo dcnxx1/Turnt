@@ -1,22 +1,25 @@
 import BottomSheet from '@gorhom/bottom-sheet';
-import {useNavigation} from '@react-navigation/native';
 import {useQueryClient} from '@tanstack/react-query';
 import {useMemo} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {Dimensions, StyleSheet, View} from 'react-native';
+import {SharedValue, useDerivedValue} from 'react-native-reanimated';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {ITurn} from '../../models/turn';
-import usePlaylistSheet from './hooks/usePlaylistSheet';
-import VideoList from '../List/VideoList';
 import VideoListContext from '../../shared/context/VideoListContext';
+import VideoList from '../List/VideoList';
+import {HEIGHT_BOTTOM_TAB} from '../Tabbar/BottomTab';
+import usePlaylistSheet from './hooks/usePlaylistSheet';
 
 type Props = {
   tabHeight: number;
+  animatedPosition: SharedValue<number>;
 };
 
-export default function PlaylistSheet({tabHeight}: Props) {
+export default function PlaylistSheet({tabHeight, animatedPosition}: Props) {
   const queryClient = useQueryClient();
-  const snapPoints = useMemo(() => ['10%', '95%'], []);
+  const {bottom} = useSafeAreaInsets();
+  const snapPoints = useMemo(() => [HEIGHT_BOTTOM_TAB + bottom, '100%'], [bottom]);
   const [ref, onChangeBottomSheetPosition] = usePlaylistSheet();
-  const navigation = useNavigation();
   const playlistData: ITurn[] | undefined = queryClient.getQueryData([
     'playlist',
   ]);
@@ -25,19 +28,35 @@ export default function PlaylistSheet({tabHeight}: Props) {
     <BottomSheet
       ref={ref}
       index={-1}
+      handleComponent={() => (
+        <View
+          style={{
+            height: Dimensions.get('screen').height * 0.1,
+            borderWidth: 5,
+            borderColor: 'blue',
+            position: 'absolute',
+            width: '100%',
+          }}></View>
+      )}
+      enableOverDrag={false}
+      animatedPosition={animatedPosition}
       onChange={onChangeBottomSheetPosition}
-      animateOnMount={true}
-      bottomInset={tabHeight}
       handleStyle={{
         backgroundColor: '#00000000',
       }}
       snapPoints={snapPoints}>
       <View style={Style.container}>
-        {/* {
-          playlistData ? <VideoListContext defaultValue={playlistData ? playlistData[0] : null}>
-          <VideoList id="playlist" data={playlistData ?? []} />
-        </VideoListContext> : null
-        } */}
+        {playlistData ? (
+          <VideoListContext
+            id={'playlistSlice'}
+            defaultValue={playlistData ? playlistData[0] : ({} as ITurn)}>
+            <VideoList
+              animateScrollToIndex={false}
+              id={'playlistSlice'}
+              data={playlistData ?? []}
+            />
+          </VideoListContext>
+        ) : null}
       </View>
     </BottomSheet>
   );

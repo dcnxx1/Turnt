@@ -26,7 +26,7 @@ type MediaControllerView = {
 };
 
 export default function MediaControllerView({tabHeight}: MediaControllerView) {
-  const snapPoints = useMemo(() => ['4%', '35%'], []);
+  const snapPoints = useMemo(() => ['5%', '35%'], []);
   const {activeTurn} = useActiveTurnStore();
   const dispatch = useDispatch();
 

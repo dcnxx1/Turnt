@@ -8,6 +8,7 @@ import _ from 'lodash';
 import SkeletonFlashList from '../List/SkeletonFlashList';
 import PlaylistItem from './PlaylistItem';
 import {setPosition} from '../../redux/playlistSheetSlice';
+import {setIndex} from '../../redux/videoListSlice';
 
 type Props = {
   data: ITurn[];
@@ -24,9 +25,9 @@ export default function SavedSongList({data}: Props) {
   const dispatch = useDispatch();
 
   const onPressPlaylistItem = (turn_id: string, index: number) => {
-    console.log('onPressPLaylistItem ');
     dispatch(setPosition('FullScreen'));
-  }
+    dispatch(setIndex(index));
+  };
 
   const renderItem: ListRenderItem<ITurn> = ({item, index}) => {
     return (

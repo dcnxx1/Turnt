@@ -1,5 +1,6 @@
-import {PayloadAction, createAction, createSlice} from '@reduxjs/toolkit';
+import {createSlice} from '@reduxjs/toolkit';
 import * as actions from '../videoListSlice';
+import * as playlistSheetActions from '../playlistSheetSlice';
 
 export const initialState = {
   index: 0,
@@ -26,6 +27,11 @@ const homeSlice = createSlice({
         state.index--;
       }
     });
+    builder.addCase(actions.setIndex, (state, action) => {
+      if (state.isActive) {
+        state.index = action.payload;
+      }
+    });
     builder.addCase(actions.togglePlaying, state => {
       if (state.isActive) {
         state.isPlaying = !state.isPlaying;
@@ -36,8 +42,11 @@ const homeSlice = createSlice({
         state.isPlaying = action.payload;
       }
     });
-    builder.addCase(actions.setActiveSlice, (state, action) => {
-      state.isActive = !state.isActive;
+    builder.addCase(playlistSheetActions.setPosition, (state, action) => {
+      if (action.payload !== 'Hidden') {
+        state.isPlaying = false
+        state.isActive = false;
+      }
     });
   },
 });

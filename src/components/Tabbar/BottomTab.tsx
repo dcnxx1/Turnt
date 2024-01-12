@@ -5,19 +5,25 @@ import {
   ParamListBase,
   TabNavigationState,
 } from '@react-navigation/native';
-import {Image, LayoutChangeEvent, StyleSheet, View} from 'react-native';
+import {Dimensions, Image, LayoutChangeEvent, StyleSheet} from 'react-native';
 import {Button} from 'react-native-paper';
+import Animated, {
+  Extrapolation,
+  SharedValue,
+  interpolate,
+  useAnimatedStyle,
+} from 'react-native-reanimated';
 import {EdgeInsets, useSafeAreaInsets} from 'react-native-safe-area-context';
 import {NavNameTypes, NavScreenNames} from '../../nav/types';
 import theme from '../../theme';
 import Flex from '../Misc/Flex';
-
 type BottomTabProps = {
   state: TabNavigationState<ParamListBase>;
   descriptors: BottomTabDescriptorMap;
   navigation: NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>;
   insets: EdgeInsets;
   onLayout: (event: LayoutChangeEvent) => void;
+  animatedPosition: SharedValue<number>;
 };
 
 const switchKeys = (routeName: NavNameTypes, isFocused: boolean) => {
@@ -47,19 +53,38 @@ const switchKeys = (routeName: NavNameTypes, isFocused: boolean) => {
   }
 };
 
+export const HEIGHT_BOTTOM_TAB = Dimensions.get('screen').height * 0.1;
+
 export default function BottomTab({
   state,
   descriptors,
   navigation,
   insets,
   onLayout,
+  animatedPosition,
 }: BottomTabProps) {
   const {bottom} = useSafeAreaInsets();
 
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      height: interpolate(
+        animatedPosition.value,
+        [844, 0],
+        [HEIGHT_BOTTOM_TAB, 0],
+        Extrapolation.CLAMP,
+      ),
+      paddingBottom: interpolate(animatedPosition.value, [844, 0], [bottom, 0]),
+    };
+  });
+
   return (
-    <View
+    <Animated.View
       onLayout={onLayout}
-      style={[Style.bottomTabContainer, {paddingBottom: bottom}]}>
+      style={[
+        Style.bottomTabContainer,
+        {paddingBottom: bottom},
+        animatedStyle,
+      ]}>
       {state.routes.map((route, index) => {
         const {options} = descriptors[route.key];
         const isFocused = state.index === index;
@@ -83,16 +108,17 @@ export default function BottomTab({
           </Flex>
         );
       })}
-    </View>
+    </Animated.View>
   );
 }
 
 const Style = StyleSheet.create({
   bottomTabContainer: {
-    height: '10%',
-    maxHeight: '10%',
+    height: HEIGHT_BOTTOM_TAB,
+
     flexDirection: 'row',
     backgroundColor: theme.color.turnerDark,
+    // position: 'absolute',
   },
   buttonContainer: {
     justifyContent: 'center',

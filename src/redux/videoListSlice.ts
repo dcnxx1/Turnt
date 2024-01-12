@@ -4,8 +4,9 @@ const videoListSlice = createSlice({
   name: 'videoListSlice',
   initialState: {},
   reducers: {
-    increment: (state) => {},
+    increment: state => {},
     decrement: () => {},
+    setIndex: (_, {payload}: PayloadAction<number>) => {},
     setIsPlaying: (state, {payload}: PayloadAction<boolean>) => {},
     togglePlaying: () => {},
     setActiveSlice: () => {},
@@ -15,6 +16,7 @@ const videoListSlice = createSlice({
 export const {
   increment,
   decrement,
+  setIndex,
   setIsPlaying,
   togglePlaying,
   setActiveSlice,
