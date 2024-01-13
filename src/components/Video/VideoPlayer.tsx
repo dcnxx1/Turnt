@@ -1,6 +1,7 @@
-import {forwardRef, useImperativeHandle} from 'react';
+import {forwardRef, useEffect, useImperativeHandle, useState} from 'react';
 import {Dimensions, StyleProp, StyleSheet, ViewStyle} from 'react-native';
 import Video, {OnLoadData, OnProgressData} from 'react-native-video';
+import theme from '../../theme';
 
 export type VideoPlayerProps = {
   source: string;
@@ -24,10 +25,9 @@ export default forwardRef<Video, VideoPlayerProps>(
     {
       source,
       paused,
-      onLoad,
+      onReadyForDisplay,
       onEnd,
       onProgress,
-      onReadyForDisplay,
       style,
       playInBackground = true,
       playWhenInactive = true,
@@ -42,7 +42,6 @@ export default forwardRef<Video, VideoPlayerProps>(
         resizeMode={'cover'}
         onEnd={onEnd}
         ignoreSilentSwitch={'ignore'}
-        onLoad={onLoad}
         onReadyForDisplay={onReadyForDisplay}
         onProgress={onProgress}
         playInBackground={playInBackground}
@@ -60,5 +59,6 @@ const Style = StyleSheet.create({
   videoStyle: {
     width: SCREEN_WIDTH,
     height: SCREEN_HEIGHT,
+    backgroundColor: theme.color.turnerDark,
   },
 });

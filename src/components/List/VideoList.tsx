@@ -15,7 +15,7 @@ type Props = {
   animateScrollToIndex?: boolean;
 };
 
-const BECAME_ACTIVE_AT_PERCENT = 95;
+const VIDEO_BECAME_ACTIVE_AT_PERCENT = 95;
 const VideoSyncMediaController = withSyncMediaController(VideoPlayer);
 
 export default function VideoList({
@@ -38,7 +38,6 @@ export default function VideoList({
 
   const renderItem: ListRenderItem<ITurn> = ({
     item: {turn_id, source},
-    index,
   }) => {
     return (
       <VideoSyncMediaController id={id} videoId={turn_id} source={source} />
@@ -46,7 +45,7 @@ export default function VideoList({
   };
 
   const viewConfigRef = useRef<ViewabilityConfig>({
-    viewAreaCoveragePercentThreshold: BECAME_ACTIVE_AT_PERCENT,
+    viewAreaCoveragePercentThreshold: VIDEO_BECAME_ACTIVE_AT_PERCENT,
   }).current;
 
   return (

@@ -25,10 +25,7 @@ export default function Tabbar(props: TabbarProps) {
     <>
       <MediaController tabHeight={tabHeight} />
 
-      <PlaylistSheet
-        animatedPosition={animatedPosition}
-        tabHeight={tabHeight}
-      />
+      <PlaylistSheet animatedPosition={animatedPosition} />
 
       <BottomTab
         animatedPosition={animatedPosition}

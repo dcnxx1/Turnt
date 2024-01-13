@@ -9,6 +9,7 @@ import SkeletonFlashList from '../List/SkeletonFlashList';
 import PlaylistItem from './PlaylistItem';
 import {setPosition} from '../../redux/playlistSheetSlice';
 import {setIndex} from '../../redux/videoListSlice';
+import theme from '../../theme';
 
 type Props = {
   data: ITurn[];
@@ -48,6 +49,9 @@ export default function SavedSongList({data}: Props) {
 
   return (
     <SkeletonFlashList
+      contentContainerStyle={{
+        backgroundColor: theme.color.turnerPurpleDark,
+      }}
       bounces
       estimatedItemSize={ESTIMATED_SONG_ITEM_SIZE}
       estimatedListSize={{

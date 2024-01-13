@@ -37,7 +37,7 @@ export default function PlaylistItem({
 const Style = StyleSheet.create({
   container: {
     borderWidth: 2,
-    borderColor: 'yellow',
+    borderColor: 'red',
     margin: 5,
     flexDirection: 'row',
     padding: 10,
@@ -50,7 +50,7 @@ const Style = StyleSheet.create({
   },
   itemContainer: {
     borderWidth: 2,
-    borderColor: 'yellow',
+    borderColor: 'red',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',

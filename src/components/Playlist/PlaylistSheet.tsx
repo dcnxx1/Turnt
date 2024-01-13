@@ -11,18 +11,26 @@ import {HEIGHT_BOTTOM_TAB} from '../Tabbar/BottomTab';
 import usePlaylistSheet from './hooks/usePlaylistSheet';
 
 type Props = {
-  tabHeight: number;
   animatedPosition: SharedValue<number>;
 };
 
-export default function PlaylistSheet({tabHeight, animatedPosition}: Props) {
+export const SHEET_PARTIAL_MODE = Dimensions.get('screen').height * 0.1;
+export const SHEET_FULL_SCREEN_MODE = 0;
+export const SHEET_HIDDEN_MODE = Dimensions.get('screen').height;
+export default function PlaylistSheet({animatedPosition}: Props) {
   const queryClient = useQueryClient();
-  const {bottom} = useSafeAreaInsets();
-  const snapPoints = useMemo(() => [HEIGHT_BOTTOM_TAB + bottom, '100%'], [bottom]);
+  const snapPoints = useMemo(
+    () => [SHEET_PARTIAL_MODE + SHEET_PARTIAL_MODE, SHEET_HIDDEN_MODE],
+    [],
+  );
   const [ref, onChangeBottomSheetPosition] = usePlaylistSheet();
   const playlistData: ITurn[] | undefined = queryClient.getQueryData([
     'playlist',
   ]);
+
+  useDerivedValue(() => {
+    console.log(animatedPosition.value);
+  }, [animatedPosition]);
 
   return (
     <BottomSheet
@@ -31,7 +39,7 @@ export default function PlaylistSheet({tabHeight, animatedPosition}: Props) {
       handleComponent={() => (
         <View
           style={{
-            height: Dimensions.get('screen').height * 0.1,
+            height: SHEET_PARTIAL_MODE,
             borderWidth: 5,
             borderColor: 'blue',
             position: 'absolute',
@@ -65,8 +73,6 @@ export default function PlaylistSheet({tabHeight, animatedPosition}: Props) {
 const Style = StyleSheet.create({
   container: {
     width: '100%',
-    borderWidth: 2,
-    borderColor: 'yellow',
     height: '100%',
   },
 });

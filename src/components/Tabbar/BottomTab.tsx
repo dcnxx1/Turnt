@@ -17,6 +17,12 @@ import {EdgeInsets, useSafeAreaInsets} from 'react-native-safe-area-context';
 import {NavNameTypes, NavScreenNames} from '../../nav/types';
 import theme from '../../theme';
 import Flex from '../Misc/Flex';
+import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import {
+  SHEET_FULL_SCREEN_MODE,
+  SHEET_HIDDEN_MODE,
+  SHEET_PARTIAL_MODE,
+} from '../Playlist/PlaylistSheet';
 type BottomTabProps = {
   state: TabNavigationState<ParamListBase>;
   descriptors: BottomTabDescriptorMap;
@@ -54,7 +60,7 @@ const switchKeys = (routeName: NavNameTypes, isFocused: boolean) => {
 };
 
 export const HEIGHT_BOTTOM_TAB = Dimensions.get('screen').height * 0.1;
-
+const SCREEN_HEIGHT = Dimensions.get('screen').height;
 export default function BottomTab({
   state,
   descriptors,
@@ -67,13 +73,16 @@ export default function BottomTab({
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
-      height: interpolate(
-        animatedPosition.value,
-        [844, 0],
-        [HEIGHT_BOTTOM_TAB, 0],
-        Extrapolation.CLAMP,
-      ),
-      paddingBottom: interpolate(animatedPosition.value, [844, 0], [bottom, 0]),
+      transform: [
+        {
+          translateY: interpolate(
+            animatedPosition.value,
+            [SHEET_HIDDEN_MODE - SHEET_PARTIAL_MODE - HEIGHT_BOTTOM_TAB, SHEET_FULL_SCREEN_MODE],
+            [0, HEIGHT_BOTTOM_TAB],
+            Extrapolation.CLAMP,
+          ),
+        },
+      ],
     };
   });
 
@@ -82,8 +91,8 @@ export default function BottomTab({
       onLayout={onLayout}
       style={[
         Style.bottomTabContainer,
-        {paddingBottom: bottom},
         animatedStyle,
+        {paddingBottom: bottom},
       ]}>
       {state.routes.map((route, index) => {
         const {options} = descriptors[route.key];
@@ -102,9 +111,9 @@ export default function BottomTab({
         };
         return (
           <Flex style={Style.buttonContainer} key={route.key}>
-            <Button style={Style.button} onPress={onPress}>
+            <TouchableWithoutFeedback style={Style.button} onPress={onPress}>
               {switchKeys(route.name as NavNameTypes, isFocused)}
-            </Button>
+            </TouchableWithoutFeedback>
           </Flex>
         );
       })}
@@ -115,25 +124,29 @@ export default function BottomTab({
 const Style = StyleSheet.create({
   bottomTabContainer: {
     height: HEIGHT_BOTTOM_TAB,
-
     flexDirection: 'row',
     backgroundColor: theme.color.turnerDark,
-    // position: 'absolute',
   },
   buttonContainer: {
     justifyContent: 'center',
-    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: 'yellow',
     width: '100%',
   },
   button: {
-    width: '60%',
+    borderWidth: 2,
+    borderColor: 'red',
+    width: '100%',
+    position: 'relative',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   text: {
     color: theme.color.white,
   },
   icon: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
+    width: 35,
+    height: 35,
+    resizeMode: 'contain',
   },
 });
