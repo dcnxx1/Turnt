@@ -32,7 +32,7 @@ function renderButtonIcon(button: Button, size = 40) {
   const sizeStyle: Pick<ImageStyle, 'width' | 'height' | 'resizeMode'> = {
     width: size,
     height: size,
-    resizeMode: 'contain',
+    resizeMode: 'cover',
   };
 
   switch (button) {
@@ -71,6 +71,14 @@ function renderButtonIcon(button: Button, size = 40) {
           source={require('../../../../assets/icons/editor_reload.png')}
         />
       );
+    case 'Forward': {
+      return (
+        <Image
+          style={sizeStyle}
+          source={require('../../../../assets/icons/fast-forward.png')}
+        />
+      );
+    }
   }
 }
 

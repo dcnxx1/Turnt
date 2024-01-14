@@ -64,5 +64,4 @@ export const trackPlayerCapabilities = [
   Capability.SkipToNext,
   Capability.SkipToPrevious,
   Capability.SeekTo,
-  Capability.Like,
 ];

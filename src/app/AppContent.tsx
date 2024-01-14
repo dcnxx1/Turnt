@@ -1,10 +1,8 @@
-import {NavigationContainer} from '@react-navigation/native';
-import {ReactNode, useEffect, useRef, useState} from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { ReactNode, useEffect } from 'react';
 import RNBootSplash from 'react-native-bootsplash';
-import {Navigation} from '../nav';
-import useInitalizeApp, {useInitialize} from './useInitializeApp';
-import {getInitialRoute} from './boot';
-import {RootNavNames} from '../nav/types';
+import { Navigation } from '../nav';
+import useInitalizeApp from './useInitializeApp';
 
 type Props = {
   children: ReactNode;

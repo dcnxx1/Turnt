@@ -8,7 +8,7 @@ import {useVideoListContext} from '../../shared/context/VideoListContext';
 import {ITurn} from '../../models/turn';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../redux/store';
-import {setIsPlaying} from '../../redux/videoListSlice';
+import {increment, setIsPlaying} from '../../redux/videoListSlice';
 import TrackPlayer from 'react-native-track-player';
 
 export default function withSyncMediaController(
@@ -46,6 +46,10 @@ export default function withSyncMediaController(
       setSeekTo(0);
     }, [isVideoOnScreen]);
 
+    const onEnd = () => {
+      dispatch(increment());
+    };
+
     const onProgress = ({currentTime}: OnProgressData) => {
       if (isSeeking) return;
       setProgress(currentTime);
@@ -55,6 +59,7 @@ export default function withSyncMediaController(
     return (
       <VideoPlayer
         ref={ref}
+        onEnd={onEnd}
         onProgress={onProgress}
         source={useCDN(TURN_KEY + source)}
         paused={isVideoOnScreen ? !isPlaying : true}

@@ -6,7 +6,7 @@ import {
   TabNavigationState,
 } from '@react-navigation/native';
 import {Dimensions, Image, LayoutChangeEvent, StyleSheet} from 'react-native';
-import {Button} from 'react-native-paper';
+import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import Animated, {
   Extrapolation,
   SharedValue,
@@ -17,7 +17,6 @@ import {EdgeInsets, useSafeAreaInsets} from 'react-native-safe-area-context';
 import {NavNameTypes, NavScreenNames} from '../../nav/types';
 import theme from '../../theme';
 import Flex from '../Misc/Flex';
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {
   SHEET_FULL_SCREEN_MODE,
   SHEET_HIDDEN_MODE,
@@ -60,7 +59,7 @@ const switchKeys = (routeName: NavNameTypes, isFocused: boolean) => {
 };
 
 export const HEIGHT_BOTTOM_TAB = Dimensions.get('screen').height * 0.1;
-const SCREEN_HEIGHT = Dimensions.get('screen').height;
+
 export default function BottomTab({
   state,
   descriptors,
@@ -77,7 +76,10 @@ export default function BottomTab({
         {
           translateY: interpolate(
             animatedPosition.value,
-            [SHEET_HIDDEN_MODE - SHEET_PARTIAL_MODE - HEIGHT_BOTTOM_TAB, SHEET_FULL_SCREEN_MODE],
+            [
+              SHEET_HIDDEN_MODE - SHEET_PARTIAL_MODE,
+              SHEET_FULL_SCREEN_MODE,
+            ],
             [0, HEIGHT_BOTTOM_TAB],
             Extrapolation.CLAMP,
           ),
@@ -129,13 +131,9 @@ const Style = StyleSheet.create({
   },
   buttonContainer: {
     justifyContent: 'center',
-    borderWidth: 2,
-    borderColor: 'yellow',
     width: '100%',
   },
   button: {
-    borderWidth: 2,
-    borderColor: 'red',
     width: '100%',
     position: 'relative',
     justifyContent: 'center',

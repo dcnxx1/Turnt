@@ -19,7 +19,7 @@ export default function useInitalizeApp(): [boolean, string | undefined] {
   const [initialRoute, setInitialRoute] = useState<RootNavs>();
   const queryClient = useQueryClient();
   const setActiveTurn = useActiveTurnStore(state => state.setActiveTurn);
-  const dispatch = useDispatch();
+
   async function initialize() {
     try {
       const me = getLocalUserProfile();
