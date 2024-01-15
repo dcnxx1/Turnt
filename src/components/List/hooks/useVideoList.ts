@@ -3,6 +3,7 @@ import {useDispatch} from 'react-redux';
 import {ITurn} from '../../../models/turn';
 import {setIndex} from '../../../redux/videoListSlice';
 import {useVideoListContext} from '../../../shared/context/VideoListContext';
+import {useEffect, useState} from 'react';
 
 type VideoListHookReturnType = [
   onViewableItemsChanged: (info: {
@@ -13,6 +14,7 @@ type VideoListHookReturnType = [
 ];
 
 export default function useVideoList(): VideoListHookReturnType {
+  const [recycledData, setRecycledData] = useState<ITurn[]>([]);
   const {setActiveTurn} = useVideoListContext();
   const dispatch = useDispatch();
 
@@ -28,12 +30,15 @@ export default function useVideoList(): VideoListHookReturnType {
       if (item !== null) {
         const currentActiveTurn = item as ITurn;
         setActiveTurn(currentActiveTurn);
+       
       }
       if (index !== null) {
         dispatch(setIndex(index));
       }
     }
   };
+
+  const onEndReached = () => {};
 
   const keyExtractor = (item: ITurn) => {
     return item.turn_id;

@@ -23,7 +23,6 @@ export default function VideoOpacity({animatedPosition, children}: Props) {
       opacity: interpolate(
         animatedPosition.value,
         [
-            
             SHEET_HIDDEN_MODE - SHEET_PARTIAL_MODE ,
             SHEET_HIDDEN_MODE - SHEET_PARTIAL_MODE - APPEAR_THRESHOLD
         ],

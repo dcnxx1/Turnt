@@ -1,6 +1,6 @@
 import BottomSheet from '@gorhom/bottom-sheet';
 import {useQueryClient} from '@tanstack/react-query';
-import {useCallback, useMemo} from 'react';
+import {useCallback, useEffect, useMemo} from 'react';
 import {Dimensions, StyleSheet} from 'react-native';
 import {SharedValue} from 'react-native-reanimated';
 import {ITurn} from '../../models/turn';
@@ -16,13 +16,14 @@ type Props = {
 };
 
 export const SHEET_PARTIAL_MODE =
-  Dimensions.get('screen').height * 0.1 + HEIGHT_BOTTOM_TAB;
+  Dimensions.get('screen').height * 0.08 + HEIGHT_BOTTOM_TAB;
 
 export const SHEET_FULL_SCREEN_MODE = 0;
 export const SHEET_HIDDEN_MODE = Dimensions.get('screen').height;
 
+const queryClient = useQueryClient();
+
 export default function PlaylistSheet({animatedPosition}: Props) {
-  const queryClient = useQueryClient();
   const snapPoints = useMemo(() => [SHEET_PARTIAL_MODE, SHEET_HIDDEN_MODE], []);
   const [ref, onChangeBottomSheetPosition] = usePlaylistSheet();
   const playlistData: ITurn[] | undefined = queryClient.getQueryData([

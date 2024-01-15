@@ -23,6 +23,7 @@ export default function Editor(): JSX.Element {
   const navigation = useNavigation<StackNavigationProp<EditorParams>>();
   const {setActiveTurn} = useActiveTurnStore();
   const me = useLocalProfile();
+  
   const onPressSubmitWithoutErrors = (fieldValues: EditorFormValuesType) => {
     createTurnMutation(
       {
@@ -74,7 +75,7 @@ export default function Editor(): JSX.Element {
     </Pressable>
   );
 
-  const content = params && (
+  const content = (
     <EditorScreen onSubmit={onPressSubmitWithoutErrors} params={params} />
   );
 

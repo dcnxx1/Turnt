@@ -1,5 +1,5 @@
 import {memo} from 'react';
-import { StyleSheet} from 'react-native';
+import {Dimensions, StyleSheet} from 'react-native';
 import Animated, {
   Extrapolation,
   SharedValue,
@@ -12,15 +12,15 @@ import {
   SHEET_PARTIAL_MODE,
 } from '../PlaylistSheet';
 import MiniPlayer from './Miniplayer';
-import {HEIGHT_BOTTOM_TAB} from '../../Tabbar/BottomTab';
 
 export const APPEAR_THRESHOLD = 50;
 type Props = {
   animatedPosition: SharedValue<number>;
 };
+const HANDLE_HEIGHT = Dimensions.get('screen').height * 0.08;
 
 function PlaylistSheetHandle({animatedPosition}: Props) {
-  const handleAnimation = useAnimatedStyle(() => {
+  const arrowDownOpacity = useAnimatedStyle(() => {
     const interpolator = (begin: number, end: number) =>
       interpolate(
         animatedPosition.value,
@@ -32,7 +32,7 @@ function PlaylistSheetHandle({animatedPosition}: Props) {
       opacity: interpolator(1, 0),
     };
   });
-  const partialAnimation = useAnimatedStyle(() => {
+  const miniPlayerOpacity = useAnimatedStyle(() => {
     return {
       opacity: interpolate(
         animatedPosition.value,
@@ -49,10 +49,10 @@ function PlaylistSheetHandle({animatedPosition}: Props) {
   return (
     <Animated.View style={[Style.container]}>
       <Animated.Image
-        style={[Style.arrow, handleAnimation]}
+        style={[Style.arrow, arrowDownOpacity]}
         source={require('../../../assets/icons/arrow.png')}
       />
-      <Animated.View style={[Style.miniPlayerContainer, partialAnimation]}>
+      <Animated.View style={[Style.miniPlayerContainer, miniPlayerOpacity]}>
         <MiniPlayer />
       </Animated.View>
     </Animated.View>
@@ -63,7 +63,7 @@ export default memo(PlaylistSheetHandle);
 
 const Style = StyleSheet.create({
   container: {
-    height: HEIGHT_BOTTOM_TAB,
+    height: HANDLE_HEIGHT,
     position: 'absolute',
     width: '100%',
     top: 0,
@@ -71,14 +71,13 @@ const Style = StyleSheet.create({
   },
   arrow: {
     transform: [{rotate: '90deg'}],
-    width: 25,
-    height: 25,
-    resizeMode: 'cover',
+    width: 45,
+    height: 45,
+    resizeMode: 'contain',
     paddingLeft: 25,
   },
   miniPlayerContainer: {
     width: '100%',
-
     height: '100%',
     position: 'absolute',
   },

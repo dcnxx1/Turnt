@@ -3,7 +3,7 @@ import {BlurView} from '@react-native-community/blur';
 import {useCallback, useMemo} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {useDispatch} from 'react-redux';
-
+import _ from 'lodash';
 import {useActiveTurnStore} from '../../../store';
 import Flex from '../../Misc/Flex';
 import {blurViewConfig, bottomSheetConfig} from '../configs';
@@ -14,6 +14,7 @@ import {
   TogglePlayPauseButton,
 } from './MediaControllerButtons';
 import TimelineSliderBar from './TimelineSliderBar';
+import {throttle} from 'lodash';
 import {
   decrement,
   increment,
@@ -34,13 +35,19 @@ export default function MediaControllerView({tabHeight}: MediaControllerView) {
     dispatch(togglePlaying());
   };
 
-  const onPressNext = useCallback(() => {
-    dispatch(increment());
-  }, [dispatch]);
+  const onPressNext = throttle(
+    useCallback(() => {
+      dispatch(increment());
+    }, [dispatch]),
+    1000,
+  );
 
-  const onPressPrevious = useCallback(() => {
-    dispatch(decrement());
-  }, [dispatch]);
+  const onPressPrevious = throttle(
+    useCallback(() => {
+      dispatch(decrement());
+    }, [dispatch]),
+    1000,
+  );
 
   return activeTurn ? (
     <BottomSheet

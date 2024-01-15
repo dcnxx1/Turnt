@@ -1,15 +1,15 @@
-import {useEffect, useRef, useState} from 'react';
-import Video, {OnProgressData} from 'react-native-video';
-import {useCDN} from '../../api/api';
-import {TURN_KEY} from '../../s3';
-import {useSeek, useVideoStore} from '../../store';
-import {VideoPlayerProps} from '../Video/VideoPlayer';
-import {useVideoListContext} from '../../shared/context/VideoListContext';
-import {ITurn} from '../../models/turn';
-import {useDispatch, useSelector} from 'react-redux';
-import {RootState} from '../../redux/store';
-import {increment, setIsPlaying} from '../../redux/videoListSlice';
+import { useEffect, useRef } from 'react';
 import TrackPlayer from 'react-native-track-player';
+import Video, { OnProgressData } from 'react-native-video';
+import { useDispatch, useSelector } from 'react-redux';
+import { useCDN } from '../../api/api';
+import { ITurn } from '../../models/turn';
+import { RootState } from '../../redux/store';
+import { setIsPlaying } from '../../redux/videoListSlice';
+import { TURN_KEY } from '../../s3';
+import { useVideoListContext } from '../../shared/context/VideoListContext';
+import { useSeek, useVideoStore } from '../../store';
+import { VideoPlayerProps } from '../Video/VideoPlayer';
 
 export default function withSyncMediaController(
   VideoPlayer: React.ForwardRefExoticComponent<
@@ -46,10 +46,6 @@ export default function withSyncMediaController(
       setSeekTo(0);
     }, [isVideoOnScreen]);
 
-    const onEnd = () => {
-      dispatch(increment());
-    };
-
     const onProgress = ({currentTime}: OnProgressData) => {
       if (isSeeking) return;
       setProgress(currentTime);
@@ -59,7 +55,7 @@ export default function withSyncMediaController(
     return (
       <VideoPlayer
         ref={ref}
-        onEnd={onEnd}
+        onEnd={() => console.log('on end reached')}
         onProgress={onProgress}
         source={useCDN(TURN_KEY + source)}
         paused={isVideoOnScreen ? !isPlaying : true}

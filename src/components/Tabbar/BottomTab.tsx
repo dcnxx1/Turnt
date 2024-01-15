@@ -70,7 +70,7 @@ export default function BottomTab({
 }: BottomTabProps) {
   const {bottom} = useSafeAreaInsets();
 
-  const animatedStyle = useAnimatedStyle(() => {
+  const translateY = useAnimatedStyle(() => {
     return {
       transform: [
         {
@@ -93,7 +93,7 @@ export default function BottomTab({
       onLayout={onLayout}
       style={[
         Style.bottomTabContainer,
-        animatedStyle,
+        translateY,
         {paddingBottom: bottom},
       ]}>
       {state.routes.map((route, index) => {

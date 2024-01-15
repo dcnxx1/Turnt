@@ -13,6 +13,7 @@ type Props = {
   data: ITurn[];
   id: 'playlistSlice' | 'homeSlice';
   animateScrollToIndex?: boolean;
+  onEndReached?: () => void;
 };
 
 const VIDEO_BECAME_ACTIVE_AT_PERCENT = 95;
@@ -24,21 +25,27 @@ export default function VideoList({
   animateScrollToIndex = true,
 }: Props) {
   const [onViewableItemsChanged, keyExtractor] = useVideoList();
+
   const ref = useRef<FlashList<ITurn>>(null);
   const index = useSelector((state: RootState) => state[id].index);
 
   useEffect(() => {
     if (ref.current) {
+      if (index > data.length - 1) {
+        ref.current.scrollToIndex({
+          animated: animateScrollToIndex,
+          index: 0,
+        });
+        return;
+      }
       ref.current.scrollToIndex({
         animated: animateScrollToIndex,
         index: index,
       });
     }
-  }, [ref, index]);
+  }, [ref, index, data]);
 
-  const renderItem: ListRenderItem<ITurn> = ({
-    item: {turn_id, source},
-  }) => {
+  const renderItem: ListRenderItem<ITurn> = ({item: {turn_id, source}}) => {
     return (
       <VideoSyncMediaController id={id} videoId={turn_id} source={source} />
     );
@@ -50,6 +57,7 @@ export default function VideoList({
 
   return (
     <SkeletonFlashList
+      extraData={data}
       ref={ref}
       renderItem={renderItem}
       keyExtractor={keyExtractor}

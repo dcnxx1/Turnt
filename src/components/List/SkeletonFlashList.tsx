@@ -2,10 +2,17 @@ import {
   ContentStyle,
   FlashList,
   ListRenderItem,
+  FlashListProps,
   ViewToken,
 } from '@shopify/flash-list';
 import {forwardRef} from 'react';
-import {Dimensions, LayoutChangeEvent, ViewabilityConfig} from 'react-native';
+import {
+  Dimensions,
+  LayoutChangeEvent,
+  View,
+  ViewabilityConfig,
+} from 'react-native';
+import {Text} from 'react-native-paper';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const screenWidth = Dimensions.get('screen').width;
@@ -24,7 +31,9 @@ export type SkeletonFlashListProps<T> = {
     height: number;
   };
   contentContainerStyle?: ContentStyle | undefined;
+  ListFooterComponent?: FlashListProps<T>['ListFooterComponent'];
   enableSnap?: boolean;
+  onEndReached?: () => void | undefined | null;
   snapToInterval?: number | undefined;
   snapToAlignment?: 'start' | 'center' | 'end' | undefined;
   bounces?: boolean;
@@ -51,6 +60,8 @@ export default forwardRef<FlashList<any>, SkeletonFlashListProps<any>>(
       },
       contentContainerStyle,
       enableSnap,
+      onEndReached,
+      ListFooterComponent,
       onLayout,
       bounces = false,
       decelerationRate,
@@ -70,10 +81,12 @@ export default forwardRef<FlashList<any>, SkeletonFlashListProps<any>>(
         onLayout={onLayout}
         ref={ref}
         data={data}
+        onEndReached={onEndReached}
         onViewableItemsChanged={onViewableItemsChanged}
         showsHorizontalScrollIndicator={showScroll}
         keyExtractor={keyExtractor}
         estimatedListSize={estimatedListSize}
+        ListFooterComponent={ListFooterComponent}
         decelerationRate={decelerationRate}
         viewabilityConfig={viewabilityConfig}
         extraData={extraData}
