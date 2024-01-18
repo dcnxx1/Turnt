@@ -19,7 +19,7 @@ type Props = {
 
 type SongList = {
   turn_id: string;
-};
+}; 
 const ESTIMATED_SONG_ITEM_SIZE = 200;
 
 export default function SavedSongList({data}: Props) {

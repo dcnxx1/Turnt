@@ -17,7 +17,7 @@ export default function App() {
         onError={err => console.log('onError occured :>>', err)}
         FallbackComponent={() => (
           <View>
-            <Text>Dit kan jij niet!</Text>
+            <Text>Error fallback component!</Text>
           </View>
         )}>
         <QueryClientProvider client={queryClient}>

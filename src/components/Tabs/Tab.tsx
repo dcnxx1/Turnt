@@ -10,6 +10,7 @@ import ErrorFallback from '../Error/ErrorFallback';
 import {queryKey} from '../../api/api';
 import getMyUploadsByUserId from '../../api/myUploads';
 import useLocalProfile from '../../store/useLocalProfile';
+import FallbackMessage from '../Error/FallbackMessage';
 
 type Props = {
   playlist: QueryResult<ITurn>;
@@ -54,12 +55,23 @@ export default function Tab({playlist, myUploads}: Props) {
           <SavedSongList data={playlist.data} />
         </View>
         <View key="2">
-          <ErrorFallback
-            error={myUploads.error}
-            queryKey={queryKey.myUploads}
-            onRefetch={onRefetch}>
-            <SavedSongList data={myUploads.data} />
-          </ErrorFallback>
+          {playlist.data.length ? (
+            <ErrorFallback
+              error={myUploads.error}
+              queryKey={queryKey.myUploads}
+              onRefetch={onRefetch}>
+              <SavedSongList data={myUploads.data} />
+            </ErrorFallback>
+          ) : (
+            <FallbackMessage
+              imageHeader={require('../../assets/icons/broken-smartphone.png')}
+              header="Oeps..."
+              imageSize={60}
+              onRetry={() => console.log('item pressed!')}
+              buttonText="Doorgaan"
+              style={Style.fallbackMessageContainer}
+            />
+          )}
         </View>
       </PagerView>
     </>
@@ -83,4 +95,5 @@ const Style = StyleSheet.create({
     borderColor: 'yellow',
     paddingBottom: SHEET_PARTIAL_MODE,
   },
+  fallbackMessageContainer: {},
 });

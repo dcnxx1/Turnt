@@ -6,8 +6,6 @@ import {SharedValue} from 'react-native-reanimated';
 import {queryKey} from '../../api/api';
 import {ITurn} from '../../models/turn';
 import VideoListContext from '../../shared/context/VideoListContext';
-import useQueryData from '../../shared/hooks/useQueryData';
-import useLocalProfile from '../../store/useLocalProfile';
 import theme from '../../theme';
 import VideoList from '../List/VideoList';
 import {HEIGHT_BOTTOM_TAB} from '../Tabbar/BottomTab';
@@ -28,10 +26,6 @@ export default function PlaylistSheet({animatedPosition}: Props) {
   const snapPoints = useMemo(() => [SHEET_PARTIAL_MODE, SHEET_HIDDEN_MODE], []);
   const [ref, onChangeBottomSheetPosition] = usePlaylistSheet();
 
-  const playlist = useQueryData<ITurn>(queryKey.playlist);
-  const me = useLocalProfile();
-  const myUploads = useQueryData<ITurn>(queryKey.myUploads);
-
   const {data} = useQuery<ITurn[]>({
     queryKey: [queryKey.playlistSheet],
   });
@@ -39,8 +33,6 @@ export default function PlaylistSheet({animatedPosition}: Props) {
   const PlaylistSheetHandle = useCallback(() => {
     return <SheetHandle animatedPosition={animatedPosition} />;
   }, [animatedPosition]);
-
-
 
   return (
     <BottomSheet
