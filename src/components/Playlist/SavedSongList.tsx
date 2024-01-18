@@ -10,6 +10,8 @@ import PlaylistItem from './PlaylistItem';
 import {setPosition} from '../../redux/playlistSheetSlice';
 import {setIndex} from '../../redux/videoListSlice';
 import theme from '../../theme';
+import {useQueryClient} from '@tanstack/react-query';
+import {queryKey} from '../../api/api';
 
 type Props = {
   data: ITurn[];
@@ -24,8 +26,10 @@ export default function SavedSongList({data}: Props) {
   const ref = useRef<FlashList<SongList>>(null);
   const flashListLayout = useLayout();
   const dispatch = useDispatch();
+  const queryClient = useQueryClient();
 
   const onPressPlaylistItem = (turn_id: string, index: number) => {
+    queryClient.setQueryData([queryKey.playlistSheet], data);
     dispatch(setPosition('FullScreen'));
     dispatch(setIndex(index));
   };

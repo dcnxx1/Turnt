@@ -42,7 +42,6 @@ export type SkeletonFlashListProps<T> = {
   decelerationRate?: number | 'fast' | 'normal' | undefined;
   showScroll?: boolean;
   onLayout?: (ev: LayoutChangeEvent) => void;
-  FULL_SCREEN?: boolean;
   viewabilityConfig?: ViewabilityConfig | null | undefined;
   extraData?: T;
 };

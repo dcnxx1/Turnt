@@ -13,6 +13,15 @@ export const useCDN = (key: string): string => {
   return `https://dxhr72btgprfv.cloudfront.net/${key}`;
 };
 
+export type QueryKey =
+  | 'findCode'
+  | 'findUsername'
+  | 'createAccount'
+  | 'profile'
+  | 'feed'
+  | 'playlist'
+  | 'myUploads';
+
 export const queryKey = {
   findCode: 'findCode',
   findUsername: 'findUsername',
@@ -21,6 +30,7 @@ export const queryKey = {
   feed: 'feed',
   playlist: 'playlist',
   myUploads: 'myUploads',
+  playlistSheet: 'playlistSheet'
 };
 
 export const TURN_IMPRESSION_TIME_LIMIT = 30;

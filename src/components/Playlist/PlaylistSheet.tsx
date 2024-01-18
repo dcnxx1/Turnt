@@ -1,10 +1,13 @@
 import BottomSheet from '@gorhom/bottom-sheet';
-import {useQueryClient} from '@tanstack/react-query';
-import {useCallback, useEffect, useMemo} from 'react';
+import {useQuery} from '@tanstack/react-query';
+import {useCallback, useMemo} from 'react';
 import {Dimensions, StyleSheet} from 'react-native';
 import {SharedValue} from 'react-native-reanimated';
+import {queryKey} from '../../api/api';
 import {ITurn} from '../../models/turn';
 import VideoListContext from '../../shared/context/VideoListContext';
+import useQueryData from '../../shared/hooks/useQueryData';
+import useLocalProfile from '../../store/useLocalProfile';
 import theme from '../../theme';
 import VideoList from '../List/VideoList';
 import {HEIGHT_BOTTOM_TAB} from '../Tabbar/BottomTab';
@@ -21,18 +24,23 @@ export const SHEET_PARTIAL_MODE =
 export const SHEET_FULL_SCREEN_MODE = 0;
 export const SHEET_HIDDEN_MODE = Dimensions.get('screen').height;
 
-const queryClient = useQueryClient();
-
 export default function PlaylistSheet({animatedPosition}: Props) {
   const snapPoints = useMemo(() => [SHEET_PARTIAL_MODE, SHEET_HIDDEN_MODE], []);
   const [ref, onChangeBottomSheetPosition] = usePlaylistSheet();
-  const playlistData: ITurn[] | undefined = queryClient.getQueryData([
-    'playlist',
-  ]);
+
+  const playlist = useQueryData<ITurn>(queryKey.playlist);
+  const me = useLocalProfile();
+  const myUploads = useQueryData<ITurn>(queryKey.myUploads);
+
+  const {data} = useQuery<ITurn[]>({
+    queryKey: [queryKey.playlistSheet],
+  });
 
   const PlaylistSheetHandle = useCallback(() => {
     return <SheetHandle animatedPosition={animatedPosition} />;
   }, [animatedPosition]);
+
+
 
   return (
     <BottomSheet
@@ -44,17 +52,15 @@ export default function PlaylistSheet({animatedPosition}: Props) {
       animatedPosition={animatedPosition}
       onChange={onChangeBottomSheetPosition}
       snapPoints={snapPoints}>
-      {playlistData ? (
-        <VideoListContext
-          id={'playlistSlice'}
-          defaultValue={playlistData ? playlistData[0] : ({} as ITurn)}>
+      {data && (
+        <VideoListContext id={'playlistSlice'} defaultValue={data[0]}>
           <VideoList
             animateScrollToIndex={false}
             id={'playlistSlice'}
-            data={playlistData ?? []}
+            data={data}
           />
         </VideoListContext>
-      ) : null}
+      )}
     </BottomSheet>
   );
 }

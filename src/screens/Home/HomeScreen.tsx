@@ -1,10 +1,12 @@
 import {useQuery, useQueryClient} from '@tanstack/react-query';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {queryKey} from '../../api/api';
 import {getFeed} from '../../api/collection';
 import {SkeletonScreen} from '../../components';
 import VideoList from '../../components/List/VideoList';
 import VideoListContext from '../../shared/context/VideoListContext';
+import {Suspense} from 'react';
+import {Text} from 'react-native-paper';
 
 export type TestData = {
   source: string;

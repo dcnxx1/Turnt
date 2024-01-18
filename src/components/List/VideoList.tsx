@@ -1,5 +1,5 @@
 import {FlashList, ListRenderItem} from '@shopify/flash-list';
-import {useEffect, useRef} from 'react';
+import {useCallback, useEffect, useRef} from 'react';
 import {Dimensions, ViewabilityConfig} from 'react-native';
 import {useSelector} from 'react-redux';
 import {ITurn} from '../../models/turn';
@@ -25,7 +25,6 @@ export default function VideoList({
   animateScrollToIndex = true,
 }: Props) {
   const [onViewableItemsChanged, keyExtractor] = useVideoList();
-
   const ref = useRef<FlashList<ITurn>>(null);
   const index = useSelector((state: RootState) => state[id].index);
 
@@ -57,6 +56,7 @@ export default function VideoList({
 
   return (
     <SkeletonFlashList
+      data={data}
       extraData={data}
       ref={ref}
       renderItem={renderItem}
@@ -64,7 +64,6 @@ export default function VideoList({
       viewabilityConfig={viewConfigRef}
       onViewableItemsChanged={onViewableItemsChanged}
       decelerationRate={'fast'}
-      data={data}
       estimatedItemSize={Dimensions.get('screen').height}
       estimatedListSize={{
         width: Dimensions.get('screen').width,

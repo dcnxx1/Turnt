@@ -13,11 +13,12 @@ import {
   getLocalUserProfile,
   setupTrackPlayer,
 } from './boot';
+import getMyUploadsByUserId from '../api/myUploads';
 
 export default function useInitalizeApp(): [boolean, string | undefined] {
+  const queryClient = useQueryClient();
   const [isInitializing, setInitializing] = useState(true);
   const [initialRoute, setInitialRoute] = useState<RootNavs>();
-  const queryClient = useQueryClient();
   const setActiveTurn = useActiveTurnStore(state => state.setActiveTurn);
 
   async function initialize() {
@@ -33,6 +34,15 @@ export default function useInitalizeApp(): [boolean, string | undefined] {
           queryKey: [queryKey.playlist],
           queryFn: () => getPlaylistWithUserId(me.user_id),
         });
+
+        queryClient.prefetchQuery({
+          queryKey: [queryKey.myUploads],
+          queryFn: () => getMyUploadsByUserId(me.user_id),
+        });
+        queryClient.prefetchQuery({
+          queryKey: [queryKey.playlistSheet],
+          queryFn: () => getPlaylistWithUserId(me.user_id),
+        });
         const fetchFeed = await getFeed();
         const cachedFeed: ITurn[] | undefined = queryClient.setQueryData(
           [queryKey.feed],
@@ -40,7 +50,6 @@ export default function useInitalizeApp(): [boolean, string | undefined] {
         );
         if (cachedFeed) {
           useActiveTurnStore.getState().setActiveTurn(cachedFeed[0]);
-         
           setActiveTurn(cachedFeed[0]);
           addTrackPlayerTracks(cachedFeed);
         }
