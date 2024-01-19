@@ -34,9 +34,11 @@ const playlistSlice = createSlice({
       }
     });
     builder.addCase(setPosition, (state, action) => {
-      if (action.payload !== 'Hidden') {
-        state.isPlaying = true;
-        state.isActive = true;
+      if (!state.isActive) {
+        if (action.payload !== 'Hidden') {
+          state.isPlaying = false;
+          state.isActive = true;
+        }
       }
     });
   },

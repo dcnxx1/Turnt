@@ -1,20 +1,20 @@
-import { useIsFetching, useQueryClient } from '@tanstack/react-query';
+import {useIsFetching, useQueryClient} from '@tanstack/react-query';
 
 export type QueryResult<T> = {
-  data: T[];
-  error: Error | null | undefined;
+  data: T[] | undefined;
+  error: Error | null;
 };
 
 export default function useQueryData<T>(queryKey: string): QueryResult<T> {
   const queryClient = useQueryClient();
-  const data: T[] | undefined = queryClient.getQueryData([queryKey]) ?? [] ;
+  const data: T[] | undefined = queryClient.getQueryData([queryKey]) ?? [];
   const queryState = queryClient.getQueryState([queryKey]);
- 
-  const error = queryState?.error;
+
+  const error = queryState?.error as Error | null;
 
   return {
     data,
-    
+
     error,
   };
 }

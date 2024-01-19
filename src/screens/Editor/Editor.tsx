@@ -14,11 +14,13 @@ import theme from '../../theme';
 import EditorScreen, {EditorFormValuesType} from './EditorScreen';
 import useCreateTurn from './hooks/useCreateTurn';
 import useLocalProfile from '../../store/useLocalProfile';
+import {queryKey} from '../../api/api';
 const LinearGradientScreen = withLinearGradient(SkeletonScreen);
 
 export default function Editor(): JSX.Element {
   const {params} = useRoute<RouteProp<Pick<EditorParams, 'EditorScreen'>>>()!;
   const createTurnMutation = useCreateTurn();
+
   const queryClient = useQueryClient();
   const navigation = useNavigation<StackNavigationProp<EditorParams>>();
   const {setActiveTurn} = useActiveTurnStore();
@@ -38,9 +40,11 @@ export default function Editor(): JSX.Element {
       },
       {
         onSettled: turn => {
-          queryClient.invalidateQueries({queryKey: ['feed']});
           if (turn) {
             setActiveTurn(turn);
+            queryClient.invalidateQueries({
+              queryKey: [queryKey.feed, turn, queryKey.myUploads],
+            });
             navigation.navigate('HomeScreen');
           }
         },

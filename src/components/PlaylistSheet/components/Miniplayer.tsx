@@ -18,12 +18,14 @@ export default function MiniPlayer() {
   const isPlaying = useSelector(
     (state: RootState) => state.playlistSlice.isPlaying,
   );
+
   const dispatch = useDispatch();
   const onPressForward = () => {
     dispatch(increment());
   };
 
   const onPressPlayPauseToggle = () => {
+    console.log('OnpressPlay pause tog gled');
     dispatch(togglePlaying());
   };
 

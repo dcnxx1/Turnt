@@ -42,9 +42,11 @@ const homeSlice = createSlice({
         state.isPlaying = action.payload;
       }
     });
+    //  TODO: check first if its active. could cause bugs
     builder.addCase(playlistSheetActions.setPosition, (state, action) => {
       if (action.payload !== 'Hidden') {
-        state.isPlaying = false
+        state.isPlaying = false;
+
         state.isActive = false;
       }
     });

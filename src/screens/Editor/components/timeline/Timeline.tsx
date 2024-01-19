@@ -1,3 +1,4 @@
+import {useEffect} from 'react';
 import {Image, StyleSheet, View} from 'react-native';
 import {FileType, ITurn} from '../../../../models/turn';
 import theme from '../../../../theme';
@@ -6,8 +7,6 @@ import useGenerateThumbnails, {
 } from '../../hooks/useGenerateThumbnails';
 import {VideoCoverColor, useComponentSize} from '../../utils';
 import TimelineSlider from './TimelineSlider';
-import * as covers from '../../../../assets/covers';
-import {useEffect} from 'react';
 type Props = {
   duration: number;
   filePath: string;
@@ -61,10 +60,6 @@ export default function Timeline({
 
 type ImageTimelineRowProps = {
   thumbnails: string[] | any[];
-};
-
-const sourceIsString = (source: unknown): source is string => {
-  return typeof source === 'string';
 };
 
 const ImageTimelineRow = ({thumbnails}: ImageTimelineRowProps) => {

@@ -1,9 +1,15 @@
 import {useRef, useState} from 'react';
-import {NativeSyntheticEvent, StyleSheet, View} from 'react-native';
+import {
+  Animated,
+  NativeSyntheticEvent,
+  StyleProp,
+  StyleSheet,
+  View,
+  ViewStyle,
+} from 'react-native';
 import PagerView from 'react-native-pager-view';
 import {Text} from 'react-native-paper';
 import {queryKey} from '../../api/api';
-import getMyUploadsByUserId from '../../api/myUploads';
 import {ITurn} from '../../models/turn';
 import {QueryResult} from '../../shared/hooks/useQueryData';
 import useLocalProfile from '../../store/useLocalProfile';
@@ -14,6 +20,7 @@ import SavedSongList from '../PlaylistSheet/SavedSongList';
 type Props = {
   playlist: QueryResult<ITurn>;
   myUploads: QueryResult<ITurn>;
+  style?: StyleProp<ViewStyle>;
 };
 
 type OnPageSelected =
@@ -24,23 +31,20 @@ type OnPageSelected =
     >
   | undefined;
 
-export default function Tab({playlist, myUploads}: Props) {
+export default function Tab({playlist, myUploads, style}: Props) {
   const [tabKey, setTabKey] = useState(0);
   const ref = useRef<PagerView>(null);
 
   const onPageSelected = (position: OnPageSelected) => {
     if (ref.current && position) {
       ref.current.setPage(position?.nativeEvent.position);
+      setTabKey(position?.nativeEvent.position);
     }
   };
   const me = useLocalProfile();
-  const onRefetch = async () => {
-    if (me.user) {
-      return await getMyUploadsByUserId(me.user?.user_id);
-    }
-  };
+
   return (
-    <View style={Style.container}>
+    <Animated.View style={[Style.container, style]}>
       <View style={Style.tabSelectorContainer}>
         <Text>Favorieten</Text>
         <Text>Mijn uploads</Text>
@@ -57,9 +61,11 @@ export default function Tab({playlist, myUploads}: Props) {
         <View key="2">
           {playlist.data.length ? (
             <ErrorFallback
+              onRefetch={() => {
+                console.log('onRefetch called :!: !:');
+              }}
               error={myUploads.error}
-              queryKey={queryKey.myUploads}
-              onRefetch={onRefetch}>
+              queryKey={queryKey.myUploads}>
               <SavedSongList data={myUploads.data} />
             </ErrorFallback>
           ) : (
@@ -74,7 +80,7 @@ export default function Tab({playlist, myUploads}: Props) {
           )}
         </View>
       </PagerView>
-    </View>
+    </Animated.View>
   );
 }
 

@@ -26,7 +26,7 @@ const EditorStack = createStackNavigator<EditorParams>();
 
 const screenOptions: StackNavigationOptions = {
   headerShown: false,
-  gestureEnabled: false,
+  gestureEnabled: true,
 };
 
 function HomeStackNavigator() {

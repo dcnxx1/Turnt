@@ -18,6 +18,7 @@ const PlaybackService = async () => {
   });
   TrackPlayer.addEventListener(Event.RemoteSeek, (event: RemoteSeekEvent) => {
     const {position} = event;
+    useVideoStore.setState({progress: position});
     useSeek.setState({seekTo: ~~position});
   });
 };

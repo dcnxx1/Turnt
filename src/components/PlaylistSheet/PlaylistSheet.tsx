@@ -1,6 +1,6 @@
 import BottomSheet from '@gorhom/bottom-sheet';
 import {useQuery} from '@tanstack/react-query';
-import {useCallback, useMemo} from 'react';
+import {useCallback, useEffect, useMemo} from 'react';
 import {Dimensions, StyleSheet} from 'react-native';
 import {SharedValue} from 'react-native-reanimated';
 import {queryKey} from '../../api/api';
@@ -42,7 +42,9 @@ export default function PlaylistSheet({animatedPosition}: Props) {
       ref={ref}
       index={-1}
       animationConfigs={animatedConfig}
-      handleComponent={PlaylistSheetHandle}
+      handleComponent={() => (
+        <SheetHandle animatedPosition={animatedPosition} />
+      )}
       enableOverDrag={false}
       style={Style.bottomSheet}
       animatedPosition={animatedPosition}
