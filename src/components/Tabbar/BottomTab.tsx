@@ -22,8 +22,8 @@ import {
   SHEET_FULL_SCREEN_MODE,
   SHEET_HIDDEN_MODE,
   SHEET_PARTIAL_MODE,
-} from '../Playlist/PlaylistSheet';
-import {MINIPLAYER_HEIGHT} from '../Playlist/components/Miniplayer';
+} from '../PlaylistSheet/PlaylistSheet';
+import {MINIPLAYER_HEIGHT} from '../PlaylistSheet/components/Miniplayer';
 type BottomTabProps = {
   state: TabNavigationState<ParamListBase>;
   descriptors: BottomTabDescriptorMap;

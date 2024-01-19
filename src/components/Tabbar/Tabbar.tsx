@@ -1,9 +1,9 @@
-import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
-import { useState } from 'react';
-import { LayoutChangeEvent } from 'react-native';
-import { useSharedValue } from 'react-native-reanimated';
+import {BottomTabBarProps} from '@react-navigation/bottom-tabs';
+import {useState} from 'react';
+import {LayoutChangeEvent} from 'react-native';
+import {useSharedValue} from 'react-native-reanimated';
 import MediaController from '../MediaController/MediaController';
-import PlaylistSheet from '../Playlist/PlaylistSheet';
+import PlaylistSheet from '../PlaylistSheet/PlaylistSheet';
 import BottomTab from './BottomTab';
 
 type TabbarProps = {

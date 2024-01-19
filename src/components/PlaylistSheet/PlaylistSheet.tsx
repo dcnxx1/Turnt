@@ -11,6 +11,7 @@ import VideoList from '../List/VideoList';
 import SheetHandle from './components/PlaylistSheetHandle';
 import usePlaylistSheet from './hooks/usePlaylistSheet';
 import {MINIPLAYER_HEIGHT} from './components/Miniplayer';
+import {animatedConfig} from './config';
 
 type Props = {
   animatedPosition: SharedValue<number>;
@@ -40,6 +41,7 @@ export default function PlaylistSheet({animatedPosition}: Props) {
     <BottomSheet
       ref={ref}
       index={-1}
+      animationConfigs={animatedConfig}
       handleComponent={PlaylistSheetHandle}
       enableOverDrag={false}
       style={Style.bottomSheet}
