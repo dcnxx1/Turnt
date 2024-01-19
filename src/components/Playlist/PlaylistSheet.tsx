@@ -8,22 +8,24 @@ import {ITurn} from '../../models/turn';
 import VideoListContext from '../../shared/context/VideoListContext';
 import theme from '../../theme';
 import VideoList from '../List/VideoList';
-import {HEIGHT_BOTTOM_TAB} from '../Tabbar/BottomTab';
 import SheetHandle from './components/PlaylistSheetHandle';
 import usePlaylistSheet from './hooks/usePlaylistSheet';
+import {MINIPLAYER_HEIGHT} from './components/Miniplayer';
 
 type Props = {
   animatedPosition: SharedValue<number>;
 };
 
-export const SHEET_PARTIAL_MODE =
-  Dimensions.get('screen').height * 0.08 + HEIGHT_BOTTOM_TAB;
+export const SHEET_PARTIAL_MODE = Dimensions.get('screen').height * 0.07;
 
 export const SHEET_FULL_SCREEN_MODE = 0;
 export const SHEET_HIDDEN_MODE = Dimensions.get('screen').height;
 
 export default function PlaylistSheet({animatedPosition}: Props) {
-  const snapPoints = useMemo(() => [SHEET_PARTIAL_MODE, SHEET_HIDDEN_MODE], []);
+  const snapPoints = useMemo(
+    () => [SHEET_PARTIAL_MODE + MINIPLAYER_HEIGHT, SHEET_HIDDEN_MODE],
+    [],
+  );
   const [ref, onChangeBottomSheetPosition] = usePlaylistSheet();
 
   const {data} = useQuery<ITurn[]>({

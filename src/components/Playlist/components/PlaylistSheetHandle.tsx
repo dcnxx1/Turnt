@@ -11,13 +11,13 @@ import {
   SHEET_HIDDEN_MODE,
   SHEET_PARTIAL_MODE,
 } from '../PlaylistSheet';
-import MiniPlayer from './Miniplayer';
+import MiniPlayer, {MINIPLAYER_HEIGHT} from './Miniplayer';
 
 export const APPEAR_THRESHOLD = 50;
 type Props = {
   animatedPosition: SharedValue<number>;
 };
-const HANDLE_HEIGHT = Dimensions.get('screen').height * 0.08;
+const HANDLE_HEIGHT = Dimensions.get('screen').height * 0.06;
 
 function PlaylistSheetHandle({animatedPosition}: Props) {
   const arrowDownOpacity = useAnimatedStyle(() => {
@@ -36,12 +36,9 @@ function PlaylistSheetHandle({animatedPosition}: Props) {
     return {
       opacity: interpolate(
         animatedPosition.value,
-        [
-          SHEET_HIDDEN_MODE - SHEET_PARTIAL_MODE,
-          SHEET_HIDDEN_MODE - SHEET_PARTIAL_MODE - APPEAR_THRESHOLD,
-        ],
+        [SHEET_HIDDEN_MODE - SHEET_PARTIAL_MODE - MINIPLAYER_HEIGHT, 0],
         [1, 0],
-        Extrapolation.EXTEND,
+        Extrapolation.CLAMP,
       ),
     };
   });
@@ -63,11 +60,13 @@ export default memo(PlaylistSheetHandle);
 
 const Style = StyleSheet.create({
   container: {
-    height: HANDLE_HEIGHT,
+    height: MINIPLAYER_HEIGHT,
     position: 'absolute',
     width: '100%',
     top: 0,
     justifyContent: 'flex-end',
+    // borderWidth: 2,
+    borderColor: 'yellow',
   },
   arrow: {
     transform: [{rotate: '90deg'}],

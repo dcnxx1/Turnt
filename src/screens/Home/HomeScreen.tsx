@@ -7,6 +7,7 @@ import VideoList from '../../components/List/VideoList';
 import VideoListContext from '../../shared/context/VideoListContext';
 import {Suspense} from 'react';
 import {Text} from 'react-native-paper';
+import GenericScreen from '../../components/Screen/GenericScreen';
 
 export type TestData = {
   source: string;
@@ -28,7 +29,12 @@ function HomeScreen(): JSX.Element {
     </VideoListContext>
   ) : null;
 
-  return <SkeletonScreen contentStyle={Style.container} content={content} />;
+  return (
+    <GenericScreen
+      style={Style.container}
+      content={content}
+    />
+  );
 }
 
 const Style = StyleSheet.create({

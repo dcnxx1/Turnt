@@ -11,6 +11,7 @@ import Animated, {
   Extrapolation,
   SharedValue,
   interpolate,
+  interpolateColor,
   useAnimatedStyle,
 } from 'react-native-reanimated';
 import {EdgeInsets, useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -22,6 +23,7 @@ import {
   SHEET_HIDDEN_MODE,
   SHEET_PARTIAL_MODE,
 } from '../Playlist/PlaylistSheet';
+import {MINIPLAYER_HEIGHT} from '../Playlist/components/Miniplayer';
 type BottomTabProps = {
   state: TabNavigationState<ParamListBase>;
   descriptors: BottomTabDescriptorMap;
@@ -70,16 +72,26 @@ export default function BottomTab({
 }: BottomTabProps) {
   const {bottom} = useSafeAreaInsets();
 
+  const animateBorderTopColor = useAnimatedStyle(() => {
+    return {
+      borderTopColor: interpolateColor(
+        animatedPosition.value,
+        [
+          SHEET_HIDDEN_MODE - SHEET_PARTIAL_MODE - MINIPLAYER_HEIGHT,
+          SHEET_FULL_SCREEN_MODE,
+        ],
+        ['#333', theme.color.turnerDark],
+      ),
+    };
+  });
+
   const translateY = useAnimatedStyle(() => {
     return {
       transform: [
         {
           translateY: interpolate(
             animatedPosition.value,
-            [
-              SHEET_HIDDEN_MODE - SHEET_PARTIAL_MODE,
-              SHEET_FULL_SCREEN_MODE,
-            ],
+            [SHEET_HIDDEN_MODE - SHEET_PARTIAL_MODE, SHEET_FULL_SCREEN_MODE],
             [0, HEIGHT_BOTTOM_TAB],
             Extrapolation.CLAMP,
           ),
@@ -95,6 +107,7 @@ export default function BottomTab({
         Style.bottomTabContainer,
         translateY,
         {paddingBottom: bottom},
+        animateBorderTopColor,
       ]}>
       {state.routes.map((route, index) => {
         const {options} = descriptors[route.key];
@@ -127,6 +140,7 @@ const Style = StyleSheet.create({
   bottomTabContainer: {
     flexDirection: 'row',
     backgroundColor: theme.color.turnerDark,
+    borderTopWidth: 1,
   },
   buttonContainer: {
     justifyContent: 'center',

@@ -37,7 +37,7 @@ function HomeStackNavigator() {
       screenOptions={{
         headerShown: false,
       }}
-      initialRouteName={NavScreenNames.ProfileScreen}>
+      initialRouteName={NavScreenNames.HomeScreen}>
       <HomeStack.Screen component={Home} name={NavScreenNames.HomeScreen} />
       <HomeStack.Screen
         component={Profile}

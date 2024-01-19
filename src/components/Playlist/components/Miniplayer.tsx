@@ -1,4 +1,4 @@
-import {Image, StyleSheet, View} from 'react-native';
+import {Dimensions, Image, StyleSheet, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 import {useCDN} from '../../../api/api';
@@ -9,6 +9,8 @@ import {COVER_KEY} from '../../../s3';
 import VideoPlayerButtonController from '../../../screens/Editor/components/videoManager/VideoPlayerButtonController';
 import {useActiveTurnStore, useVideoStore} from '../../../store';
 import theme from '../../../theme';
+
+export const MINIPLAYER_HEIGHT = Dimensions.get('screen').height * 0.07;
 
 export default function MiniPlayer() {
   const {activeTurn} = useActiveTurnStore();
@@ -26,12 +28,11 @@ export default function MiniPlayer() {
   };
 
   return (
-    <View style={[Style.container]}>
+    <View style={Style.container}>
       <Image
         source={{uri: useCDN(COVER_KEY + activeTurn.cover)}}
         style={Style.coverImage}
       />
-
       <View style={[Style.metaItem, Style.metaTextContainer]}>
         <Text>Artist Name!</Text>
         <Text>{activeTurn.title}</Text>
@@ -72,7 +73,7 @@ const Style = StyleSheet.create({
     width: '15%',
     height: '100%',
     resizeMode: 'contain',
-    aspectRatio: 1,
+    // aspectRatio: 1,
   },
   metaContainer: {
     width: '100%',
