@@ -13,18 +13,34 @@ import {
 } from '../PlaylistSheet';
 import MiniPlayer, {MINIPLAYER_HEIGHT} from './Miniplayer';
 
+const HANDLE_HEIGHT = Dimensions.get('screen').height * 0.1;
 export const APPEAR_THRESHOLD = 50;
 type Props = {
   animatedPosition: SharedValue<number>;
 };
-const HANDLE_HEIGHT = Dimensions.get('screen').height * 0.06;
 
 function PlaylistSheetHandle({animatedPosition}: Props) {
+  const animateContainerHeight = useAnimatedStyle(() => {
+    return {
+      height: interpolate(
+        animatedPosition.value,
+        [
+          SHEET_HIDDEN_MODE - SHEET_PARTIAL_MODE - MINIPLAYER_HEIGHT,
+          SHEET_FULL_SCREEN_MODE,
+        ],
+        [MINIPLAYER_HEIGHT, HANDLE_HEIGHT],
+      ),
+    };
+  });
+
   const arrowDownOpacity = useAnimatedStyle(() => {
     const interpolator = (begin: number, end: number) =>
       interpolate(
         animatedPosition.value,
-        [SHEET_HIDDEN_MODE - SHEET_PARTIAL_MODE, SHEET_FULL_SCREEN_MODE],
+        [
+          SHEET_HIDDEN_MODE - SHEET_PARTIAL_MODE - MINIPLAYER_HEIGHT,
+          SHEET_FULL_SCREEN_MODE,
+        ],
         [end, begin],
         Extrapolation.CLAMP,
       );
@@ -44,7 +60,7 @@ function PlaylistSheetHandle({animatedPosition}: Props) {
   });
 
   return (
-    <Animated.View style={[Style.container]}>
+    <Animated.View style={[Style.container, animateContainerHeight]}>
       <Animated.Image
         style={[Style.arrow, arrowDownOpacity]}
         source={require('../../../assets/icons/arrow.png')}
@@ -65,8 +81,6 @@ const Style = StyleSheet.create({
     width: '100%',
     top: 0,
     justifyContent: 'flex-end',
-    // borderWidth: 2,
-    borderColor: 'yellow',
   },
   arrow: {
     transform: [{rotate: '90deg'}],
