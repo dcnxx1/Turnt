@@ -3,7 +3,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {StyleSheet, Text} from 'react-native';
 import {Button} from 'react-native-paper';
 import {SkeletonScreen} from '../../components';
-import {withLinearGradient} from '../../components/SkeletonScreen/SkeletonScreen';
+import {withLinearGradient} from '../../components/Screen/SkeletonScreen';
 import {millisToSeconds} from '../../helpers';
 import {EditorParams} from '../../nav/navparams';
 
@@ -37,8 +37,6 @@ export default function FileSelectScreen() {
       if (mp3File) {
         const decodeUri = decodeURIComponent(mp3File.uri);
         const duration = await getAudioDuration(decodeUri);
-
-        
 
         const params: EditorParamsPath = {
           filePath: mp3File.uri,

@@ -2,7 +2,7 @@ import {StyleSheet, View} from 'react-native';
 import {Button, Text, TextInput} from 'react-native-paper';
 import SkeletonScreen, {
   withLinearGradient,
-} from '../../components/SkeletonScreen/SkeletonScreen';
+} from '../../components/Screen/SkeletonScreen';
 import theme from '../../theme';
 import {Flex} from '../../components';
 import {useNavigation} from '@react-navigation/native';

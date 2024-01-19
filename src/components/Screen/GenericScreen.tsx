@@ -24,6 +24,7 @@ type GenericScreenProps = {
   headerStyle?: StyleProp<ViewStyle>;
   safeAreaInsets?: boolean;
   backgroundColor?: string | (string | number)[];
+  withPaddingBottom?: boolean;
 };
 export default function GenericScreen({
   content,
@@ -37,11 +38,12 @@ export default function GenericScreen({
   backgroundColor,
   safeAreaInsets = false,
   scrollable,
+  withPaddingBottom = true
 }: GenericScreenProps) {
   const Container = scrollable ? ScrollView : View;
   const {top, bottom} = useSafeAreaInsets();
   const hasSafeAreaInsets = safeAreaInsets
-    ? {paddingTop: top, paddingBottom: bottom}
+    ? {paddingTop: top, paddingBottom: withPaddingBottom ? bottom : 0}
     : null;
   const headerEnabled = !!left || !!right || !!middle;
 

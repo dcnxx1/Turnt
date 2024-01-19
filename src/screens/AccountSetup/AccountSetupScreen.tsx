@@ -2,7 +2,7 @@ import {RouteProp, useRoute} from '@react-navigation/native';
 import {KeyboardAvoidingView, Platform, StyleSheet} from 'react-native';
 import {Text} from 'react-native-paper';
 import {Flex, SkeletonScreen} from '../../components';
-import {withLinearGradient} from '../../components/SkeletonScreen/SkeletonScreen';
+import {withLinearGradient} from '../../components/Screen/SkeletonScreen';
 import {AccountSetupParams} from '../../nav/navparams';
 
 import theme from '../../theme';

@@ -1,16 +1,15 @@
-import {useEffect, useRef, useState} from 'react';
-import {NativeSyntheticEvent, StyleSheet, View} from 'react-native';
+import { useRef, useState } from 'react';
+import { NativeSyntheticEvent, StyleSheet, View } from 'react-native';
 import PagerView from 'react-native-pager-view';
-import {Text} from 'react-native-paper';
-import {ITurn} from '../../models/turn';
-import {SHEET_PARTIAL_MODE} from '../Playlist/PlaylistSheet';
-import SavedSongList from '../Playlist/SavedSongList';
-import {QueryResult} from '../../shared/hooks/useQueryData';
-import ErrorFallback from '../Error/ErrorFallback';
-import {queryKey} from '../../api/api';
+import { Text } from 'react-native-paper';
+import { queryKey } from '../../api/api';
 import getMyUploadsByUserId from '../../api/myUploads';
+import { ITurn } from '../../models/turn';
+import { QueryResult } from '../../shared/hooks/useQueryData';
 import useLocalProfile from '../../store/useLocalProfile';
+import ErrorFallback from '../Error/ErrorFallback';
 import FallbackMessage from '../Error/FallbackMessage';
+import SavedSongList from '../Playlist/SavedSongList';
 
 type Props = {
   playlist: QueryResult<ITurn>;
@@ -41,12 +40,13 @@ export default function Tab({playlist, myUploads}: Props) {
     }
   };
   return (
-    <>
+    <View style={Style.container}>
       <View style={Style.tabSelectorContainer}>
         <Text>Favorieten</Text>
         <Text>Mijn uploads</Text>
       </View>
       <PagerView
+        collapsable
         onPageSelected={onPageSelected}
         ref={ref}
         initialPage={tabKey}
@@ -74,26 +74,34 @@ export default function Tab({playlist, myUploads}: Props) {
           )}
         </View>
       </PagerView>
-    </>
+    </View>
   );
 }
 
 const Style = StyleSheet.create({
+  container: {
+    borderWidth: 2,
+    borderColor: 'blue',
+    flex: 1,
+  },
   tabSelectorContainer: {
     borderWidth: 2,
     borderColor: 'yellow',
     width: '100%',
     flexDirection: 'row',
+
     justifyContent: 'space-evenly',
     alignItems: 'center',
     height: 30,
   },
   pagerViewContainer: {
+    flex: 1,
     width: '100%',
-    height: '90%',
+    height: '100%',
     borderWidth: 2,
-    borderColor: 'yellow',
-    paddingBottom: SHEET_PARTIAL_MODE,
+    borderColor: 'red',
   },
-  fallbackMessageContainer: {},
+  fallbackMessageContainer: {
+    
+  },
 });

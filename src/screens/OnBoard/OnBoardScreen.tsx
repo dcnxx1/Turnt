@@ -3,7 +3,7 @@ import React from 'react';
 import {Dimensions, Image, StyleSheet} from 'react-native';
 import {Flex, SkeletonScreen} from '../../components';
 import SkeletonFlashList from '../../components/List/SkeletonFlashList';
-import {withLinearGradient} from '../../components/SkeletonScreen/SkeletonScreen';
+import {withLinearGradient} from '../../components/Screen/SkeletonScreen';
 import {IOnBoardProps, onBoardingText} from '../../constants';
 import theme from '../../theme';
 

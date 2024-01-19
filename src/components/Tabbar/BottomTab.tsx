@@ -125,7 +125,6 @@ export default function BottomTab({
 
 const Style = StyleSheet.create({
   bottomTabContainer: {
-    height: HEIGHT_BOTTOM_TAB,
     flexDirection: 'row',
     backgroundColor: theme.color.turnerDark,
   },

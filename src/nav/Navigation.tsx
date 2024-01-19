@@ -1,9 +1,9 @@
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {
   StackNavigationOptions,
   createStackNavigator,
 } from '@react-navigation/stack';
-import { PaperProvider } from 'react-native-paper';
+import {PaperProvider} from 'react-native-paper';
 import Tabbar from '../components/Tabbar/Tabbar';
 import {
   Editor,
@@ -16,8 +16,8 @@ import AccountSetupScreen from '../screens/AccountSetup/AccountSetupScreen';
 import AuthScreen from '../screens/Auth/AuthScreen';
 
 import useLocalProfile from '../store/useLocalProfile';
-import { AccountSetupParams, EditorParams, HomeParams } from './navparams';
-import { NavScreenNames, RootNavNames } from './types';
+import {AccountSetupParams, EditorParams, HomeParams} from './navparams';
+import {NavScreenNames, RootNavNames} from './types';
 
 const HomeStack = createBottomTabNavigator<HomeParams>();
 const RootStack = createStackNavigator();
@@ -37,7 +37,7 @@ function HomeStackNavigator() {
       screenOptions={{
         headerShown: false,
       }}
-      initialRouteName={NavScreenNames.HomeScreen}>
+      initialRouteName={NavScreenNames.ProfileScreen}>
       <HomeStack.Screen component={Home} name={NavScreenNames.HomeScreen} />
       <HomeStack.Screen
         component={Profile}
@@ -88,8 +88,6 @@ function EditorStackNavigator() {
 type Props = {
   initialRoute: string;
 };
-
-
 
 export default function Navigation({initialRoute}: Props) {
   const me = useLocalProfile();

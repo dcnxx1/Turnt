@@ -1,11 +1,4 @@
-import {
-  Image,
-  Pressable,
-  StyleProp,
-  StyleSheet,
-  View,
-  ViewStyle,
-} from 'react-native';
+import {Pressable, StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
 import {Icon, Text} from 'react-native-paper';
 type Props = {
   imageHeader: any;

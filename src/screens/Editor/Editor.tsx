@@ -4,7 +4,7 @@ import {useQueryClient} from '@tanstack/react-query';
 import {useEffect} from 'react';
 import {Image, Pressable, StyleSheet} from 'react-native';
 import {SkeletonScreen} from '../../components';
-import {withLinearGradient} from '../../components/SkeletonScreen/SkeletonScreen';
+import {withLinearGradient} from '../../components/Screen/SkeletonScreen';
 import {deleteThumbnailContent} from '../../helpers';
 import {FileType, Genre} from '../../models/turn';
 import {EditorParams} from '../../nav/navparams';
@@ -23,7 +23,7 @@ export default function Editor(): JSX.Element {
   const navigation = useNavigation<StackNavigationProp<EditorParams>>();
   const {setActiveTurn} = useActiveTurnStore();
   const me = useLocalProfile();
-  
+
   const onPressSubmitWithoutErrors = (fieldValues: EditorFormValuesType) => {
     createTurnMutation(
       {
