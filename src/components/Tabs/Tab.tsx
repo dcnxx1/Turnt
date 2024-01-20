@@ -56,10 +56,10 @@ export default function Tab({playlist, myUploads, style}: Props) {
         initialPage={tabKey}
         style={Style.pagerViewContainer}>
         <View key="1">
-          <SavedSongList data={playlist.data} />
+          <SavedSongList data={playlist.data ?? []} />
         </View>
         <View key="2">
-          {playlist.data.length ? (
+          {playlist?.data.length ? (
             <ErrorFallback
               onRefetch={() => {
                 console.log('onRefetch called :!: !:');

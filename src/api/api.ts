@@ -20,9 +20,10 @@ export type QueryKey =
   | 'profile'
   | 'feed'
   | 'playlist'
-  | 'myUploads';
+  | 'myUploads'
+  | 'playlistSheet';
 
-export const queryKey = {
+export const queryKey: Record<string, QueryKey> = {
   findCode: 'findCode',
   findUsername: 'findUsername',
   createAccount: 'createAccount',
@@ -30,7 +31,7 @@ export const queryKey = {
   feed: 'feed',
   playlist: 'playlist',
   myUploads: 'myUploads',
-  playlistSheet: 'playlistSheet'
+  playlistSheet: 'playlistSheet',
 };
 
 export const TURN_IMPRESSION_TIME_LIMIT = 30;

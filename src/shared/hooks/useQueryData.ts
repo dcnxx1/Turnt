@@ -1,20 +1,23 @@
-import {useIsFetching, useQueryClient} from '@tanstack/react-query';
+import {useIsFetching, useQuery, useQueryClient} from '@tanstack/react-query';
+import {queryKey} from '../../api/api';
+import getMyUploadsByUserId from '../../api/myUploads';
+import useLocalProfile from '../../store/useLocalProfile';
+import {ITurn} from '../../models/turn';
 
 export type QueryResult<T> = {
   data: T[] | undefined;
   error: Error | null;
 };
+const FIVE_MINUTES = 1000 * 60 * 5;
 
-export default function useQueryData<T>(queryKey: string): QueryResult<T> {
+export function useMyUploadsQuery() {
   const queryClient = useQueryClient();
-  const data: T[] | undefined = queryClient.getQueryData([queryKey]) ?? [];
-  const queryState = queryClient.getQueryState([queryKey]);
+  const me = useLocalProfile();
 
-  const error = queryState?.error as Error | null;
-
-  return {
-    data,
-
-    error,
-  };
+  return useQuery({
+    queryKey: [queryKey.myUploads],
+    queryFn: async () => await getMyUploadsByUserId(me.user?.user_id ?? ''),
+    staleTime: FIVE_MINUTES,
+    initialData: queryClient.getQueryData([queryKey.myUploads]),
+  });
 }

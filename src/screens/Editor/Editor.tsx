@@ -39,19 +39,16 @@ export default function Editor(): JSX.Element {
         type: fieldValues.fileType as FileType,
       },
       {
-        onSettled: turn => {
+        onSettled: async turn => {
           if (turn) {
             setActiveTurn(turn);
             queryClient.invalidateQueries({
-              queryKey: [queryKey.feed],
-            });
-            queryClient
-              .invalidateQueries({
-                queryKey: [queryKey.myUploads],
-              })
-              .then(() => {
-                navigation.navigate('HomeScreen');
-              });
+              queryKey: [queryKey.myUploads],
+            }),
+              queryClient.invalidateQueries({
+                queryKey: [queryKey.feed],
+              }),
+              navigation.navigate('HomeScreen');
           }
         },
       },

@@ -5,6 +5,7 @@ import {Pressable, StyleSheet} from 'react-native';
 import {Text} from 'react-native-paper';
 import {useSelector} from 'react-redux';
 import {queryKey, useCDN} from '../../api/api';
+import getMyUploadsByUserId from '../../api/myUploads';
 import {Profile as UserProfile} from '../../api/profile';
 import {AvatarWithUsername} from '../../components/Images/Avatar';
 import {MINIPLAYER_HEIGHT} from '../../components/PlaylistSheet/components/Miniplayer';
@@ -13,6 +14,9 @@ import {ITurn} from '../../models/turn';
 import {HomeParams} from '../../nav/navparams';
 import {RootState} from '../../redux/store';
 import useLocalProfile from '../../store/useLocalProfile';
+import {useEffect} from 'react';
+import {useMyUploadsQuery} from '../../shared/hooks/useQueryData';
+
 export default function ProfileScreen() {
   const queryClient = useQueryClient();
   const remoteProfile: UserProfile | undefined = queryClient.getQueryData([
@@ -23,14 +27,16 @@ export default function ProfileScreen() {
   );
   const me = useLocalProfile();
 
-  const {data: playlistData, error: playlistError} = useQuery<ITurn[]>({
+  const {data: playlistData, error: playlistError} = useQuery<
+    ITurn[] | undefined
+  >({
     queryKey: [queryKey.playlist],
-  });
-  const {data: myUploadsData, error: myUploadsError} = useQuery<ITurn[]>({
-    queryKey: [queryKey.myUploads],
+    initialData: queryClient.getQueryData([queryKey.playlist]),
   });
 
-  const playlistQueryState = queryClient.getQueryState([queryKey.playlist]);
+  const myUploadsData = useMyUploadsQuery();
+
+
   const navigation = useNavigation<StackNavigationProp<HomeParams>>();
 
   const onPressUpload = () => {
@@ -53,7 +59,10 @@ export default function ProfileScreen() {
       <Tab
         style={{paddingBottom: isPlaylistSliceActive ? MINIPLAYER_HEIGHT : 0}}
         playlist={{data: playlistData, error: playlistError}}
-        myUploads={{data: myUploadsData, error: myUploadsError}}
+        myUploads={{
+          data: queryClient.getQueryData([queryKey.myUploads]),
+          error: null,
+        }}
       />
     </>
   );

@@ -31,7 +31,7 @@ export async function getPlaylistWithUserId(
 ): Promise<ITurn[] | undefined> {
   try {
     const playlistData = await API.get(`profile/playlist/${user_id}`);
-    log.debug({playlistData: playlistData.data});
+
     return playlistData.data;
   } catch (err) {
     log.error('ERR GET PLAYLIST :>>', err);

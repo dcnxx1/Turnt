@@ -27,33 +27,33 @@ export default function useInitalizeApp(): [boolean, string | undefined] {
       const me = getLocalUserProfile();
       if (me) {
         await setupTrackPlayer();
-        queryClient.prefetchQuery({
+        await queryClient.prefetchQuery({
           queryKey: [queryKey.profile],
           queryFn: () => getProfile(me.user_id),
         });
-        queryClient.prefetchQuery({
+        await queryClient.prefetchQuery({
           queryKey: [queryKey.playlist],
           queryFn: () => getPlaylistWithUserId(me.user_id),
         });
 
-        queryClient.prefetchQuery({
+        await queryClient.prefetchQuery({
           queryKey: [queryKey.myUploads],
           queryFn: () => getMyUploadsByUserId(me.user_id),
         });
-        queryClient.prefetchQuery({
+        await queryClient.prefetchQuery({
           queryKey: [queryKey.playlistSheet],
           queryFn: () => getPlaylistWithUserId(me.user_id),
         });
-        const fetchFeed = await getFeed();
-        const cachedFeed: ITurn[] | undefined = queryClient.setQueryData(
-          [queryKey.feed],
-          fetchFeed,
-        );
-        if (cachedFeed) {
-          const firstActiveTurn = cachedFeed[0];
+        const feed = await queryClient.fetchQuery({
+          queryKey: [queryKey.feed],
+          queryFn: getFeed,
+        });
+
+        if (feed) {
+          const firstActiveTurn = feed[0];
           useActiveTurnStore.getState().setActiveTurn(firstActiveTurn);
           dispatch(setActiveTurn(firstActiveTurn));
-          addTrackPlayerTracks(cachedFeed);
+          addTrackPlayerTracks(feed);
         }
         setInitialRoute('HomeStack');
         return;

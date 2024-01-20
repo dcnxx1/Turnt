@@ -27,8 +27,6 @@ export default function VideoListContext({defaultValue, children, id}: Props) {
   const {setActiveTurn: setActiveTurnStore} = useActiveTurnStore();
   const isActive = useSelector((state: RootState) => state[id].isActive);
 
-
-
   
   useEffect(() => {
     if (isActive) {

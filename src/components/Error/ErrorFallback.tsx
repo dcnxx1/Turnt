@@ -21,20 +21,12 @@ export default function ErrorFallback({
   error,
   children,
 }: Props) {
-  const {data, isFetching, refetch} = useQuery({
-    queryKey: [queryKey],
-    queryFn: onRefetch,
-  });
+  
   const bb = useQueryErrorResetBoundary();
   const queryClient = useQueryClient();
-  const onPress = async () => {
-    const answ = await refetch();
-    queryClient.setQueryData([queryKey], answ.data);
-    bb.reset();
-  };
-  useEffect(() => {
-    console.log('the error :>>', error);
-  }, [error]);
+  const onPress = async () => {};
+
+
 
   return (
     <QueryErrorResetBoundary>
