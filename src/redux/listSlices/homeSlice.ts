@@ -1,11 +1,13 @@
 import {createSlice} from '@reduxjs/toolkit';
 import * as actions from '../videoListSlice';
 import * as playlistSheetActions from '../playlistSheetSlice';
+import {ITurn} from '../../models/turn';
 
 export const initialState = {
   index: 0,
   isPlaying: false,
   isActive: false,
+  activeTurn: {} as ITurn,
 };
 
 const homeSlice = createSlice({
@@ -14,6 +16,7 @@ const homeSlice = createSlice({
     index: 0,
     isPlaying: false,
     isActive: true,
+    activeTurn: {} as ITurn,
   },
   reducers: {},
   extraReducers: builder => {
@@ -23,7 +26,8 @@ const homeSlice = createSlice({
       }
     });
     builder.addCase(actions.decrement, state => {
-      if (state.isActive) {
+      console.log(state.index)
+      if (state.isActive && state.index > 0) {
         state.index--;
       }
     });
@@ -46,8 +50,12 @@ const homeSlice = createSlice({
     builder.addCase(playlistSheetActions.setPosition, (state, action) => {
       if (action.payload !== 'Hidden') {
         state.isPlaying = false;
-
         state.isActive = false;
+      }
+    });
+    builder.addCase(actions.setActiveTurn, (state, action) => {
+      if (state.isActive) {
+        state.activeTurn = action.payload;
       }
     });
   },

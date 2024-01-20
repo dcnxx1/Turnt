@@ -41,6 +41,11 @@ const playlistSlice = createSlice({
         }
       }
     });
+    builder.addCase(actions.setActiveTurn, (state, action) => {
+      if (state.isActive) {
+        state.activeTurn = action.payload;
+      }
+    });
   },
 });
 

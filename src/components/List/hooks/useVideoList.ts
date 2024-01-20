@@ -1,9 +1,13 @@
-import {ViewToken} from '@shopify/flash-list';
+import {FlashList, ViewToken} from '@shopify/flash-list';
 import {useDispatch} from 'react-redux';
 import {ITurn} from '../../../models/turn';
-import {setIndex} from '../../../redux/videoListSlice';
+import {setActiveTurn, setIndex} from '../../../redux/videoListSlice';
 import {useVideoListContext} from '../../../shared/context/VideoListContext';
-import {useEffect, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
+import {useActiveTurnStore} from '../../../store';
+import {ViewabilityConfig} from 'react-native';
+import TrackPlayer from 'react-native-track-player';
+import {turnToTrackMapper} from '../../../utils';
 
 type VideoListHookReturnType = [
   onViewableItemsChanged: (info: {
@@ -11,14 +15,18 @@ type VideoListHookReturnType = [
     viewableItems: ViewToken[];
   }) => void,
   keyExtractor: (item: ITurn) => string,
+  flashlistRef: React.RefObject<FlashList<ITurn>>,
+  viewConfigRef: ViewabilityConfig,
 ];
 
-export default function useVideoList(): VideoListHookReturnType {
-  const [recycledData, setRecycledData] = useState<ITurn[]>([]);
-  const {setActiveTurn} = useVideoListContext();
-  const dispatch = useDispatch();
+const VIDEO_BECAME_ACTIVE_AT_PERCENT = 95;
 
-  const onViewableItemsChanged = (info: {
+export default function useVideoList(): VideoListHookReturnType {
+  const setGlobalActiveTurn = useActiveTurnStore(state => state.setActiveTurn);
+  const flashListRef = useRef<FlashList<ITurn>>(null);
+
+  const dispatch = useDispatch();
+  const onViewableItemsChanged = async (info: {
     changed: ViewToken[];
     viewableItems: ViewToken[];
   }) => {
@@ -29,20 +37,22 @@ export default function useVideoList(): VideoListHookReturnType {
       const {item, index} = info.viewableItems[0];
       if (item !== null) {
         const currentActiveTurn = item as ITurn;
-        setActiveTurn(currentActiveTurn);
-       
+        dispatch(setActiveTurn(currentActiveTurn));
+        setGlobalActiveTurn(currentActiveTurn);
+        await TrackPlayer.load(turnToTrackMapper(currentActiveTurn));
       }
       if (index !== null) {
         dispatch(setIndex(index));
       }
     }
   };
-
-  const onEndReached = () => {};
+  const viewConfigRef = useRef<ViewabilityConfig>({
+    viewAreaCoveragePercentThreshold: VIDEO_BECAME_ACTIVE_AT_PERCENT,
+  }).current;
 
   const keyExtractor = (item: ITurn) => {
     return item.turn_id;
   };
 
-  return [onViewableItemsChanged, keyExtractor];
+  return [onViewableItemsChanged, keyExtractor, flashListRef, viewConfigRef];
 }

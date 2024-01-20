@@ -43,9 +43,15 @@ export default function Editor(): JSX.Element {
           if (turn) {
             setActiveTurn(turn);
             queryClient.invalidateQueries({
-              queryKey: [queryKey.feed, turn, queryKey.myUploads],
+              queryKey: [queryKey.feed],
             });
-            navigation.navigate('HomeScreen');
+            queryClient
+              .invalidateQueries({
+                queryKey: [queryKey.myUploads],
+              })
+              .then(() => {
+                navigation.navigate('HomeScreen');
+              });
           }
         },
       },

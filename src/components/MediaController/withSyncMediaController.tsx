@@ -26,9 +26,8 @@ export default function withSyncMediaController(
     id: 'playlistSlice' | 'homeSlice';
   }) => {
     const ref = useRef<Video>(null);
-    const {activeTurn} = useVideoListContext();
+    const activeTurn = useSelector((state: RootState) => state[id].activeTurn);
     const isVideoOnScreen = activeTurn.turn_id === videoId;
-
     const isPlaying = useSelector((state: RootState) => state[id].isPlaying);
     const {seekTo, setSeekTo, isSeeking} = useSeek();
     const setProgress = useVideoStore(state => state.setProgress);

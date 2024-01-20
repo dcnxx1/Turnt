@@ -1,4 +1,5 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
+import {ITurn} from '../models/turn';
 
 const videoListSlice = createSlice({
   name: 'videoListSlice',
@@ -10,6 +11,7 @@ const videoListSlice = createSlice({
     setIsPlaying: (state, {payload}: PayloadAction<boolean>) => {},
     togglePlaying: () => {},
     setActiveSlice: () => {},
+    setActiveTurn: (_, {payload}: PayloadAction<ITurn>) => {},
   },
 });
 
@@ -20,6 +22,7 @@ export const {
   setIsPlaying,
   togglePlaying,
   setActiveSlice,
+  setActiveTurn,
 } = videoListSlice.actions;
 
 export default videoListSlice;

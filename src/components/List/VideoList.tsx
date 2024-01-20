@@ -16,7 +16,6 @@ type Props = {
   onEndReached?: () => void;
 };
 
-const VIDEO_BECAME_ACTIVE_AT_PERCENT = 95;
 const VideoSyncMediaController = withSyncMediaController(VideoPlayer);
 
 export default function VideoList({
@@ -24,25 +23,27 @@ export default function VideoList({
   id,
   animateScrollToIndex = true,
 }: Props) {
-  const [onViewableItemsChanged, keyExtractor] = useVideoList();
-  const ref = useRef<FlashList<ITurn>>(null);
-  const index = useSelector((state: RootState) => state[id].index);
+  const {index, isActive} = useSelector((state: RootState) => state[id]);
+  const [onViewableItemsChanged, keyExtractor, flashlistRef, viewConfigRef] =
+    useVideoList();
 
   useEffect(() => {
-    if (ref.current) {
-      if (index > data.length - 1) {
-        ref.current.scrollToIndex({
+    if (isActive) {
+      if (flashlistRef.current) {
+        if (index > data.length - 1) {
+          flashlistRef.current.scrollToIndex({
+            animated: animateScrollToIndex,
+            index: 0,
+          });
+          return
+        }
+        flashlistRef.current.scrollToIndex({
           animated: animateScrollToIndex,
-          index: 0,
+          index: index,
         });
-        return;
       }
-      ref.current.scrollToIndex({
-        animated: animateScrollToIndex,
-        index: index,
-      });
     }
-  }, [ref, index, data]);
+  }, [flashlistRef, index, data, isActive]);
 
   const renderItem: ListRenderItem<ITurn> = ({item: {turn_id, source}}) => {
     return (
@@ -50,17 +51,15 @@ export default function VideoList({
     );
   };
 
-  const viewConfigRef = useRef<ViewabilityConfig>({
-    viewAreaCoveragePercentThreshold: VIDEO_BECAME_ACTIVE_AT_PERCENT,
-  }).current;
-
   return (
     <SkeletonFlashList
       data={data}
       extraData={data}
-      ref={ref}
+      ref={flashlistRef}
       renderItem={renderItem}
       keyExtractor={keyExtractor}
+      snapToAlignment="start"
+      snapToInterval={Dimensions.get('screen').height}
       viewabilityConfig={viewConfigRef}
       onViewableItemsChanged={onViewableItemsChanged}
       decelerationRate={'fast'}

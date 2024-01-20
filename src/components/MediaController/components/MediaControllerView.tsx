@@ -3,7 +3,7 @@ import {BlurView} from '@react-native-community/blur';
 import {useCallback, useMemo} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {useDispatch} from 'react-redux';
-import _ from 'lodash';
+import _, { debounce } from 'lodash';
 import {useActiveTurnStore} from '../../../store';
 import Flex from '../../Misc/Flex';
 import {blurViewConfig, bottomSheetConfig} from '../configs';
@@ -34,19 +34,19 @@ export default function MediaControllerView({tabHeight}: MediaControllerView) {
   const onPressTogglePlayPause = () => {
     dispatch(togglePlaying());
   };
-
-  const onPressNext = throttle(
+  // TODO: Check whether to use debounce or throttle..
+  const onPressNext = debounce(
     useCallback(() => {
       dispatch(increment());
     }, [dispatch]),
-    1000,
+    50,
   );
 
-  const onPressPrevious = throttle(
+  const onPressPrevious = debounce(
     useCallback(() => {
       dispatch(decrement());
     }, [dispatch]),
-    1000,
+    50,
   );
 
   return activeTurn ? (

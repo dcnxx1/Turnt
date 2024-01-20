@@ -2,6 +2,7 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useQuery, useQueryClient} from '@tanstack/react-query';
 import {Pressable, StyleSheet} from 'react-native';
+import {Text} from 'react-native-paper';
 import {useSelector} from 'react-redux';
 import {queryKey, useCDN} from '../../api/api';
 import {Profile as UserProfile} from '../../api/profile';
@@ -11,11 +12,7 @@ import Tab from '../../components/Tabs/Tab';
 import {ITurn} from '../../models/turn';
 import {HomeParams} from '../../nav/navparams';
 import {RootState} from '../../redux/store';
-import useQueryData from '../../shared/hooks/useQueryData';
 import useLocalProfile from '../../store/useLocalProfile';
-import {Animated} from 'react-native';
-import {Text} from 'react-native-paper';
-import getMyUploadsByUserId from '../../api/myUploads';
 export default function ProfileScreen() {
   const queryClient = useQueryClient();
   const remoteProfile: UserProfile | undefined = queryClient.getQueryData([
@@ -31,7 +28,6 @@ export default function ProfileScreen() {
   });
   const {data: myUploadsData, error: myUploadsError} = useQuery<ITurn[]>({
     queryKey: [queryKey.myUploads],
-    initialData: queryClient.getQueryData([queryKey.myUploads]),
   });
 
   const playlistQueryState = queryClient.getQueryState([queryKey.playlist]);
