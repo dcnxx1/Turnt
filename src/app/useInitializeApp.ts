@@ -3,7 +3,7 @@ import {DependencyList, useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {queryKey} from '../api/api';
 import {getFeed} from '../api/collection';
-import {getPlaylistWithUserId} from '../api/playlist';
+import {getPlaylistByUserId} from '../api/playlist';
 import {getProfile} from '../api/profile';
 import {ITurn} from '../models/turn';
 import {RootNavs} from '../nav/types';
@@ -33,7 +33,7 @@ export default function useInitalizeApp(): [boolean, string | undefined] {
         });
         await queryClient.prefetchQuery({
           queryKey: [queryKey.playlist],
-          queryFn: () => getPlaylistWithUserId(me.user_id),
+          queryFn: () => getPlaylistByUserId(me.user_id),
         });
 
         await queryClient.prefetchQuery({
@@ -42,7 +42,7 @@ export default function useInitalizeApp(): [boolean, string | undefined] {
         });
         await queryClient.prefetchQuery({
           queryKey: [queryKey.playlistSheet],
-          queryFn: () => getPlaylistWithUserId(me.user_id),
+          queryFn: () => getPlaylistByUserId(me.user_id),
         });
         const feed = await queryClient.fetchQuery({
           queryKey: [queryKey.feed],

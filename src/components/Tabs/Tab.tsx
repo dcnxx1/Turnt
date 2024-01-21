@@ -1,6 +1,8 @@
+import {UseQueryResult, useQueryClient} from '@tanstack/react-query';
 import {useRef, useState} from 'react';
 import {
   Animated,
+  Easing,
   NativeSyntheticEvent,
   StyleProp,
   StyleSheet,
@@ -9,17 +11,19 @@ import {
 } from 'react-native';
 import PagerView from 'react-native-pager-view';
 import {Text} from 'react-native-paper';
-import {queryKey} from '../../api/api';
 import {ITurn} from '../../models/turn';
-import {QueryResult} from '../../shared/hooks/useQueryData';
 import useLocalProfile from '../../store/useLocalProfile';
-import ErrorFallback from '../Error/ErrorFallback';
 import FallbackMessage from '../Error/FallbackMessage';
 import SavedSongList from '../PlaylistSheet/SavedSongList';
+import RNAnimated, {FadeIn} from 'react-native-reanimated';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {HomeParams} from '../../nav/navparams';
+import {queryKey} from '../../api/api';
 
 type Props = {
-  playlist: QueryResult<ITurn>;
-  myUploads: QueryResult<ITurn>;
+  playlist: UseQueryResult<ITurn[] | undefined, Error>;
+  myUploads: UseQueryResult<ITurn[] | undefined, Error>;
   style?: StyleProp<ViewStyle>;
 };
 
@@ -33,21 +37,35 @@ type OnPageSelected =
 
 export default function Tab({playlist, myUploads, style}: Props) {
   const [tabKey, setTabKey] = useState(0);
+  const navigation = useNavigation<StackNavigationProp<HomeParams>>();
   const ref = useRef<PagerView>(null);
-
+  const queryClient = useQueryClient();
+  const me = useLocalProfile();
+  const onEmptyUpload = () => {
+    navigation.navigate('EditorStack');
+  };
   const onPageSelected = (position: OnPageSelected) => {
     if (ref.current && position) {
       ref.current.setPage(position?.nativeEvent.position);
       setTabKey(position?.nativeEvent.position);
+      console.log('setting position to :>>', position?.nativeEvent.position);
     }
   };
-  const me = useLocalProfile();
+  const onRefreshPlaylist = () => {
+    console.log('playlist isState:>>', playlist.isStale);
+
+    queryClient.invalidateQueries({
+      queryKey: [queryKey.playlist],
+    });
+  };
 
   return (
-    <Animated.View style={[Style.container, style]}>
+    <RNAnimated.View
+      entering={FadeIn.delay(100)}
+      style={[Style.container, style]}>
       <View style={Style.tabSelectorContainer}>
-        <Text>Favorieten</Text>
-        <Text>Mijn uploads</Text>
+        <Text style={Style.text}>Favorieten</Text>
+        <Text style={Style.text}>Mijn uploads</Text>
       </View>
       <PagerView
         collapsable
@@ -56,31 +74,32 @@ export default function Tab({playlist, myUploads, style}: Props) {
         initialPage={tabKey}
         style={Style.pagerViewContainer}>
         <View key="1">
-          <SavedSongList data={playlist.data ?? []} />
+          <FallbackMessage
+            style={Style.playlistFallback}
+            queryKeyToRefetch={'playlist'}
+            isFetching={playlist.isFetching}
+            isRefetching={playlist.isRefetching}
+            isError={playlist.isError}
+            data={playlist.data}>
+            <SavedSongList
+              onRefresh={onRefreshPlaylist}
+              data={playlist.data ?? []}
+            />
+          </FallbackMessage>
         </View>
         <View key="2">
-          {playlist?.data.length ? (
-            <ErrorFallback
-              onRefetch={() => {
-                console.log('onRefetch called :!: !:');
-              }}
-              error={myUploads.error}
-              queryKey={queryKey.myUploads}>
-              <SavedSongList data={myUploads.data} />
-            </ErrorFallback>
-          ) : (
-            <FallbackMessage
-              imageHeader={require('../../assets/icons/broken-smartphone.png')}
-              header="Oeps..."
-              imageSize={60}
-              onRetry={() => console.log('item pressed!')}
-              buttonText="Doorgaan"
-              style={Style.fallbackMessageContainer}
-            />
-          )}
+          <FallbackMessage
+            onEmptyPressAction={onEmptyUpload}
+            style={Style.fallbackMyUploads}
+            data={myUploads.data}
+            queryKeyToRefetch={'myUploads'}
+            isRefetching={myUploads.isRefetching}
+            isError={myUploads.isError}>
+            <SavedSongList data={myUploads.data ?? []} />
+          </FallbackMessage>
         </View>
       </PagerView>
-    </Animated.View>
+    </RNAnimated.View>
   );
 }
 
@@ -107,5 +126,15 @@ const Style = StyleSheet.create({
     borderWidth: 2,
     borderColor: 'red',
   },
+  text: {
+    fontSize: 16,
+    color: 'white',
+  },
   fallbackMessageContainer: {},
+  playlistFallback: {
+    justifyContent: 'center',
+  },
+  fallbackMyUploads: {
+    justifyContent: 'space-evenly',
+  },
 });

@@ -21,9 +21,7 @@ const LinearGradientScreen = withLinearGradient(SkeletonScreen);
 type EditorParamsPath = EditorParams['EditorScreen'];
 
 export default function FileSelectScreen() {
-  // const {
-  //   profile: {username},
-  // } = useLocalUserProfile();
+
   const navigation = useNavigation<StackNavigationProp<EditorParams>>();
   const defaultCoverColor: VideoCoverColor = chooseDefaultCoverImage();
 
@@ -71,6 +69,7 @@ export default function FileSelectScreen() {
     restoreTrackPlayerCapabilities();
     navigation.goBack();
   };
+
   const header = (
     <>
       <Text onPress={onPressGoBack}>Terug</Text>

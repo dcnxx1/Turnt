@@ -26,7 +26,7 @@ const defaultConfig = {
 };
 const log = logger.createLogger(defaultConfig);
 
-export async function getPlaylistWithUserId(
+export async function getPlaylistByUserId(
   user_id: string,
 ): Promise<ITurn[] | undefined> {
   try {

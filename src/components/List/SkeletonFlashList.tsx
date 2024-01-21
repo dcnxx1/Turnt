@@ -38,6 +38,8 @@ export type SkeletonFlashListProps<T> = {
   snapToAlignment?: 'start' | 'center' | 'end' | undefined;
   bounces?: boolean;
   data?: readonly T[];
+  onRefresh?: () => void;
+  refreshing?: boolean;
   hasSafeAreaInsets?: boolean;
   decelerationRate?: number | 'fast' | 'normal' | undefined;
   showScroll?: boolean;
@@ -66,11 +68,13 @@ export default forwardRef<FlashList<any>, SkeletonFlashListProps<any>>(
       decelerationRate,
       snapToAlignment = undefined,
       viewabilityConfig,
+      refreshing,
       data,
       snapToInterval = undefined,
       showScroll = false,
       hasSafeAreaInsets,
       extraData,
+      onRefresh,
     }: SkeletonFlashListProps<any>,
     ref,
   ) => {
@@ -83,6 +87,8 @@ export default forwardRef<FlashList<any>, SkeletonFlashListProps<any>>(
         onEndReached={onEndReached}
         onViewableItemsChanged={onViewableItemsChanged}
         showsHorizontalScrollIndicator={showScroll}
+        onRefresh={onRefresh}
+        refreshing={refreshing}
         keyExtractor={keyExtractor}
         estimatedListSize={estimatedListSize}
         ListFooterComponent={ListFooterComponent}

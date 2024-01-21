@@ -1,6 +1,6 @@
 import {ITurn} from '../models/turn';
 import {API} from './api';
-import {getPlaylistWithUserId} from './playlist';
+import {getPlaylistByUserId} from './playlist';
 
 export default async function getMyUploadsByUserId(
   user_id: string,

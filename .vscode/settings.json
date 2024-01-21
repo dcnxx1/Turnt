@@ -6,5 +6,25 @@
     "size": "cover",
     "position": "center",
     "interval": 0
-  }
+  },
+  "workbench.colorCustomizations": {
+    "activityBar.activeBackground": "#3d1145",
+    "activityBar.background": "#3d1145",
+    "activityBar.foreground": "#e7e7e7",
+    "activityBar.inactiveForeground": "#e7e7e799",
+    "activityBarBadge.background": "#665a19",
+    "activityBarBadge.foreground": "#e7e7e7",
+    "commandCenter.border": "#e7e7e799",
+    "sash.hoverBorder": "#3d1145",
+    "statusBar.background": "#19071c",
+    "statusBar.foreground": "#e7e7e7",
+    "statusBarItem.hoverBackground": "#3d1145",
+    "statusBarItem.remoteBackground": "#19071c",
+    "statusBarItem.remoteForeground": "#e7e7e7",
+    "titleBar.activeBackground": "#19071c",
+    "titleBar.activeForeground": "#e7e7e7",
+    "titleBar.inactiveBackground": "#19071c99",
+    "titleBar.inactiveForeground": "#e7e7e799"
+  },
+  "peacock.color": "rgb(25 7 28)"
 }
