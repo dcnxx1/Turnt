@@ -8,14 +8,14 @@ import _ from 'lodash';
 import SkeletonFlashList from '../List/SkeletonFlashList';
 import PlaylistItem from './PlaylistItem';
 import {setPosition} from '../../redux/playlistSheetSlice';
-import {setIndex} from '../../redux/videoListSlice';
+import {setIndex, setIsPlaying} from '../../redux/videoListSlice';
 import theme from '../../theme';
 import {useQueryClient} from '@tanstack/react-query';
-import {queryKey} from '../../api/api';
+import {QueryKey, queryKey} from '../../api/api';
 
 type Props = {
   data: ITurn[];
-  onRefresh: () => void;
+  queryKeyRefresh: QueryKey;
 };
 
 type SongList = {
@@ -23,17 +23,25 @@ type SongList = {
 };
 const ESTIMATED_SONG_ITEM_SIZE = 200;
 
-export default function SavedSongList({data, onRefresh}: Props) {
+/**
+ *
+ * @param queryKey for refreshing
+ */
+
+export default function SavedSongList({data, queryKeyRefresh}: Props) {
   const [isRefreshing, setRefreshing] = useState(false);
   const ref = useRef<FlashList<SongList>>(null);
   const flashListLayout = useLayout();
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
-  const playlistObs = queryClient.getQueryState(['playlist']);
+
   const onPullToRefresh = async () => {
     try {
       setRefreshing(true);
-      queryClient.invalidateQueries({queryKey: ['playlist']});
+      queryClient.invalidateQueries({
+        queryKey: [queryKeyRefresh],
+        stale: true,
+      });
     } catch (err) {
     } finally {
       setRefreshing(false);
@@ -69,7 +77,7 @@ export default function SavedSongList({data, onRefresh}: Props) {
         backgroundColor: theme.color.turnerPurpleDark,
       }}
       bounces
-      onRefresh={onRefresh}
+      onRefresh={onPullToRefresh}
       refreshing={isRefreshing}
       estimatedItemSize={ESTIMATED_SONG_ITEM_SIZE}
       estimatedListSize={{

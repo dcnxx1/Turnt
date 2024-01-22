@@ -41,6 +41,7 @@ export default function Tab({playlist, myUploads, style}: Props) {
   const ref = useRef<PagerView>(null);
   const queryClient = useQueryClient();
   const me = useLocalProfile();
+
   const onEmptyUpload = () => {
     navigation.navigate('EditorStack');
   };
@@ -50,13 +51,6 @@ export default function Tab({playlist, myUploads, style}: Props) {
       setTabKey(position?.nativeEvent.position);
       console.log('setting position to :>>', position?.nativeEvent.position);
     }
-  };
-  const onRefreshPlaylist = () => {
-    console.log('playlist isState:>>', playlist.isStale);
-
-    queryClient.invalidateQueries({
-      queryKey: [queryKey.playlist],
-    });
   };
 
   return (
@@ -82,7 +76,7 @@ export default function Tab({playlist, myUploads, style}: Props) {
             isError={playlist.isError}
             data={playlist.data}>
             <SavedSongList
-              onRefresh={onRefreshPlaylist}
+              queryKeyRefresh={queryKey.playlist}
               data={playlist.data ?? []}
             />
           </FallbackMessage>
@@ -95,7 +89,10 @@ export default function Tab({playlist, myUploads, style}: Props) {
             queryKeyToRefetch={'myUploads'}
             isRefetching={myUploads.isRefetching}
             isError={myUploads.isError}>
-            <SavedSongList data={myUploads.data ?? []} />
+            <SavedSongList
+              queryKeyRefresh={queryKey.myUploads}
+              data={myUploads.data ?? []}
+            />
           </FallbackMessage>
         </View>
       </PagerView>

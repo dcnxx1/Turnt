@@ -23,14 +23,14 @@ export default function ProfileScreen() {
   const remoteProfile: UserProfile | undefined = queryClient.getQueryData([
     queryKey.profile,
   ]);
-  const isPlaylistSliceActive = useSelector(
-    (state: RootState) => state.playlistSlice.isActive,
-  );
   const me = useLocalProfile();
   const myPlaylistData = useMyPlaylistQuery();
   const myUploadsData = useMyUploadsQuery();
   const navigation = useNavigation<StackNavigationProp<HomeParams>>();
-
+  
+  const isPlaylistSliceActive = useSelector(
+    (state: RootState) => state.playlistSlice.isActive,
+  );
   const onPressUpload = () => {
     navigation.navigate('EditorStack');
   };
