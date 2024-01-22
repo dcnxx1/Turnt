@@ -1,15 +1,14 @@
-import {useNavigation} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {StyleSheet, Text} from 'react-native';
-import {Button} from 'react-native-paper';
-import {SkeletonScreen} from '../../components';
-import {withLinearGradient} from '../../components/Screen/SkeletonScreen';
-import {millisToSeconds} from '../../helpers';
-import {EditorParams} from '../../nav/navparams';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { StyleSheet, Text } from 'react-native';
+import { Button } from 'react-native-paper';
+import { SkeletonScreen } from '../../components';
+import { withLinearGradient } from '../../components/Screen/SkeletonScreen';
+import { millisToSeconds } from '../../helpers';
+import { EditorParams } from '../../nav/navparams';
 
 import theme from '../../theme';
-import {restoreTrackPlayerCapabilities} from '../../utils';
-import {getAudioDuration} from './hooks/useGenerateThumbnails';
+import { getAudioDuration } from './hooks/useGenerateThumbnails';
 import {
   VideoCoverColor,
   chooseDefaultCoverImage,
@@ -66,7 +65,7 @@ export default function FileSelectScreen() {
   };
 
   const onPressGoBack = () => {
-    restoreTrackPlayerCapabilities();
+    // restoreTrackPlayerCapabilities();
     navigation.goBack();
   };
 

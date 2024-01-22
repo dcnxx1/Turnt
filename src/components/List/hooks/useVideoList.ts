@@ -1,5 +1,5 @@
 import {FlashList, ViewToken} from '@shopify/flash-list';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {ITurn} from '../../../models/turn';
 import {setActiveTurn, setIndex} from '../../../redux/videoListSlice';
 import {useVideoListContext} from '../../../shared/context/VideoListContext';
@@ -8,6 +8,7 @@ import {useActiveTurnStore} from '../../../store';
 import {ViewabilityConfig} from 'react-native';
 import TrackPlayer from 'react-native-track-player';
 import {turnToTrackMapper} from '../../../utils';
+import {RootState} from '../../../redux/store';
 
 type VideoListHookReturnType = [
   onViewableItemsChanged: (info: {
@@ -23,9 +24,9 @@ const VIDEO_BECAME_ACTIVE_AT_PERCENT = 95;
 
 export default function useVideoList(): VideoListHookReturnType {
   const setGlobalActiveTurn = useActiveTurnStore(state => state.setActiveTurn);
-  const flashListRef = useRef<FlashList<ITurn>>(null);
-
+  const flashListRef = useRef<FlashList<ITurn> | null>(null);
   const dispatch = useDispatch();
+
   const onViewableItemsChanged = async (info: {
     changed: ViewToken[];
     viewableItems: ViewToken[];
@@ -38,7 +39,9 @@ export default function useVideoList(): VideoListHookReturnType {
       if (item !== null) {
         const currentActiveTurn = item as ITurn;
         dispatch(setActiveTurn(currentActiveTurn));
+
         setGlobalActiveTurn(currentActiveTurn);
+
         await TrackPlayer.load(turnToTrackMapper(currentActiveTurn));
       }
       if (index !== null) {
@@ -46,6 +49,7 @@ export default function useVideoList(): VideoListHookReturnType {
       }
     }
   };
+
   const viewConfigRef = useRef<ViewabilityConfig>({
     viewAreaCoveragePercentThreshold: VIDEO_BECAME_ACTIVE_AT_PERCENT,
   }).current;

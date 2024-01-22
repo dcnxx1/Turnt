@@ -8,7 +8,12 @@ import _ from 'lodash';
 import SkeletonFlashList from '../List/SkeletonFlashList';
 import PlaylistItem from './PlaylistItem';
 import {setPosition} from '../../redux/playlistSheetSlice';
-import {setIndex, setIsPlaying} from '../../redux/videoListSlice';
+import {
+  setActiveSlice,
+  setActiveTurn,
+  setIndex,
+  setIsPlaying,
+} from '../../redux/videoListSlice';
 import theme from '../../theme';
 import {useQueryClient} from '@tanstack/react-query';
 import {QueryKey, queryKey} from '../../api/api';
@@ -50,7 +55,9 @@ export default function SavedSongList({data, queryKeyRefresh}: Props) {
 
   const onPressPlaylistItem = (turn_id: string, index: number) => {
     queryClient.setQueryData([queryKey.playlistSheet], data);
+    console.log('setting the index to :>>', index);
     dispatch(setPosition('FullScreen'));
+    console.log('onPressPlayList item called');
     dispatch(setIndex(index));
   };
 

@@ -26,13 +26,14 @@ const homeSlice = createSlice({
       }
     });
     builder.addCase(actions.decrement, state => {
-      console.log(state.index)
+      console.log(state.index);
       if (state.isActive && state.index > 0) {
         state.index--;
       }
     });
     builder.addCase(actions.setIndex, (state, action) => {
       if (state.isActive) {
+        console.log('setIndex called home');
         state.index = action.payload;
       }
     });
@@ -48,9 +49,11 @@ const homeSlice = createSlice({
     });
     //  TODO: check first if its active. could cause bugs
     builder.addCase(playlistSheetActions.setPosition, (state, action) => {
-      if (action.payload !== 'Hidden') {
-        state.isPlaying = false;
-        state.isActive = false;
+      if (action.payload === 'Hidden') {
+        state.isPlaying = true;
+        state.isActive = true;
+      } else {
+        (state.isPlaying = false), (state.isActive = false);
       }
     });
     builder.addCase(actions.setActiveTurn, (state, action) => {

@@ -14,11 +14,12 @@ import {
 } from '../screens';
 import AccountSetupScreen from '../screens/AccountSetup/AccountSetupScreen';
 import AuthScreen from '../screens/Auth/AuthScreen';
-
+import {createMaterialBottomTabNavigator} from 'react-native-paper/react-navigation';
 import useLocalProfile from '../store/useLocalProfile';
 import {AccountSetupParams, EditorParams, HomeParams} from './navparams';
 import {NavScreenNames, RootNavNames} from './types';
 
+const MaterialHomeStack = createMaterialBottomTabNavigator<HomeParams>();
 const HomeStack = createBottomTabNavigator<HomeParams>();
 const RootStack = createStackNavigator();
 const SetupStack = createStackNavigator<AccountSetupParams>();
@@ -31,19 +32,23 @@ const screenOptions: StackNavigationOptions = {
 
 function HomeStackNavigator() {
   return (
-    <HomeStack.Navigator
-      detachInactiveScreens={false}
-      tabBar={props => <Tabbar {...props} />}
-      screenOptions={{
-        headerShown: false,
-      }}
+    <MaterialHomeStack.Navigator
+      tabBar={(props: any) => <Tabbar {...props} />}
+      screenOptions={
+        {
+          // headerShown: false,
+        }
+      }
       initialRouteName={NavScreenNames.HomeScreen}>
-      <HomeStack.Screen component={Home} name={NavScreenNames.HomeScreen} />
-      <HomeStack.Screen
+      <MaterialHomeStack.Screen
+        component={Home}
+        name={NavScreenNames.HomeScreen}
+      />
+      <MaterialHomeStack.Screen
         component={Profile}
         name={NavScreenNames.ProfileScreen}
       />
-    </HomeStack.Navigator>
+    </MaterialHomeStack.Navigator>
   );
 }
 

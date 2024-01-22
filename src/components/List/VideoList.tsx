@@ -1,5 +1,5 @@
 import {FlashList, ListRenderItem} from '@shopify/flash-list';
-import {useCallback, useEffect, useRef} from 'react';
+import {useCallback, useEffect, useRef, useState} from 'react';
 import {Dimensions, ViewabilityConfig} from 'react-native';
 import {useSelector} from 'react-redux';
 import {ITurn} from '../../models/turn';
@@ -8,6 +8,7 @@ import withSyncMediaController from '../MediaController/withSyncMediaController'
 import VideoPlayer from '../Video/VideoPlayer';
 import SkeletonFlashList from './SkeletonFlashList';
 import useVideoList from './hooks/useVideoList';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 
 type Props = {
   data: ITurn[];
@@ -24,6 +25,8 @@ export default function VideoList({
   animateScrollToIndex = true,
 }: Props) {
   const {index, isActive} = useSelector((state: RootState) => state[id]);
+  const [isFocused, setIsFocused] = useState(true);
+  const navigation = useNavigation();
   const [onViewableItemsChanged, keyExtractor, flashlistRef, viewConfigRef] =
     useVideoList();
 
@@ -35,7 +38,7 @@ export default function VideoList({
             animated: animateScrollToIndex,
             index: 0,
           });
-          return
+          return;
         }
         flashlistRef.current.scrollToIndex({
           animated: animateScrollToIndex,
@@ -51,6 +54,22 @@ export default function VideoList({
     );
   };
 
+  useEffect(() => {
+    const blurSub = navigation.addListener('blur', () => {
+      console.log('blur called', id);
+      setIsFocused(false);
+    });
+    const focusSub = navigation.addListener('focus', () => {
+      console.log('focus called', id);
+
+      setIsFocused(true);
+    });
+    return () => {
+      navigation.removeListener('blur', blurSub);
+      navigation.removeListener('focus', focusSub);
+    };
+  }, [navigation]);
+
   return (
     <SkeletonFlashList
       data={data}
@@ -61,7 +80,7 @@ export default function VideoList({
       snapToAlignment="start"
       snapToInterval={Dimensions.get('screen').height}
       viewabilityConfig={viewConfigRef}
-      onViewableItemsChanged={onViewableItemsChanged}
+      onViewableItemsChanged={isFocused ? onViewableItemsChanged : undefined}
       decelerationRate={'fast'}
       estimatedItemSize={Dimensions.get('screen').height}
       estimatedListSize={{

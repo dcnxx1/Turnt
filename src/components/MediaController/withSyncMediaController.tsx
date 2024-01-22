@@ -11,6 +11,7 @@ import {useVideoListContext} from '../../shared/context/VideoListContext';
 import {useSeek, useVideoStore} from '../../store';
 import {VideoPlayerProps} from '../Video/VideoPlayer';
 import {Pressable} from 'react-native';
+import {setPosition} from '../../redux/playlistSheetSlice';
 
 export default function withSyncMediaController(
   VideoPlayer: React.ForwardRefExoticComponent<
@@ -54,6 +55,9 @@ export default function withSyncMediaController(
     };
 
     const onPressScreen = () => {
+      if (id === 'homeSlice') {
+        dispatch(setPosition('Hidden'));
+      }
       dispatch(togglePlaying());
     };
 

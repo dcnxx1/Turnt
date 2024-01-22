@@ -20,6 +20,7 @@ const playlistSlice = createSlice({
     });
     builder.addCase(actions.setIndex, (state, action) => {
       if (state.isActive) {
+        console.log('setIndex called playlist');
         state.index = action.payload;
       }
     });
@@ -34,15 +35,18 @@ const playlistSlice = createSlice({
       }
     });
     builder.addCase(setPosition, (state, action) => {
-      if (!state.isActive) {
-        if (action.payload !== 'Hidden') {
-          state.isPlaying = false;
+      if (action.payload !== 'Hidden') {
+        if (state.isActive === false) {
+          state.isPlaying = true;
           state.isActive = true;
         }
+      } else {
+        (state.isPlaying = false), (state.isActive = false);
       }
     });
     builder.addCase(actions.setActiveTurn, (state, action) => {
       if (state.isActive) {
+        console.log("SetActiveTurn dispatched")
         state.activeTurn = action.payload;
       }
     });

@@ -51,13 +51,11 @@ export default function PlaylistSheet({animatedPosition}: Props) {
       onChange={onChangeBottomSheetPosition}
       snapPoints={snapPoints}>
       {data && (
-      
-          <VideoList
-            animateScrollToIndex={false}
-            id={'playlistSlice'}
-            data={data}
-          />
-       
+        <VideoList
+          animateScrollToIndex={false}
+          id={'playlistSlice'}
+          data={data}
+        />
       )}
     </BottomSheet>
   );

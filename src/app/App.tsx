@@ -6,6 +6,7 @@ import AppContent from './AppContent';
 import ErrorBoundary from 'react-native-error-boundary';
 import {View} from 'react-native';
 import {Text} from 'react-native-paper';
+import {enableFreeze} from 'react-native-screens';
 const queryClient = new QueryClient();
 
 export default function App() {

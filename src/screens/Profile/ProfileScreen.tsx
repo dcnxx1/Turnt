@@ -16,7 +16,6 @@ import {
   useMyUploadsQuery,
 } from '../../shared/hooks/useQueryData';
 import useLocalProfile from '../../store/useLocalProfile';
-import {useEffect} from 'react';
 
 export default function ProfileScreen() {
   const queryClient = useQueryClient();
@@ -27,10 +26,18 @@ export default function ProfileScreen() {
   const myPlaylistData = useMyPlaylistQuery();
   const myUploadsData = useMyUploadsQuery();
   const navigation = useNavigation<StackNavigationProp<HomeParams>>();
-  
+
   const isPlaylistSliceActive = useSelector(
     (state: RootState) => state.playlistSlice.isActive,
   );
+  const homeIsActive = useSelector(
+    (state: RootState) => state.homeSlice.isActive,
+  );
+
+  console.log({
+    isPlaylistSliceActive,
+    homeIsActive,
+  });
   const onPressUpload = () => {
     navigation.navigate('EditorStack');
   };
