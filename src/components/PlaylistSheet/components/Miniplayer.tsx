@@ -25,7 +25,7 @@ export default function MiniPlayer() {
   };
 
   const onPressPlayPauseToggle = () => {
-    console.log('OnpressPlay pause tog gled');
+
     dispatch(togglePlaying());
   };
 

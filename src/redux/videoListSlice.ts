@@ -10,7 +10,7 @@ const videoListSlice = createSlice({
     setIndex: (_, {payload}: PayloadAction<number>) => {},
     setIsPlaying: (state, {payload}: PayloadAction<boolean>) => {},
     togglePlaying: () => {},
-    setActiveSlice: () => {},
+    setActiveSlice: (state, {payload} : PayloadAction<'playlistSlice' | 'homeSlice'>) => {},
     setActiveTurn: (_, {payload}: PayloadAction<ITurn>) => {},
   },
 });

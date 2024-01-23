@@ -13,20 +13,18 @@ export default function App() {
   const [isErrorVisible, setisErrorVisible] = useState(false);
 
   return (
-    <StrictMode>
-      <ErrorBoundary
-        onError={err => console.log('onError occured :>>', err)}
-        FallbackComponent={() => (
-          <View>
-            <Text>Error fallback component!</Text>
-          </View>
-        )}>
-        <QueryClientProvider client={queryClient}>
-          <Provider store={store}>
-            <AppContent />
-          </Provider>
-        </QueryClientProvider>
-      </ErrorBoundary>
-    </StrictMode>
+    <ErrorBoundary
+      onError={err => console.log('onError occured :>>', err)}
+      FallbackComponent={() => (
+        <View>
+          <Text>Error fallback component!</Text>
+        </View>
+      )}>
+      <QueryClientProvider client={queryClient}>
+        <Provider store={store}>
+          <AppContent />
+        </Provider>
+      </QueryClientProvider>
+    </ErrorBoundary>
   );
 }

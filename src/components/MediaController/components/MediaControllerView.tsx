@@ -3,7 +3,7 @@ import {BlurView} from '@react-native-community/blur';
 import {useCallback, useMemo} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {useDispatch} from 'react-redux';
-import _, { debounce } from 'lodash';
+import _, {debounce} from 'lodash';
 import {useActiveTurnStore} from '../../../store';
 import Flex from '../../Misc/Flex';
 import {blurViewConfig, bottomSheetConfig} from '../configs';
@@ -36,18 +36,16 @@ export default function MediaControllerView({tabHeight}: MediaControllerView) {
   };
   // TODO: Check whether to use debounce or throttle..
   const onPressNext = debounce(
-    useCallback(() => {
+    () => {
       dispatch(increment());
-    }, [dispatch]),
+    },
+
     50,
   );
 
-  const onPressPrevious = debounce(
-    useCallback(() => {
-      dispatch(decrement());
-    }, [dispatch]),
-    50,
-  );
+  const onPressPrevious = debounce(() => {
+    dispatch(decrement());
+  }, 50);
 
   return activeTurn ? (
     <BottomSheet

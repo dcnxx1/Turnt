@@ -3,7 +3,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {useQueryClient} from '@tanstack/react-query';
 import {Pressable, StyleSheet} from 'react-native';
 import {Text} from 'react-native-paper';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {queryKey, useCDN} from '../../api/api';
 import {Profile as UserProfile} from '../../api/profile';
 import {AvatarWithUsername} from '../../components/Images/Avatar';
@@ -16,6 +16,9 @@ import {
   useMyUploadsQuery,
 } from '../../shared/hooks/useQueryData';
 import useLocalProfile from '../../store/useLocalProfile';
+import TestList from '../../components/List/TestList';
+import {setActiveSlice} from '../../redux/videoListSlice';
+import homeSlice from '../../redux/listSlices/homeSlice';
 
 export default function ProfileScreen() {
   const queryClient = useQueryClient();
@@ -30,16 +33,9 @@ export default function ProfileScreen() {
   const isPlaylistSliceActive = useSelector(
     (state: RootState) => state.playlistSlice.isActive,
   );
-  const homeIsActive = useSelector(
-    (state: RootState) => state.homeSlice.isActive,
-  );
 
-  console.log({
-    isPlaylistSliceActive,
-    homeIsActive,
-  });
   const onPressUpload = () => {
-    navigation.navigate('EditorStack');
+    navigation.push('EditorStack');
   };
 
   return (
@@ -54,6 +50,7 @@ export default function ProfileScreen() {
           <Text style={Style.text}>Uploaden</Text>
         </Pressable>
       )}
+
       <Tab
         style={{paddingBottom: isPlaylistSliceActive ? MINIPLAYER_HEIGHT : 0}}
         playlist={myPlaylistData}

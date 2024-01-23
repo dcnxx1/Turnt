@@ -18,8 +18,10 @@ import {createMaterialBottomTabNavigator} from 'react-native-paper/react-navigat
 import useLocalProfile from '../store/useLocalProfile';
 import {AccountSetupParams, EditorParams, HomeParams} from './navparams';
 import {NavScreenNames, RootNavNames} from './types';
+import { useEffect } from 'react';
 
-const MaterialHomeStack = createMaterialBottomTabNavigator<HomeParams>();
+
+const MaterialHomeStack = createMaterialBottomTabNavigator<HomeParams>()
 const HomeStack = createBottomTabNavigator<HomeParams>();
 const RootStack = createStackNavigator();
 const SetupStack = createStackNavigator<AccountSetupParams>();
@@ -31,24 +33,21 @@ const screenOptions: StackNavigationOptions = {
 };
 
 function HomeStackNavigator() {
+
   return (
-    <MaterialHomeStack.Navigator
-      tabBar={(props: any) => <Tabbar {...props} />}
-      screenOptions={
-        {
-          // headerShown: false,
-        }
-      }
+    <HomeStack.Navigator
+      detachInactiveScreens={false}
+      tabBar={props => <Tabbar {...props} />}
+      screenOptions={{
+        headerShown: false,
+      }}
       initialRouteName={NavScreenNames.HomeScreen}>
-      <MaterialHomeStack.Screen
-        component={Home}
-        name={NavScreenNames.HomeScreen}
-      />
-      <MaterialHomeStack.Screen
+      <HomeStack.Screen component={Home} name={NavScreenNames.HomeScreen} />
+      <HomeStack.Screen
         component={Profile}
         name={NavScreenNames.ProfileScreen}
       />
-    </MaterialHomeStack.Navigator>
+    </HomeStack.Navigator>
   );
 }
 

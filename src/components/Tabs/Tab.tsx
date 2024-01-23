@@ -49,7 +49,6 @@ export default function Tab({playlist, myUploads, style}: Props) {
     if (ref.current && position) {
       ref.current.setPage(position?.nativeEvent.position);
       setTabKey(position?.nativeEvent.position);
-      console.log('setting position to :>>', position?.nativeEvent.position);
     }
   };
 

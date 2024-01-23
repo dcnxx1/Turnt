@@ -1,6 +1,5 @@
-import {FlashList, ListRenderItem} from '@shopify/flash-list';
-import {useCallback, useEffect, useRef, useState} from 'react';
-import {Dimensions, ViewabilityConfig} from 'react-native';
+import {useEffect} from 'react';
+import {Dimensions, FlatList, ViewToken} from 'react-native';
 import {useSelector} from 'react-redux';
 import {ITurn} from '../../models/turn';
 import {RootState} from '../../redux/store';
@@ -8,85 +7,63 @@ import withSyncMediaController from '../MediaController/withSyncMediaController'
 import VideoPlayer from '../Video/VideoPlayer';
 import SkeletonFlashList from './SkeletonFlashList';
 import useVideoList from './hooks/useVideoList';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {FlashList, ListRenderItem} from '@shopify/flash-list';
 
 type Props = {
   data: ITurn[];
-  id: 'playlistSlice' | 'homeSlice';
-  animateScrollToIndex?: boolean;
-  onEndReached?: () => void;
 };
-
+const renderItem: ListRenderItem<ITurn> = ({item: {turn_id, source}}) => {
+  return (
+    <VideoSyncMediaController
+      id={'homeSlice'}
+      videoId={turn_id}
+      source={source}
+    />
+  );
+};
 const VideoSyncMediaController = withSyncMediaController(VideoPlayer);
 
-export default function VideoList({
-  data,
-  id,
-  animateScrollToIndex = true,
-}: Props) {
-  const {index, isActive} = useSelector((state: RootState) => state[id]);
-  const [isFocused, setIsFocused] = useState(true);
-  const navigation = useNavigation();
-  const [onViewableItemsChanged, keyExtractor, flashlistRef, viewConfigRef] =
-    useVideoList();
+export default function VideoList({data}: Props) {
+  const {index, isActive} = useSelector((state: RootState) => state.homeSlice);
+
+  const [
+    onViewableItemsChanged,
+    keyExtractor,
+    flashlistRef,
+    viewConfigRef,
+    viewabilityConfigCallbackPairs,
+  ] = useVideoList();
 
   useEffect(() => {
     if (isActive) {
       if (flashlistRef.current) {
-        if (index > data.length - 1) {
-          flashlistRef.current.scrollToIndex({
-            animated: animateScrollToIndex,
-            index: 0,
-          });
-          return;
-        }
         flashlistRef.current.scrollToIndex({
-          animated: animateScrollToIndex,
+          animated: true,
           index: index,
         });
       }
     }
   }, [flashlistRef, index, data, isActive]);
 
-  const renderItem: ListRenderItem<ITurn> = ({item: {turn_id, source}}) => {
-    return (
-      <VideoSyncMediaController id={id} videoId={turn_id} source={source} />
-    );
-  };
-
-  useEffect(() => {
-    const blurSub = navigation.addListener('blur', () => {
-      console.log('blur called', id);
-      setIsFocused(false);
-    });
-    const focusSub = navigation.addListener('focus', () => {
-      console.log('focus called', id);
-
-      setIsFocused(true);
-    });
-    return () => {
-      navigation.removeListener('blur', blurSub);
-      navigation.removeListener('focus', focusSub);
-    };
-  }, [navigation]);
-
   return (
-    <SkeletonFlashList
-      data={data}
+    <FlatList
       extraData={data}
-      ref={flashlistRef}
+      data={data}
+      initialNumToRender={10}
+      // ref={flashlistRef}
       renderItem={renderItem}
       keyExtractor={keyExtractor}
       snapToAlignment="start"
       snapToInterval={Dimensions.get('screen').height}
-      viewabilityConfig={viewConfigRef}
-      onViewableItemsChanged={isFocused ? onViewableItemsChanged : undefined}
+      // viewabilityConfig={viewConfigRef}
+      viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
+      // onViewableItemsChanged={onViewableItemsChanged}
       decelerationRate={'fast'}
-      estimatedItemSize={Dimensions.get('screen').height}
-      estimatedListSize={{
-        width: Dimensions.get('screen').width,
-        height: Dimensions.get('screen').height,
-      }}
+      // estimatedItemSize={Dimensions.get('screen').height}
+      // estimatedListSize={{
+      //   width: Dimensions.get('screen').width,
+      //   height: Dimensions.get('screen').height,
+      // }}
     />
   );
 }

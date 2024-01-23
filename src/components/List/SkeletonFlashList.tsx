@@ -11,6 +11,7 @@ import {
   LayoutChangeEvent,
   View,
   ViewabilityConfig,
+  ViewabilityConfigCallbackPairs,
 } from 'react-native';
 import {Text} from 'react-native-paper';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -40,6 +41,7 @@ export type SkeletonFlashListProps<T> = {
   data?: readonly T[];
   onRefresh?: () => void;
   refreshing?: boolean;
+  viewabilityConfigCallbackPairs?: ViewabilityConfigCallbackPairs | undefined;
   hasSafeAreaInsets?: boolean;
   decelerationRate?: number | 'fast' | 'normal' | undefined;
   showScroll?: boolean;
@@ -63,6 +65,7 @@ export default forwardRef<FlashList<any>, SkeletonFlashListProps<any>>(
       enableSnap,
       onEndReached,
       ListFooterComponent,
+      viewabilityConfigCallbackPairs,
       onLayout,
       bounces = false,
       decelerationRate,
@@ -87,12 +90,12 @@ export default forwardRef<FlashList<any>, SkeletonFlashListProps<any>>(
         onEndReached={onEndReached}
         onViewableItemsChanged={onViewableItemsChanged}
         showsHorizontalScrollIndicator={showScroll}
-        
         onRefresh={onRefresh}
         refreshing={refreshing}
         keyExtractor={keyExtractor}
         estimatedListSize={estimatedListSize}
         ListFooterComponent={ListFooterComponent}
+        viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs}
         decelerationRate={decelerationRate}
         viewabilityConfig={viewabilityConfig}
         extraData={extraData}

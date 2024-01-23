@@ -54,10 +54,9 @@ export default function SavedSongList({data, queryKeyRefresh}: Props) {
   };
 
   const onPressPlaylistItem = (turn_id: string, index: number) => {
+    dispatch(setActiveSlice('playlistSlice'));
     queryClient.setQueryData([queryKey.playlistSheet], data);
-    console.log('setting the index to :>>', index);
     dispatch(setPosition('FullScreen'));
-    console.log('onPressPlayList item called');
     dispatch(setIndex(index));
   };
 

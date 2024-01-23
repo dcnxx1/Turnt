@@ -1,14 +1,15 @@
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { StyleSheet, Text } from 'react-native';
-import { Button } from 'react-native-paper';
-import { SkeletonScreen } from '../../components';
-import { withLinearGradient } from '../../components/Screen/SkeletonScreen';
-import { millisToSeconds } from '../../helpers';
-import { EditorParams } from '../../nav/navparams';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {StyleSheet, Text} from 'react-native';
+import {Button} from 'react-native-paper';
+import {SkeletonScreen} from '../../components';
+import {withLinearGradient} from '../../components/Screen/SkeletonScreen';
+import {millisToSeconds} from '../../helpers';
+import {EditorParams} from '../../nav/navparams';
 
+import GenericScreen from '../../components/Screen/GenericScreen';
 import theme from '../../theme';
-import { getAudioDuration } from './hooks/useGenerateThumbnails';
+import {getAudioDuration} from './hooks/useGenerateThumbnails';
 import {
   VideoCoverColor,
   chooseDefaultCoverImage,
@@ -20,7 +21,6 @@ const LinearGradientScreen = withLinearGradient(SkeletonScreen);
 type EditorParamsPath = EditorParams['EditorScreen'];
 
 export default function FileSelectScreen() {
-
   const navigation = useNavigation<StackNavigationProp<EditorParams>>();
   const defaultCoverColor: VideoCoverColor = chooseDefaultCoverImage();
 
@@ -66,15 +66,13 @@ export default function FileSelectScreen() {
 
   const onPressGoBack = () => {
     // restoreTrackPlayerCapabilities();
-    navigation.goBack();
+    navigation.navigate('HomeStack');
   };
 
   const header = (
     <>
-      <Text onPress={onPressGoBack}>Terug</Text>
-      <Text style={Style.headerText}>Welkom {''}</Text>
-      <Text style={Style.colorWhite}>
-        Kies een MP3 bestand of een video om te uploaden
+      <Text onPress={onPressGoBack} style={Style.buttonText}>
+        Terug
       </Text>
     </>
   );
@@ -91,29 +89,24 @@ export default function FileSelectScreen() {
   );
 
   return (
-    <LinearGradientScreen
-      contentStyle={Style.content}
-      header={header}
+    <GenericScreen
+      left={header}
+      style={Style.content}
+      safeAreaInsets
       headerStyle={Style.headerStyle}
-      hasSafeAreaInsets
       content={content}
-      gradient={[theme.color.turnerDark, '#000']}
     />
   );
 }
 
 const Style = StyleSheet.create({
   content: {
-    height: '100%',
-    flex: 2,
-    justifyContent: 'space-evenly',
     alignItems: 'center',
+    backgroundColor: theme.color.turnerDark,
   },
   headerStyle: {
     justifyContent: 'center',
     alignItems: 'center',
-    height: '100%',
-    flex: 1,
     gap: 20,
   },
   colorWhite: {

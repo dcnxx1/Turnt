@@ -6,11 +6,8 @@ const playlistSheetSlice = createSlice({
   name: 'playlistSheetSlice',
   initialState: {
     position: 'Hidden' as PlaylistSheetState,
-
   },
   reducers: {
-
-
     setPosition: (state, {payload}: PayloadAction<PlaylistSheetState>) => {
       switch (payload) {
         case 'FullScreen': {
@@ -29,12 +26,6 @@ const playlistSheetSlice = createSlice({
           return {
             ...state,
             position: 'Partial',
-          };
-        }
-        default: {
-          return {
-            ...state,
-            position: 'Hidden',
           };
         }
       }
