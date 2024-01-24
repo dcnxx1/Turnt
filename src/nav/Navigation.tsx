@@ -1,6 +1,10 @@
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {
+  BottomTabBarProps,
+  createBottomTabNavigator,
+} from '@react-navigation/bottom-tabs';
 import {
   StackNavigationOptions,
+  StackNavigationProp,
   createStackNavigator,
 } from '@react-navigation/stack';
 import {PaperProvider} from 'react-native-paper';
@@ -18,10 +22,9 @@ import {createMaterialBottomTabNavigator} from 'react-native-paper/react-navigat
 import useLocalProfile from '../store/useLocalProfile';
 import {AccountSetupParams, EditorParams, HomeParams} from './navparams';
 import {NavScreenNames, RootNavNames} from './types';
-import { useEffect } from 'react';
+import {useCallback, useEffect, useLayoutEffect} from 'react';
+import {useNavigation} from '@react-navigation/native';
 
-
-const MaterialHomeStack = createMaterialBottomTabNavigator<HomeParams>()
 const HomeStack = createBottomTabNavigator<HomeParams>();
 const RootStack = createStackNavigator();
 const SetupStack = createStackNavigator<AccountSetupParams>();
@@ -32,7 +35,15 @@ const screenOptions: StackNavigationOptions = {
   gestureEnabled: true,
 };
 
+
 function HomeStackNavigator() {
+  const navigation = useNavigation<StackNavigationProp<HomeParams>>();
+  // otherwise the  skeletonFlashlists will reset idk why. 
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      detachPreviousScreen: false,
+    });
+  }, [navigation]);
 
   return (
     <HomeStack.Navigator
@@ -75,7 +86,9 @@ function SetupScreenStackNavigator() {
 function EditorStackNavigator() {
   return (
     <EditorStack.Navigator
-      screenOptions={screenOptions}
+      screenOptions={{
+        ...screenOptions,
+      }}
       initialRouteName={RootNavNames.EditorStack}>
       <EditorStack.Screen
         component={FileSelectScreen}

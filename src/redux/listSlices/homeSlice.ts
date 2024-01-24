@@ -33,6 +33,7 @@ const homeSlice = createSlice({
     });
     builder.addCase(actions.setIndex, (state, action) => {
       if (state.isActive) {
+        console.log('setIndex called inside homeSlice', action.payload);
         state.index = action.payload;
       }
     });

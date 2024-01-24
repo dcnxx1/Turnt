@@ -4,10 +4,11 @@ import {ITurn} from '../../../models/turn';
 import SkeletonFlashList from '../SkeletonFlashList';
 import useVideoList from '../hooks/useVideoList';
 import React, {useEffect} from 'react';
-import {ListRenderItem} from '@shopify/flash-list';
+import {FlashList, ListRenderItem} from '@shopify/flash-list';
 import withSyncMediaController from '../../MediaController/withSyncMediaController';
 import VideoPlayer from '../../Video/VideoPlayer';
 import {Dimensions} from 'react-native';
+import {useRef} from 'react';
 
 type Props = {
   data: ITurn[];
@@ -16,8 +17,8 @@ type Props = {
 const VideoSyncMediaController = withSyncMediaController(VideoPlayer);
 
 export default function PlaylistVideoManager({data}: Props) {
-  const [onViewableItemsChanged, keyExtractor, flashListRef, viewConfigRef] =
-    useVideoList();
+  const flashListRef = useRef<FlashList<ITurn> | null>(null);
+  const [onViewableItemsChanged, keyExtractor, viewConfigRef] = useVideoList();
   const {index, isActive} = useSelector(
     (state: RootState) => state.playlistSlice,
   );
@@ -49,10 +50,11 @@ export default function PlaylistVideoManager({data}: Props) {
   };
 
   return (
-    <SkeletonFlashList
+    <FlashList
       data={data}
       ref={flashListRef}
       renderItem={renderItem}
+      initialScrollIndex={0}
       keyExtractor={keyExtractor}
       snapToAlignment="start"
       snapToInterval={Dimensions.get('screen').height}

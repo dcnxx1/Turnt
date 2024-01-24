@@ -19,6 +19,7 @@ import useLocalProfile from '../../store/useLocalProfile';
 import TestList from '../../components/List/TestList';
 import {setActiveSlice} from '../../redux/videoListSlice';
 import homeSlice from '../../redux/listSlices/homeSlice';
+import { useEffect } from 'react';
 
 export default function ProfileScreen() {
   const queryClient = useQueryClient();
@@ -35,8 +36,12 @@ export default function ProfileScreen() {
   );
 
   const onPressUpload = () => {
-    navigation.push('EditorStack');
+    navigation.navigate('EditorStack');
   };
+
+  useEffect(() =>{ 
+    console.log("ProfileScreen rendered")
+  })
 
   return (
     <>

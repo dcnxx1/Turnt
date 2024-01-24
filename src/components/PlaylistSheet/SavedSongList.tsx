@@ -1,5 +1,5 @@
 import {useLayout} from '@react-native-community/hooks';
-import {FlashList, ListRenderItem} from '@shopify/flash-list';
+import {FlashList, ListRenderItem, ViewToken} from '@shopify/flash-list';
 import {useRef, useState} from 'react';
 import {Dimensions, RefreshControl} from 'react-native';
 import {useDispatch} from 'react-redux';
@@ -54,9 +54,9 @@ export default function SavedSongList({data, queryKeyRefresh}: Props) {
   };
 
   const onPressPlaylistItem = (turn_id: string, index: number) => {
+    dispatch(setPosition('FullScreen'));
     dispatch(setActiveSlice('playlistSlice'));
     queryClient.setQueryData([queryKey.playlistSheet], data);
-    dispatch(setPosition('FullScreen'));
     dispatch(setIndex(index));
   };
 
@@ -84,6 +84,14 @@ export default function SavedSongList({data, queryKeyRefresh}: Props) {
       }}
       bounces
       onRefresh={onPullToRefresh}
+      onViewableItemsChanged={(info: {viewableItems: ViewToken[]}) => {
+        if (info.viewableItems[0] && info.viewableItems[0].index !== null) {
+          console.log(
+            'This the information for savedSOngList :>>',
+            info.viewableItems[0].item,
+          );
+        }
+      }}
       refreshing={isRefreshing}
       estimatedItemSize={ESTIMATED_SONG_ITEM_SIZE}
       estimatedListSize={{

@@ -1,13 +1,12 @@
-import {useEffect} from 'react';
-import {Dimensions, FlatList, ViewToken} from 'react-native';
+import {FlashList, ListRenderItem} from '@shopify/flash-list';
+import {useEffect, useMemo, useRef} from 'react';
+import {Dimensions} from 'react-native';
 import {useSelector} from 'react-redux';
 import {ITurn} from '../../models/turn';
 import {RootState} from '../../redux/store';
 import withSyncMediaController from '../MediaController/withSyncMediaController';
 import VideoPlayer from '../Video/VideoPlayer';
-import SkeletonFlashList from './SkeletonFlashList';
 import useVideoList from './hooks/useVideoList';
-import {FlashList, ListRenderItem} from '@shopify/flash-list';
 
 type Props = {
   data: ITurn[];
@@ -25,45 +24,41 @@ const VideoSyncMediaController = withSyncMediaController(VideoPlayer);
 
 export default function VideoList({data}: Props) {
   const {index, isActive} = useSelector((state: RootState) => state.homeSlice);
-
+  const flashListRef = useRef<FlashList<ITurn> | null>(null);
   const [
     onViewableItemsChanged,
     keyExtractor,
-    flashlistRef,
     viewConfigRef,
     viewabilityConfigCallbackPairs,
   ] = useVideoList();
 
   useEffect(() => {
     if (isActive) {
-      if (flashlistRef.current) {
-        flashlistRef.current.scrollToIndex({
+      if (flashListRef.current) {
+        flashListRef.current.scrollToIndex({
           animated: true,
           index: index,
         });
       }
     }
-  }, [flashlistRef, index, data, isActive]);
+  }, [flashListRef, index, data, isActive]);
 
   return (
-    <FlatList
+    <FlashList
       extraData={data}
       data={data}
-      initialNumToRender={10}
-      // ref={flashlistRef}
+      ref={flashListRef}
       renderItem={renderItem}
       keyExtractor={keyExtractor}
       snapToAlignment="start"
       snapToInterval={Dimensions.get('screen').height}
-      // viewabilityConfig={viewConfigRef}
       viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
-      // onViewableItemsChanged={onViewableItemsChanged}
       decelerationRate={'fast'}
-      // estimatedItemSize={Dimensions.get('screen').height}
-      // estimatedListSize={{
-      //   width: Dimensions.get('screen').width,
-      //   height: Dimensions.get('screen').height,
-      // }}
+      estimatedItemSize={Dimensions.get('screen').height}
+      estimatedListSize={{
+        width: Dimensions.get('screen').width,
+        height: Dimensions.get('screen').height,
+      }}
     />
   );
 }
