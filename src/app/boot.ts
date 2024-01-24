@@ -15,11 +15,14 @@ export type UserStorage = {
   username: string;
   role: Role;
 };
+const PROGRESS_UPDATE_INTERAL_TRACK_PLAYER = 1000;
+
 export async function setupTrackPlayer() {
   try {
     await TrackPlayer.setupPlayer();
     await TrackPlayer.updateOptions({
       capabilities: trackPlayerCapabilities,
+      progressUpdateEventInterval: PROGRESS_UPDATE_INTERAL_TRACK_PLAYER,
     });
   } catch (err) {
     throw new Error('ERR SETUP TRACK PLAYER ' + err);

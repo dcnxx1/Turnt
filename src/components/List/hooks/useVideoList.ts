@@ -1,18 +1,15 @@
-import {FlashList} from '@shopify/flash-list';
-import {useDispatch, useSelector} from 'react-redux';
-import {ITurn} from '../../../models/turn';
-import {setActiveTurn, setIndex} from '../../../redux/videoListSlice';
-import {useVideoListContext} from '../../../shared/context/VideoListContext';
-import {useCallback, useEffect, useRef, useState} from 'react';
-import {useActiveTurnStore} from '../../../store';
+import {useRef} from 'react';
 import {
   ViewToken,
   ViewabilityConfig,
   ViewabilityConfigCallbackPair,
 } from 'react-native';
 import TrackPlayer from 'react-native-track-player';
+import {useDispatch} from 'react-redux';
+import {ITurn} from '../../../models/turn';
+import {setActiveTurn, setIndex} from '../../../redux/videoListSlice';
+import {useActiveTurnStore} from '../../../store';
 import {turnToTrackMapper} from '../../../utils';
-import {RootState} from '../../../redux/store';
 
 type VideoListHookReturnType = [
   onViewableItemsChanged: (info: {

@@ -1,8 +1,8 @@
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
 import {UseQueryResult, useQueryClient} from '@tanstack/react-query';
 import {useRef, useState} from 'react';
 import {
-  Animated,
-  Easing,
   NativeSyntheticEvent,
   StyleProp,
   StyleSheet,
@@ -10,16 +10,18 @@ import {
   ViewStyle,
 } from 'react-native';
 import PagerView from 'react-native-pager-view';
-import {Text} from 'react-native-paper';
+import {
+  FadeIn,
+  default as RNAnimated,
+  useSharedValue,
+} from 'react-native-reanimated';
+import {queryKey} from '../../api/api';
 import {ITurn} from '../../models/turn';
+import {HomeParams} from '../../nav/navparams';
 import useLocalProfile from '../../store/useLocalProfile';
 import FallbackMessage from '../Error/FallbackMessage';
 import SavedSongList from '../PlaylistSheet/SavedSongList';
-import RNAnimated, {FadeIn} from 'react-native-reanimated';
-import {useNavigation} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {HomeParams} from '../../nav/navparams';
-import {queryKey} from '../../api/api';
+import {useActiveTurnStore} from '../../store';
 
 type Props = {
   playlist: UseQueryResult<ITurn[] | undefined, Error>;
@@ -38,18 +40,23 @@ type OnPageSelected =
 export default function Tab({playlist, myUploads, style}: Props) {
   const [tabKey, setTabKey] = useState(0);
   const navigation = useNavigation<StackNavigationProp<HomeParams>>();
-  const ref = useRef<PagerView>(null);
-  const queryClient = useQueryClient();
+  const pagerViewRef = useRef<PagerView>(null);
   const me = useLocalProfile();
 
   const onEmptyUpload = () => {
     navigation.navigate('EditorStack');
   };
+
   const onPageSelected = (position: OnPageSelected) => {
-    if (ref.current && position) {
-      ref.current.setPage(position?.nativeEvent.position);
+    if (pagerViewRef.current && position) {
+      pagerViewRef.current.setPage(position?.nativeEvent.position);
       setTabKey(position?.nativeEvent.position);
     }
+  };
+
+  const handleTabKeyPress = (position: number) => {
+    pagerViewRef.current?.setPage(position);
+    setTabKey(position);
   };
 
   return (
@@ -57,13 +64,24 @@ export default function Tab({playlist, myUploads, style}: Props) {
       entering={FadeIn.delay(100)}
       style={[Style.container, style]}>
       <View style={Style.tabSelectorContainer}>
-        <Text style={Style.text}>Favorieten</Text>
-        <Text style={Style.text}>Mijn uploads</Text>
+        <RNAnimated.Text
+          onPress={() => handleTabKeyPress(0)}
+          style={[Style.text, {color: tabKey === 0 ? 'white' : 'gray'}]}>
+          Favorieten
+        </RNAnimated.Text>
+        {me.user?.role === 'Artist' && (
+          <RNAnimated.Text
+            onPress={() => handleTabKeyPress(1)}
+            style={[Style.text, {color: tabKey === 1 ? 'white' : 'gray'}]}>
+            Mijn uploads
+          </RNAnimated.Text>
+        )}
       </View>
       <PagerView
+        overdrag
         collapsable
         onPageSelected={onPageSelected}
-        ref={ref}
+        ref={pagerViewRef}
         initialPage={tabKey}
         style={Style.pagerViewContainer}>
         <View key="1">
@@ -101,13 +119,9 @@ export default function Tab({playlist, myUploads, style}: Props) {
 
 const Style = StyleSheet.create({
   container: {
-    borderWidth: 2,
-    borderColor: 'blue',
     flex: 1,
   },
   tabSelectorContainer: {
-    borderWidth: 2,
-    borderColor: 'yellow',
     width: '100%',
     flexDirection: 'row',
 
@@ -119,8 +133,6 @@ const Style = StyleSheet.create({
     flex: 1,
     width: '100%',
     height: '100%',
-    borderWidth: 2,
-    borderColor: 'red',
   },
   text: {
     fontSize: 16,

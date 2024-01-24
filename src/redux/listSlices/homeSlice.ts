@@ -33,7 +33,6 @@ const homeSlice = createSlice({
     });
     builder.addCase(actions.setIndex, (state, action) => {
       if (state.isActive) {
-        console.log('setIndex called inside homeSlice', action.payload);
         state.index = action.payload;
       }
     });
@@ -49,7 +48,6 @@ const homeSlice = createSlice({
     });
     //  TODO: check first if its active. could cause bugs
     builder.addCase(actions.setActiveSlice, (state, payload) => {
-      console.log('setActiveSlice activated');
       if (payload.payload === 'homeSlice') {
         state.isActive = true;
         state.isPlaying = true;

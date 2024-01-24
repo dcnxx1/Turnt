@@ -3,12 +3,23 @@ import {queryKey} from '../../api/api';
 import getMyUploadsByUserId from '../../api/myUploads';
 import {getPlaylistByUserId} from '../../api/playlist';
 import useLocalProfile from '../../store/useLocalProfile';
+import {getFeed} from '../../api/collection';
 
 export type QueryResult<T> = {
   data: T[] | undefined;
   error: Error | null;
 };
 const FIVE_MINUTES = 1000 * 60 * 5;
+
+export function useFeedQuery() {
+  const queryClient = useQueryClient();
+  return useQuery({
+    queryKey: [queryKey.feed],
+    queryFn: getFeed,
+    staleTime: FIVE_MINUTES,
+    initialData: queryClient.getQueryData([queryKey.feed]),
+  });
+}
 
 export function useMyPlaylistQuery() {
   const queryClient = useQueryClient();

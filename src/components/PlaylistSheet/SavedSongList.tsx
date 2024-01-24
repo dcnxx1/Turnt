@@ -17,6 +17,7 @@ import {
 import theme from '../../theme';
 import {useQueryClient} from '@tanstack/react-query';
 import {QueryKey, queryKey} from '../../api/api';
+import {useActiveTurnStore} from '../../store';
 
 type Props = {
   data: ITurn[];
@@ -84,14 +85,6 @@ export default function SavedSongList({data, queryKeyRefresh}: Props) {
       }}
       bounces
       onRefresh={onPullToRefresh}
-      onViewableItemsChanged={(info: {viewableItems: ViewToken[]}) => {
-        if (info.viewableItems[0] && info.viewableItems[0].index !== null) {
-          console.log(
-            'This the information for savedSOngList :>>',
-            info.viewableItems[0].item,
-          );
-        }
-      }}
       refreshing={isRefreshing}
       estimatedItemSize={ESTIMATED_SONG_ITEM_SIZE}
       estimatedListSize={{

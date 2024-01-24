@@ -4,6 +4,9 @@ import {COVER_KEY} from '../../s3';
 import {Text} from 'react-native-paper';
 import {secondsToDisplayTime} from '../../helpers';
 import {ITurn} from '../../models/turn';
+import {useActiveTurnStore} from '../../store';
+import {useEffect} from 'react';
+import theme from '../../theme';
 
 type Props = {
   duration: number;
@@ -21,8 +24,17 @@ export default function PlaylistItem({
   index,
   title,
 }: Props) {
+  const activeTurn = useActiveTurnStore(state => state.activeTurn);
+
   return (
-    <Pressable onPress={() => onPress(id, index)} style={Style.container}>
+    <Pressable
+      onPress={() => onPress(id, index)}
+      style={[
+        Style.container,
+        {
+          borderColor: activeTurn.turn_id === id ? 'red' : 'green',
+        },
+      ]}>
       <Image style={Style.cover} source={{uri: useCDN(COVER_KEY + cover)}} />
       <View style={Style.itemContainer}>
         <Text>{title}</Text>
@@ -40,6 +52,8 @@ const Style = StyleSheet.create({
     flexDirection: 'row',
     padding: 10,
     borderRadius: 15,
+
+    backgroundColor: theme.color.turner,
   },
   cover: {
     width: 50,
@@ -47,8 +61,6 @@ const Style = StyleSheet.create({
     resizeMode: 'cover',
   },
   itemContainer: {
-    borderRightWidth: 2,
-    borderRightColor: 'white',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',

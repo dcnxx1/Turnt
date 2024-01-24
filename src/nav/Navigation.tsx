@@ -40,6 +40,7 @@ function HomeStackNavigator() {
   const navigation = useNavigation<StackNavigationProp<HomeParams>>();
   // otherwise the  skeletonFlashlists will reset idk why. 
   useLayoutEffect(() => {
+   
     navigation.setOptions({
       detachPreviousScreen: false,
     });

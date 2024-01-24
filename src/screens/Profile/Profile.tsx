@@ -1,8 +1,7 @@
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet} from 'react-native';
 import GenericScreen from '../../components/Screen/GenericScreen';
 import theme from '../../theme';
 import ProfileScreen from './ProfileScreen';
-import withTabbarScreen from '../../components/Tabbar/withTabbarScreen';
 
 export default function Profile(): JSX.Element {
   const content = (
@@ -12,7 +11,12 @@ export default function Profile(): JSX.Element {
   );
 
   return (
-    <GenericScreen withPaddingBottom={false} safeAreaInsets  style={Style.container} content={content} />
+    <GenericScreen
+      withPaddingBottom={false}
+      safeAreaInsets
+      style={Style.container}
+      content={content}
+    />
   );
 }
 
