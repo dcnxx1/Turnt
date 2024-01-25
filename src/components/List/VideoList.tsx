@@ -7,14 +7,21 @@ import {RootState} from '../../redux/store';
 import withSyncMediaController from '../MediaController/withSyncMediaController';
 import VideoPlayer from '../Video/VideoPlayer';
 import useVideoList from './hooks/useVideoList';
+import AudioPlayerManager from '../Audio/AudioPlayerManager';
+import {useCDN} from '../../api/api';
+import {COVER_KEY} from '../../s3';
 
 type Props = {
   data: ITurn[];
 };
 
-const renderItem: ListRenderItem<ITurn> = ({item: {turn_id, source}}) => {
+const renderItem: ListRenderItem<ITurn> = ({
+  item: {turn_id, source, type, cover},
+}) => {
   return (
     <VideoSyncMediaController
+      cover={cover}
+      type={type}
       id={'homeSlice'}
       videoId={turn_id}
       source={source}

@@ -1,23 +1,26 @@
-import {useNavigation} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {useQueryClient} from '@tanstack/react-query';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { useQueryClient } from '@tanstack/react-query';
 import React from 'react';
-import {Pressable, StyleSheet} from 'react-native';
-import {Text} from 'react-native-paper';
-import {useSelector} from 'react-redux';
-import {queryKey, useCDN} from '../../api/api';
-import {Profile as UserProfile} from '../../api/profile';
-import {AvatarWithUsername} from '../../components/Images/Avatar';
-import {HomeParams} from '../../nav/navparams';
-import {RootState} from '../../redux/store';
+import { Pressable, StyleSheet } from 'react-native';
+import { Text } from 'react-native-paper';
+import { useSelector } from 'react-redux';
+import { queryKey, useCDN } from '../../api/api';
+import { Profile as UserProfile } from '../../api/profile';
+import { AvatarWithUsername } from '../../components/Images/Avatar';
+import { MINIPLAYER_HEIGHT } from '../../components/PlaylistSheet/components/Miniplayer';
+import Tab from '../../components/Tabs/Tab';
+import { HomeParams } from '../../nav/navparams';
+import { RootState } from '../../redux/store';
 import {
   useMyPlaylistQuery,
   useMyUploadsQuery,
 } from '../../shared/hooks/useQueryData';
 import useLocalProfile from '../../store/useLocalProfile';
-import AudioPlayer from '../../components/Audio/AudioPlayer';
 
 export default function ProfileScreen() {
+  
+
   const queryClient = useQueryClient();
   const remoteProfile: UserProfile | undefined = queryClient.getQueryData([
     queryKey.profile,
@@ -35,9 +38,7 @@ export default function ProfileScreen() {
     navigation.navigate('EditorStack');
   };
 
-  const onProgress = (position: number) => {
-    console.log('inside profileScreen: ', position);
-  };
+
 
   return (
     <>
@@ -52,20 +53,11 @@ export default function ProfileScreen() {
         </Pressable>
       )}
 
-      {myUploadsData.data && (
-        <AudioPlayer
-          paused={false}
-          onProgress={onProgress}
-          id={myUploadsData.data[0].turn_id}
-          source={{uri: myUploadsData.data[0].source}}
-        />
-      )}
-
-      {/* <Tab
+      <Tab
         style={{paddingBottom: isPlaylistSliceActive ? MINIPLAYER_HEIGHT : 0}}
         playlist={myPlaylistData}
         myUploads={myUploadsData}
-      /> */}
+      />
     </>
   );
 }
