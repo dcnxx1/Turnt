@@ -1,6 +1,10 @@
-import {useEffect, useRef} from 'react';
+import {useCallback, useEffect, useRef} from 'react';
 import {Dimensions, View} from 'react-native';
-import TrackPlayer from 'react-native-track-player';
+import TrackPlayer, {
+  Event,
+  useProgress,
+  useTrackPlayerEvents,
+} from 'react-native-track-player';
 import Video, {OnProgressData} from 'react-native-video';
 import {useDispatch, useSelector} from 'react-redux';
 import {useCDN} from '../../api/api';
@@ -16,6 +20,9 @@ import {useSeek, useVideoStore} from '../../store';
 import ImageBlurBackground from '../Images/ImageBlurBackground';
 import VideoPausedOverlay from '../Screen/VideoPausedOverlay';
 import {VideoPlayerProps} from '../Video/VideoPlayer';
+import {debounce, throttle} from 'lodash';
+
+const TrackPlayerEvents: Event[] = [Event.RemoteSeek];
 
 export default function withSyncMediaController(
   VideoPlayer: React.ForwardRefExoticComponent<
@@ -59,15 +66,25 @@ export default function withSyncMediaController(
     const onProgress = async ({currentTime}: OnProgressData) => {
       if (isSeeking) return;
       setProgress(currentTime);
-      await TrackPlayer.seekTo(~~currentTime);
+      await TrackPlayer.seekTo(currentTime);
     };
+
+    useTrackPlayerEvents(TrackPlayerEvents, ev => {
+      if (ev.type === Event.RemoteSeek) {
+        ref.current?.seek(ev.position);
+        setProgress(ev.position);
+      }
+    });
 
     const onPressScreen = () => {
       dispatch(togglePlaying());
     };
 
     const onEnd = () => {
-      dispatch(increment());
+      const progress = useVideoStore.getState().progress;
+      if (progress >= activeTurn.duration) {
+        dispatch(increment());
+      }
     };
 
     return (
@@ -89,8 +106,8 @@ export default function withSyncMediaController(
           ) : null}
           <VideoPlayer
             ref={ref}
-            onEnd={onEnd}
-            onProgress={onProgress}
+            onEnd={activeTurn.turn_id === videoId ? onEnd : undefined}
+            onProgress={activeTurn.turn_id === videoId ? onProgress : undefined}
             source={useCDN(TURN_KEY + source)}
             paused={activeTurn.turn_id === videoId ? !isPlaying : true}
             style={{
