@@ -1,20 +1,21 @@
-import {useEffect, useMemo, useRef} from 'react';
+import {useEffect, useRef} from 'react';
+import {Dimensions, View} from 'react-native';
 import TrackPlayer from 'react-native-track-player';
 import Video, {OnProgressData} from 'react-native-video';
 import {useDispatch, useSelector} from 'react-redux';
 import {useCDN} from '../../api/api';
 import {ITurn} from '../../models/turn';
 import {RootState} from '../../redux/store';
-import {setIsPlaying, togglePlaying} from '../../redux/videoListSlice';
+import {
+  increment,
+  setIsPlaying,
+  togglePlaying,
+} from '../../redux/videoListSlice';
 import {COVER_KEY, TURN_KEY} from '../../s3';
-import {useVideoListContext} from '../../shared/context/VideoListContext';
 import {useSeek, useVideoStore} from '../../store';
-import {VideoPlayerProps} from '../Video/VideoPlayer';
-import {Dimensions, Pressable, View} from 'react-native';
-import {setPosition} from '../../redux/playlistSheetSlice';
 import ImageBlurBackground from '../Images/ImageBlurBackground';
-import Flex from '../Misc/Flex';
 import VideoPausedOverlay from '../Screen/VideoPausedOverlay';
+import {VideoPlayerProps} from '../Video/VideoPlayer';
 
 export default function withSyncMediaController(
   VideoPlayer: React.ForwardRefExoticComponent<
@@ -65,8 +66,14 @@ export default function withSyncMediaController(
       dispatch(togglePlaying());
     };
 
+    const onEnd = () => {
+      dispatch(increment());
+    };
+
     return (
-      <VideoPausedOverlay paused={activeTurn.turn_id === videoId && !isPlaying} onPress={onPressScreen}>
+      <VideoPausedOverlay
+        paused={activeTurn.turn_id === videoId && !isPlaying}
+        onPress={onPressScreen}>
         <View
           style={{
             position: 'relative',
@@ -80,10 +87,9 @@ export default function withSyncMediaController(
               }}
             />
           ) : null}
-
           <VideoPlayer
             ref={ref}
-            onEnd={() => console.log('on end reached')}
+            onEnd={onEnd}
             onProgress={onProgress}
             source={useCDN(TURN_KEY + source)}
             paused={activeTurn.turn_id === videoId ? !isPlaying : true}

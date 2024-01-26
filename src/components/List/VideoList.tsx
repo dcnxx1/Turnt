@@ -1,5 +1,5 @@
 import {FlashList, ListRenderItem} from '@shopify/flash-list';
-import {useEffect, useMemo, useRef} from 'react';
+import {useEffect, useRef} from 'react';
 import {Dimensions} from 'react-native';
 import {useSelector} from 'react-redux';
 import {ITurn} from '../../models/turn';
@@ -7,9 +7,6 @@ import {RootState} from '../../redux/store';
 import withSyncMediaController from '../MediaController/withSyncMediaController';
 import VideoPlayer from '../Video/VideoPlayer';
 import useVideoList from './hooks/useVideoList';
-import AudioPlayerManager from '../Audio/AudioPlayerManager';
-import {useCDN} from '../../api/api';
-import {COVER_KEY} from '../../s3';
 
 type Props = {
   data: ITurn[];
@@ -33,12 +30,7 @@ const VideoSyncMediaController = withSyncMediaController(VideoPlayer);
 export default function VideoList({data}: Props) {
   const {index, isActive} = useSelector((state: RootState) => state.homeSlice);
   const flashListRef = useRef<FlashList<ITurn> | null>(null);
-  const [
-    onViewableItemsChanged,
-    keyExtractor,
-    viewConfigRef,
-    viewabilityConfigCallbackPairs,
-  ] = useVideoList();
+  const [keyExtractor, viewabilityConfigCallbackPairs] = useVideoList();
 
   useEffect(() => {
     if (isActive) {
@@ -59,6 +51,7 @@ export default function VideoList({data}: Props) {
       renderItem={renderItem}
       keyExtractor={keyExtractor}
       snapToAlignment="start"
+      disableIntervalMomentum
       snapToInterval={Dimensions.get('screen').height}
       viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
       decelerationRate={'fast'}

@@ -12,12 +12,7 @@ import {useActiveTurnStore} from '../../../store';
 import {turnToTrackMapper} from '../../../utils';
 
 type VideoListHookReturnType = [
-  onViewableItemsChanged: (info: {
-    viewableItems: ViewToken[];
-    changed: ViewToken[];
-  }) => void,
   keyExtractor: (item: ITurn) => string,
-  viewConfigRef: ViewabilityConfig,
   viewablityConfigCallbackPairs: React.MutableRefObject<
     ViewabilityConfigCallbackPair[]
   >,
@@ -68,10 +63,5 @@ export default function useVideoList(): VideoListHookReturnType {
     return item.turn_id;
   };
 
-  return [
-    onViewableItemsChanged,
-    keyExtractor,
-    viewConfigRef,
-    viewablityConfigCallbackPairs,
-  ];
+  return [keyExtractor, viewablityConfigCallbackPairs];
 }

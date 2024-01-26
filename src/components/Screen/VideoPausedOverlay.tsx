@@ -17,8 +17,6 @@ type Props = {
 };
 const AnimatedLinear = RNAnimated.createAnimatedComponent(LinearGradient);
 export default function VideoPausedOverlay({children, paused, onPress}: Props) {
-  const {title, alias} = useActiveTurnStore(state => state.activeTurn);
-
   const animatedBackgroundOpacity = useAnimatedStyle(() => {
     return {
       opacity: paused
