@@ -11,6 +11,7 @@ import {ITurn} from '../../models/turn';
 import {RootState} from '../../redux/store';
 import {
   increment,
+  setActiveSlice,
   setIsPlaying,
   togglePlaying,
 } from '../../redux/videoListSlice';
@@ -19,6 +20,7 @@ import {useSeek, useVideoStore} from '../../store';
 import ImageBlurBackground from '../Images/ImageBlurBackground';
 import VideoPausedOverlay from '../Screen/VideoPausedOverlay';
 import {VideoPlayerProps} from '../Video/VideoPlayer';
+import {setPosition} from '../../redux/playlistSheetSlice';
 
 const TrackPlayerEvents: Event[] = [Event.RemoteSeek];
 
@@ -46,7 +48,7 @@ export default function withSyncMediaController(
     const {seekTo, setSeekTo, isSeeking} = useSeek();
     const setProgress = useVideoStore(state => state.setProgress);
     const dispatch = useDispatch();
-
+    const homeSlice = useSelector((state: RootState) => state.homeSlice);
     useEffect(() => {
       if (ref.current) {
         ref.current.seek(seekTo);
@@ -74,7 +76,14 @@ export default function withSyncMediaController(
       }
     });
 
-    const onPressScreen = () => {
+    const onPressVideoPausedOverlay = () => {
+      if (id === 'homeSlice') {
+        if (homeSlice.isActive === false) {
+          dispatch(setActiveSlice('homeSlice'));
+          dispatch(setPosition('Hidden'));
+          dispatch(togglePlaying());
+        }
+      }
       dispatch(togglePlaying());
     };
 
@@ -88,7 +97,7 @@ export default function withSyncMediaController(
     return (
       <VideoPausedOverlay
         paused={activeTurn.turn_id === videoId && !isPlaying}
-        onPress={onPressScreen}>
+        onPress={onPressVideoPausedOverlay}>
         <View
           style={{
             position: 'relative',

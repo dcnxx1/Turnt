@@ -1,7 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {initialState} from './homeSlice';
-import * as actions from '../videoListSlice';
 import {setPosition} from '../playlistSheetSlice';
+import * as actions from '../videoListSlice';
+import {initialState} from './homeSlice';
 
 const playlistSlice = createSlice({
   name: 'playlistSlice',
@@ -50,7 +50,6 @@ const playlistSlice = createSlice({
     });
     builder.addCase(actions.setActiveTurn, (state, action) => {
       if (state.isActive) {
-        console.log('SetActiveTurn dispatched');
         state.activeTurn = action.payload;
       }
     });

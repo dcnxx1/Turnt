@@ -1,11 +1,13 @@
-import { Image, Pressable, StyleSheet, View } from 'react-native';
-import { Text } from 'react-native-paper';
-import { useCDN } from '../../api/api';
-import { secondsToDisplayTime } from '../../helpers';
-import { ITurn } from '../../models/turn';
-import { COVER_KEY } from '../../s3';
-import { useActiveTurnStore } from '../../store';
+import {Image, Pressable, StyleSheet, View} from 'react-native';
+import {Text} from 'react-native-paper';
+import {useCDN} from '../../api/api';
+import {secondsToDisplayTime} from '../../helpers';
+import {ITurn} from '../../models/turn';
+import {COVER_KEY} from '../../s3';
+import {useActiveTurnStore} from '../../store';
 import theme from '../../theme';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../redux/store';
 
 type Props = {
   duration: number;
@@ -24,7 +26,9 @@ export default function PlaylistItem({
   title,
 }: Props) {
   const activeTurn = useActiveTurnStore(state => state.activeTurn);
-
+  const isPlaylistSliceActive = useSelector(
+    (state: RootState) => state.playlistSlice.isActive,
+  );
   return (
     <Pressable
       onPress={() => onPress(id, index)}
@@ -32,7 +36,9 @@ export default function PlaylistItem({
         Style.container,
         {
           borderColor:
-            activeTurn.turn_id === id ? 'red' : theme.color.turnerPurple,
+            isPlaylistSliceActive && activeTurn.turn_id === id
+              ? 'red'
+              : theme.color.turnerPurple,
         },
       ]}>
       <Image style={Style.cover} source={{uri: useCDN(COVER_KEY + cover)}} />

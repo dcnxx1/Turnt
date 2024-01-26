@@ -1,7 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit';
-import * as actions from '../videoListSlice';
-import * as playlistSheetActions from '../playlistSheetSlice';
 import {ITurn} from '../../models/turn';
+import * as actions from '../videoListSlice';
 
 export const initialState = {
   index: 0,
