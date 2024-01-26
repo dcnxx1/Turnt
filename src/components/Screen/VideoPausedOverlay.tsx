@@ -1,32 +1,35 @@
 import {ReactElement} from 'react';
-import {View, Animated, Pressable, Dimensions} from 'react-native';
+import {Pressable, StyleSheet} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+
+import {Icon} from 'react-native-paper';
 import RNAnimated, {
-  processColor,
   useAnimatedStyle,
-  useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
+import {useActiveTurnStore} from '../../store';
 import theme from '../../theme';
-import {Avatar, Icon} from 'react-native-paper';
 
 type Props = {
   children: ReactElement;
   paused: boolean;
   onPress: () => void;
 };
+const AnimatedLinear = RNAnimated.createAnimatedComponent(LinearGradient);
 export default function VideoPausedOverlay({children, paused, onPress}: Props) {
-  const animatedOpacity = useSharedValue(0);
+  const {title, alias} = useActiveTurnStore(state => state.activeTurn);
+
   const animatedBackgroundOpacity = useAnimatedStyle(() => {
     return {
       opacity: paused
-        ? withSpring(0.5, {
+        ? withSpring(0.7, {
             duration: 250,
-            overshootClamping: false,
+            overshootClamping: true,
             stiffness: 100,
           })
-        : withSpring(1, {
+        : withSpring(0, {
             duration: 250,
-            overshootClamping: false,
+            overshootClamping: true,
             stiffness: 100,
           }),
     };
@@ -38,46 +41,59 @@ export default function VideoPausedOverlay({children, paused, onPress}: Props) {
     };
   }, [paused]);
 
-  const animatedBorder = useAnimatedStyle(() => {
+  const animatedScaleButtonContainer = useAnimatedStyle(() => {
     return {
-      padding: paused ? withSpring(20) : withSpring(0),
+      transform: [{scale: paused ? withSpring(1) : withSpring(0.2)}],
     };
   }, [paused]);
 
   return (
-    <RNAnimated.View
-      style={[
-        animatedBackgroundOpacity,
-        {backgroundColor: 'black', position: 'relative'},
-      ]}>
+    <RNAnimated.View style={Style.container}>
       <Pressable onPress={onPress}>
         {children}
-
         <RNAnimated.View
-          style={[
-            {
-              position: 'absolute',
-              width: '100%',
-              height: '100%',
-              zIndex: 25,
-              justifyContent: 'center',
-              alignItems: 'center',
-            },
-            animatedIconBackgroundOpacity,
-          ]}>
-          <RNAnimated.View
-            style={[
-              {
-                borderRadius: (55 * 2) / 2,
-
-                backgroundColor: theme.color.turner,
-              },
-              animatedBorder,
-            ]}>
-            <Icon size={55} source={require('../../assets/icons/pause.png')} />
+          style={[Style.interactionContainer, animatedIconBackgroundOpacity]}>
+          <RNAnimated.View style={[animatedScaleButtonContainer]}>
+            <Icon
+              size={100}
+              source={require('../../assets/icons/pause_button_subtract_bg.png')}
+            />
           </RNAnimated.View>
         </RNAnimated.View>
+        <AnimatedLinear
+          colors={[theme.color.turner, theme.color.turnerPurple]}
+          style={[Style.linearGradient, animatedBackgroundOpacity]}
+        />
       </Pressable>
     </RNAnimated.View>
   );
 }
+
+const Style = StyleSheet.create({
+  container: {
+    flex: 1,
+    position: 'relative',
+  },
+  linearGradient: {
+    flex: 1,
+    height: '100%',
+    width: '100%',
+    zIndex: 15,
+    position: 'absolute',
+    opacity: 0.7,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  interactionContainer: {
+    position: 'absolute',
+    zIndex: 22,
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  textStyle: {
+    fontSize: 24,
+    color: 'white',
+  },
+});

@@ -66,7 +66,7 @@ export default function FileSelectScreen() {
 
   const onPressGoBack = () => {
     // restoreTrackPlayerCapabilities();
-    navigation.navigate('HomeStack');
+    navigation.goBack();
   };
 
   const header = (
