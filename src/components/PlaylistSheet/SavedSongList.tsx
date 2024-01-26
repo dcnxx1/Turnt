@@ -1,23 +1,16 @@
 import {useLayout} from '@react-native-community/hooks';
-import {FlashList, ListRenderItem, ViewToken} from '@shopify/flash-list';
+import {FlashList, ListRenderItem} from '@shopify/flash-list';
+import {useQueryClient} from '@tanstack/react-query';
 import {useRef, useState} from 'react';
-import {Dimensions, RefreshControl} from 'react-native';
+import {Dimensions} from 'react-native';
 import {useDispatch} from 'react-redux';
+import {QueryKey, queryKey} from '../../api/api';
 import {ITurn} from '../../models/turn';
-import _ from 'lodash';
+import {setPosition} from '../../redux/playlistSheetSlice';
+import {setActiveSlice, setIndex} from '../../redux/videoListSlice';
+import theme from '../../theme';
 import SkeletonFlashList from '../List/SkeletonFlashList';
 import PlaylistItem from './PlaylistItem';
-import {setPosition} from '../../redux/playlistSheetSlice';
-import {
-  setActiveSlice,
-  setActiveTurn,
-  setIndex,
-  setIsPlaying,
-} from '../../redux/videoListSlice';
-import theme from '../../theme';
-import {useQueryClient} from '@tanstack/react-query';
-import {QueryKey, queryKey} from '../../api/api';
-import {useActiveTurnStore} from '../../store';
 
 type Props = {
   data: ITurn[];

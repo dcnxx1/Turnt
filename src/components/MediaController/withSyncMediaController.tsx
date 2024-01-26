@@ -1,8 +1,7 @@
-import {useCallback, useEffect, useRef} from 'react';
+import {useEffect, useRef} from 'react';
 import {Dimensions, View} from 'react-native';
 import TrackPlayer, {
   Event,
-  useProgress,
   useTrackPlayerEvents,
 } from 'react-native-track-player';
 import Video, {OnProgressData} from 'react-native-video';
@@ -20,7 +19,6 @@ import {useSeek, useVideoStore} from '../../store';
 import ImageBlurBackground from '../Images/ImageBlurBackground';
 import VideoPausedOverlay from '../Screen/VideoPausedOverlay';
 import {VideoPlayerProps} from '../Video/VideoPlayer';
-import {debounce, throttle} from 'lodash';
 
 const TrackPlayerEvents: Event[] = [Event.RemoteSeek];
 

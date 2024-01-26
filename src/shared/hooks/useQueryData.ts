@@ -4,6 +4,7 @@ import getMyUploadsByUserId from '../../api/myUploads';
 import {getPlaylistByUserId} from '../../api/playlist';
 import useLocalProfile from '../../store/useLocalProfile';
 import {getFeed} from '../../api/collection';
+import { getProfile } from '../../api/profile';
 
 export type QueryResult<T> = {
   data: T[] | undefined;
@@ -41,4 +42,17 @@ export function useMyUploadsQuery() {
     staleTime: FIVE_MINUTES,
     initialData: queryClient.getQueryData([queryKey.myUploads]),
   });
+}
+
+
+export function useMyRemoteProfile () { 
+  const queryClient = useQueryClient()
+  const me = useLocalProfile()
+  return useQuery({
+    queryKey: [queryKey.profile],
+    queryFn: async () => await getProfile(me.user?.user_id ?? ''),
+    initialData: queryClient.getQueryData([queryKey.profile]),
+    staleTime: FIVE_MINUTES,
+    gcTime: Infinity
+  })
 }

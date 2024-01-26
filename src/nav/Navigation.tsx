@@ -35,12 +35,10 @@ const screenOptions: StackNavigationOptions = {
   gestureEnabled: true,
 };
 
-
 function HomeStackNavigator() {
   const navigation = useNavigation<StackNavigationProp<HomeParams>>();
-  // otherwise the  skeletonFlashlists will reset idk why. 
+  // otherwise the  skeletonFlashlists will reset idk why.
   useLayoutEffect(() => {
-   
     navigation.setOptions({
       detachPreviousScreen: false,
     });
@@ -85,6 +83,13 @@ function SetupScreenStackNavigator() {
 }
 
 function EditorStackNavigator() {
+  const navigation = useNavigation<StackNavigationProp<EditorParams>>();
+  // otherwise the  skeletonFlashlists will reset idk why.
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      detachPreviousScreen: false,
+    });
+  }, [navigation]);
   return (
     <EditorStack.Navigator
       screenOptions={{

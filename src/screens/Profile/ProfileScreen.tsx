@@ -1,30 +1,24 @@
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { useQueryClient } from '@tanstack/react-query';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
 import React from 'react';
-import { Pressable, StyleSheet } from 'react-native';
-import { Text } from 'react-native-paper';
-import { useSelector } from 'react-redux';
-import { queryKey, useCDN } from '../../api/api';
-import { Profile as UserProfile } from '../../api/profile';
-import { AvatarWithUsername } from '../../components/Images/Avatar';
-import { MINIPLAYER_HEIGHT } from '../../components/PlaylistSheet/components/Miniplayer';
+import {Pressable, StyleSheet} from 'react-native';
+import {Text} from 'react-native-paper';
+import {useSelector} from 'react-redux';
+import {useCDN} from '../../api/api';
+import {AvatarWithUsername} from '../../components/Images/Avatar';
+import {MINIPLAYER_HEIGHT} from '../../components/PlaylistSheet/components/Miniplayer';
 import Tab from '../../components/Tabs/Tab';
-import { HomeParams } from '../../nav/navparams';
-import { RootState } from '../../redux/store';
+import {HomeParams} from '../../nav/navparams';
+import {RootState} from '../../redux/store';
 import {
   useMyPlaylistQuery,
+  useMyRemoteProfile,
   useMyUploadsQuery,
 } from '../../shared/hooks/useQueryData';
 import useLocalProfile from '../../store/useLocalProfile';
 
 export default function ProfileScreen() {
-  
-
-  const queryClient = useQueryClient();
-  const remoteProfile: UserProfile | undefined = queryClient.getQueryData([
-    queryKey.profile,
-  ]);
+  const remoteProfile = useMyRemoteProfile();
   const me = useLocalProfile();
   const myPlaylistData = useMyPlaylistQuery();
   const myUploadsData = useMyUploadsQuery();
@@ -38,13 +32,11 @@ export default function ProfileScreen() {
     navigation.navigate('EditorStack');
   };
 
-
-
   return (
     <>
       <AvatarWithUsername
-        source={remoteProfile?.avatar && useCDN(remoteProfile.avatar)}
-        username={remoteProfile?.alias ? remoteProfile.alias : ''}
+        source={remoteProfile.data?.alias && useCDN(remoteProfile.data.avatar)}
+        username={remoteProfile?.data?.alias ? remoteProfile?.data?.alias : ''}
         spacing={10}
       />
       {me.user?.role === 'Artist' && (
@@ -52,7 +44,6 @@ export default function ProfileScreen() {
           <Text style={Style.text}>Uploaden</Text>
         </Pressable>
       )}
-
       <Tab
         style={{paddingBottom: isPlaylistSliceActive ? MINIPLAYER_HEIGHT : 0}}
         playlist={myPlaylistData}

@@ -1,11 +1,10 @@
-import {Image, Pressable, StyleSheet, View} from 'react-native';
-import {useCDN} from '../../api/api';
-import {COVER_KEY} from '../../s3';
-import {Text} from 'react-native-paper';
-import {secondsToDisplayTime} from '../../helpers';
-import {ITurn} from '../../models/turn';
-import {useActiveTurnStore} from '../../store';
-import {useEffect} from 'react';
+import { Image, Pressable, StyleSheet, View } from 'react-native';
+import { Text } from 'react-native-paper';
+import { useCDN } from '../../api/api';
+import { secondsToDisplayTime } from '../../helpers';
+import { ITurn } from '../../models/turn';
+import { COVER_KEY } from '../../s3';
+import { useActiveTurnStore } from '../../store';
 import theme from '../../theme';
 
 type Props = {
@@ -32,7 +31,8 @@ export default function PlaylistItem({
       style={[
         Style.container,
         {
-          borderColor: activeTurn.turn_id === id ? 'red' : 'green',
+          borderColor:
+            activeTurn.turn_id === id ? 'red' : theme.color.turnerPurple,
         },
       ]}>
       <Image style={Style.cover} source={{uri: useCDN(COVER_KEY + cover)}} />
@@ -52,8 +52,7 @@ const Style = StyleSheet.create({
     flexDirection: 'row',
     padding: 10,
     borderRadius: 15,
-
-    backgroundColor: theme.color.turner,
+    borderWidth: 2,
   },
   cover: {
     width: 50,

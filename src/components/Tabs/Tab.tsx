@@ -98,7 +98,7 @@ export default function Tab({playlist, myUploads, style}: Props) {
             />
           </FallbackMessage>
         </View>
-        <View key="2">
+        <View style={{borderWidth: 2, borderColor: 'orange'}} key="2">
           <FallbackMessage
             onEmptyPressAction={onEmptyUpload}
             style={Style.fallbackMyUploads}
