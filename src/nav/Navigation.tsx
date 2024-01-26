@@ -1,12 +1,11 @@
-import {
-  BottomTabBarProps,
-  createBottomTabNavigator,
-} from '@react-navigation/bottom-tabs';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {useNavigation} from '@react-navigation/native';
 import {
   StackNavigationOptions,
   StackNavigationProp,
   createStackNavigator,
 } from '@react-navigation/stack';
+import {useLayoutEffect} from 'react';
 import {PaperProvider} from 'react-native-paper';
 import Tabbar from '../components/Tabbar/Tabbar';
 import {
@@ -18,12 +17,9 @@ import {
 } from '../screens';
 import AccountSetupScreen from '../screens/AccountSetup/AccountSetupScreen';
 import AuthScreen from '../screens/Auth/AuthScreen';
-import {createMaterialBottomTabNavigator} from 'react-native-paper/react-navigation';
 import useLocalProfile from '../store/useLocalProfile';
 import {AccountSetupParams, EditorParams, HomeParams} from './navparams';
 import {NavScreenNames, RootNavNames} from './types';
-import {useCallback, useEffect, useLayoutEffect} from 'react';
-import {useNavigation} from '@react-navigation/native';
 
 const HomeStack = createBottomTabNavigator<HomeParams>();
 const RootStack = createStackNavigator();

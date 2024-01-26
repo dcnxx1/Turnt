@@ -54,11 +54,6 @@ export default function ProfileScreen() {
 }
 
 const Style = StyleSheet.create({
-  audiPlayer: {},
-  container: {
-    borderWidth: 5,
-    borderColor: 'red',
-  },
   avatar: {
     width: 100,
     height: 100,

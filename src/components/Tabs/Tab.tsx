@@ -98,7 +98,7 @@ export default function Tab({playlist, myUploads, style}: Props) {
             />
           </FallbackMessage>
         </View>
-        <View style={{borderWidth: 2, borderColor: 'orange'}} key="2">
+        <View key="2">
           <FallbackMessage
             onEmptyPressAction={onEmptyUpload}
             style={Style.fallbackMyUploads}
@@ -124,7 +124,6 @@ const Style = StyleSheet.create({
   tabSelectorContainer: {
     width: '100%',
     flexDirection: 'row',
-
     justifyContent: 'space-evenly',
     alignItems: 'center',
     height: 30,

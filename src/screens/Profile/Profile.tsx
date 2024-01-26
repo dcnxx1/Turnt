@@ -24,13 +24,4 @@ const Style = StyleSheet.create({
   container: {
     backgroundColor: theme.color.turnerDark,
   },
-  contentStyle: {
-    backgroundColor: 'yellow',
-    borderWidth: 2,
-    borderColor: 'black',
-  },
-  headerStyle: {
-    borderWidth: 2,
-    borderColor: 'green',
-  },
 });
