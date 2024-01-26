@@ -1,8 +1,12 @@
-import BottomSheet from '@gorhom/bottom-sheet';
 import {BlurView} from '@react-native-community/blur';
 import {debounce} from 'lodash';
-import {useMemo} from 'react';
 import {StyleSheet, View} from 'react-native';
+import RNAnimated, {
+  SharedValue,
+  interpolate,
+  useAnimatedStyle,
+  useDerivedValue,
+} from 'react-native-reanimated';
 import {useDispatch} from 'react-redux';
 import {
   decrement,
@@ -11,7 +15,7 @@ import {
 } from '../../../redux/videoListSlice';
 import {useActiveTurnStore} from '../../../store';
 import Flex from '../../Misc/Flex';
-import {blurViewConfig, bottomSheetConfig} from '../configs';
+import {blurViewConfig} from '../configs';
 import MediaControllerArtistSong from './MediaControllerArtistSong';
 import {
   PlayNextButton,
@@ -19,13 +23,18 @@ import {
   TogglePlayPauseButton,
 } from './MediaControllerButtons';
 import TimelineSliderBar from './TimelineSliderBar';
+import {FIRST_SNAP_POINT_MEDIACONTROLLER} from '../../PlaylistSheet/PlaylistSheet';
+import {MAX_SNAP_POINT} from '../MediaController';
 
-type MediaControllerView = {
-  tabHeight: number;
+type Props = {
+  animatedPosition: SharedValue<number>;
+  collapseAnimationEnabled?: boolean;
 };
 
-export default function MediaControllerView({tabHeight}: MediaControllerView) {
-  const snapPoints = useMemo(() => ['3%', '35%'], []);
+export default function MediaControllerView({
+  animatedPosition,
+  collapseAnimationEnabled,
+}: Props) {
   const {activeTurn} = useActiveTurnStore();
   const dispatch = useDispatch();
 
@@ -41,20 +50,35 @@ export default function MediaControllerView({tabHeight}: MediaControllerView) {
     dispatch(decrement());
   }, 50);
 
-  return activeTurn ? (
-    <BottomSheet
-      {...bottomSheetConfig}
-      bottomInset={tabHeight}
-      containerStyle={Style.container}
-      snapPoints={snapPoints}>
-      <BlurView style={Style.blurView} {...blurViewConfig}>
-        <View style={Style.content}>
-          <View style={Style.mediaController}>
-            <MediaControllerArtistSong
-              artist={'someone'}
-              title={activeTurn && activeTurn.title}
-            />
-          </View>
+  useDerivedValue(() => {
+    console.log('animatedPosition :>>', animatedPosition.value);
+  }, [animatedPosition]);
+
+  const interpolateCollapseAnimation = useAnimatedStyle(() => {
+    return {
+      opacity: interpolate(
+        animatedPosition.value,
+        //TODO:  values below need to be relative to the screen height
+        [0, 876],
+        [0, 1],
+      ),
+    };
+  }, []);
+
+  return (
+    <BlurView style={Style.blurView} {...blurViewConfig}>
+      <View style={Style.content}>
+        <View style={Style.mediaController}>
+          <MediaControllerArtistSong
+            artist={'someone'}
+            title={activeTurn && activeTurn.title}
+          />
+        </View>
+        <RNAnimated.View
+          style={[
+            collapseAnimationEnabled && interpolateCollapseAnimation,
+            Style.animationCollapseContainer,
+          ]}>
           <Flex style={Style.timelineSideBarContainer}>
             <TimelineSliderBar
               title={activeTurn && activeTurn.title}
@@ -66,21 +90,21 @@ export default function MediaControllerView({tabHeight}: MediaControllerView) {
             <TogglePlayPauseButton onPress={onPressTogglePlayPause} />
             <PlayNextButton onPress={onPressNext} />
           </Flex>
-        </View>
-      </BlurView>
-    </BottomSheet>
-  ) : null;
+        </RNAnimated.View>
+      </View>
+    </BlurView>
+  );
 }
 
 const Style = StyleSheet.create({
-  container: {
-    //
-  },
   blurView: {
     width: '100%',
     flex: 1,
   },
   content: {
+    flex: 1,
+  },
+  animationCollapseContainer: {
     flex: 1,
   },
   timelineSideBarContainer: {

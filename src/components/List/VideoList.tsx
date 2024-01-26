@@ -3,12 +3,12 @@ import {useCallback, useEffect, useRef} from 'react';
 import {Dimensions} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {ITurn} from '../../models/turn';
+import {setPosition} from '../../redux/playlistSheetSlice';
 import {RootState} from '../../redux/store';
+import {increment, setActiveSlice} from '../../redux/videoListSlice';
 import withSyncMediaController from '../MediaController/withSyncMediaController';
 import VideoPlayer from '../Video/VideoPlayer';
 import useVideoList from './hooks/useVideoList';
-import {increment, setActiveSlice} from '../../redux/videoListSlice';
-import {setPosition} from '../../redux/playlistSheetSlice';
 
 type Props = {
   data: ITurn[];

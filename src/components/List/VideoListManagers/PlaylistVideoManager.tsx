@@ -1,9 +1,9 @@
-import {FlashList, ListRenderItem} from '@shopify/flash-list';
-import React, {useEffect, useRef} from 'react';
-import {Dimensions} from 'react-native';
-import {useSelector} from 'react-redux';
-import {ITurn} from '../../../models/turn';
-import {RootState} from '../../../redux/store';
+import { FlashList, ListRenderItem } from '@shopify/flash-list';
+import React, { useEffect, useRef } from 'react';
+import { Dimensions } from 'react-native';
+import { useSelector } from 'react-redux';
+import { ITurn } from '../../../models/turn';
+import { RootState } from '../../../redux/store';
 import withSyncMediaController from '../../MediaController/withSyncMediaController';
 import VideoPlayer from '../../Video/VideoPlayer';
 import useVideoList from '../hooks/useVideoList';
