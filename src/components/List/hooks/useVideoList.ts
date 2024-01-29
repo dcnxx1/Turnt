@@ -7,7 +7,11 @@ import {
 import TrackPlayer from 'react-native-track-player';
 import {useDispatch} from 'react-redux';
 import {ITurn} from '../../../models/turn';
-import {setActiveTurn, setIndex} from '../../../redux/videoListSlice';
+import {
+  setActiveTurn,
+  setIndex,
+  setIsPlaying,
+} from '../../../redux/videoListSlice';
 import {useActiveTurnStore} from '../../../store';
 import {turnToTrackMapper} from '../../../utils';
 
@@ -34,8 +38,8 @@ export default function useVideoList(): VideoListHookReturnType {
 
         if (item !== null) {
           const currentActiveTurn = item as ITurn;
-          dispatch(setActiveTurn(currentActiveTurn));
 
+          dispatch(setActiveTurn(currentActiveTurn));
           setGlobalActiveTurn(currentActiveTurn);
 
           TrackPlayer.load(turnToTrackMapper(currentActiveTurn));

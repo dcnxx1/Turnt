@@ -6,6 +6,7 @@ import {ITurn} from '../../models/turn';
 import {setPosition} from '../../redux/playlistSheetSlice';
 import {RootState} from '../../redux/store';
 import {increment, setActiveSlice} from '../../redux/videoListSlice';
+import {useActiveTurnStore} from '../../store';
 import withSyncMediaController from '../MediaController/withSyncMediaController';
 import VideoPlayer from '../Video/VideoPlayer';
 import useVideoList from './hooks/useVideoList';
@@ -20,6 +21,7 @@ export default function VideoList({data}: Props) {
   const {index, isActive} = useSelector((state: RootState) => state.homeSlice);
   const flashListRef = useRef<FlashList<ITurn> | null>(null);
   const [keyExtractor, viewabilityConfigCallbackPairs] = useVideoList();
+
   const dispatch = useDispatch();
   useEffect(() => {
     if (isActive) {

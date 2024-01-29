@@ -16,11 +16,17 @@ const PlaybackService = async () => {
   TrackPlayer.addEventListener(Event.RemotePrevious, () => {
     store.dispatch(decrement());
   });
-  TrackPlayer.addEventListener(Event.RemoteSeek, async (event: RemoteSeekEvent) => {
-    const {position} = event;
+  TrackPlayer.addEventListener(
+    Event.RemoteSeek,
+    async (event: RemoteSeekEvent) => {
+      const {position} = event;
 
-    useVideoStore.setState({progress: position});
-    useSeek.setState({seekTo: position});
+      useVideoStore.setState({progress: position});
+      useSeek.setState({seekTo: position});
+    },
+  );
+  TrackPlayer.addEventListener(Event.RemoteStop, () => {
+    store.dispatch(setIsPlaying(false));
   });
 };
 

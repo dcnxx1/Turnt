@@ -1,6 +1,6 @@
 import {BlurView} from '@react-native-community/blur';
 import {debounce} from 'lodash';
-import {StyleSheet, View} from 'react-native';
+import {Dimensions, StyleSheet, View} from 'react-native';
 import RNAnimated, {
   SharedValue,
   interpolate,
@@ -25,7 +25,8 @@ import {
 import TimelineSliderBar from './TimelineSliderBar';
 import {FIRST_SNAP_POINT_MEDIACONTROLLER} from '../../PlaylistSheet/PlaylistSheet';
 import {MAX_SNAP_POINT} from '../MediaController';
-
+import {useRef} from 'react';
+const SCREEN_HEIGHT = Dimensions.get('screen').height;
 type Props = {
   animatedPosition: SharedValue<number>;
   collapseAnimationEnabled?: boolean;
@@ -37,6 +38,7 @@ export default function MediaControllerView({
 }: Props) {
   const {activeTurn} = useActiveTurnStore();
   const dispatch = useDispatch();
+  const timer = useRef<NodeJS.Timeout>();
 
   const onPressTogglePlayPause = () => {
     dispatch(togglePlaying());
@@ -50,16 +52,15 @@ export default function MediaControllerView({
     dispatch(decrement());
   }, 50);
 
-  useDerivedValue(() => {
-    console.log('animatedPosition :>>', animatedPosition.value);
-  }, [animatedPosition]);
-
   const interpolateCollapseAnimation = useAnimatedStyle(() => {
     return {
       opacity: interpolate(
         animatedPosition.value,
-        //TODO:  values below need to be relative to the screen height
-        [0, 876],
+ 
+        [
+          SCREEN_HEIGHT - FIRST_SNAP_POINT_MEDIACONTROLLER,
+          SCREEN_HEIGHT - MAX_SNAP_POINT,
+        ],
         [0, 1],
       ),
     };
@@ -81,6 +82,7 @@ export default function MediaControllerView({
           ]}>
           <Flex style={Style.timelineSideBarContainer}>
             <TimelineSliderBar
+              animatedPosition={animatedPosition}
               title={activeTurn && activeTurn.title}
               videoDuration={activeTurn && activeTurn.duration}
             />

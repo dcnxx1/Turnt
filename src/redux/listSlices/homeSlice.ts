@@ -3,7 +3,7 @@ import {ITurn} from '../../models/turn';
 import * as actions from '../videoListSlice';
 
 export const initialState = {
-  index: 0,
+  index: -1,
   isPlaying: false,
   isActive: false,
   activeTurn: {} as ITurn,

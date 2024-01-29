@@ -1,19 +1,30 @@
-import {StyleSheet} from 'react-native';
+import {Dimensions, StyleSheet} from 'react-native';
 import {Text} from 'react-native-paper';
 import {secondsToDisplayTime} from '../../../helpers';
 import {ITurn} from '../../../models/turn';
 import {useSeek, useVideoStore} from '../../../store';
 import Flex from '../../Misc/Flex';
 import MediaControllerSlider from './MediaControllerSlider';
-
+import {
+  SharedValue,
+  interpolate,
+  useAnimatedStyle,
+} from 'react-native-reanimated';
+import {FIRST_SNAP_POINT_MEDIACONTROLLER} from '../../PlaylistSheet/PlaylistSheet';
+import {MAX_SNAP_POINT} from '../MediaController';
+import RNAnimated from 'react-native-reanimated';
 type Props = {
   videoDuration: ITurn['duration'];
   title: ITurn['title'];
+  animatedPosition: SharedValue<number>;
 };
+
+const SCREEN_HEIGHT = Dimensions.get('screen').height;
 
 export default function TimelineSliderBar({
   videoDuration: turnDuration,
   title,
+  animatedPosition,
 }: Props) {
   const {setSeekTo} = useSeek();
   const {progress, setProgress} = useVideoStore();
@@ -26,7 +37,9 @@ export default function TimelineSliderBar({
   return (
     <>
       <Flex style={Style.videoProgress}>
-        <Text style={Style.text}>{secondsToDisplayTime(progress)}</Text>
+        <RNAnimated.Text style={Style.text}>
+          {secondsToDisplayTime(progress)}
+        </RNAnimated.Text>
       </Flex>
       <Flex flex={4}>
         <MediaControllerSlider

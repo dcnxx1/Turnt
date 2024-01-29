@@ -49,6 +49,8 @@ export default function withSyncMediaController(
     const setProgress = useVideoStore(state => state.setProgress);
     const dispatch = useDispatch();
     const homeSlice = useSelector((state: RootState) => state.homeSlice);
+
+
     useEffect(() => {
       if (ref.current) {
         ref.current.seek(seekTo);
@@ -94,7 +96,7 @@ export default function withSyncMediaController(
       }
     };
 
-    return (
+    return  (
       <VideoPausedOverlay
         paused={activeTurn.turn_id === videoId && !isPlaying}
         onPress={onPressVideoPausedOverlay}>

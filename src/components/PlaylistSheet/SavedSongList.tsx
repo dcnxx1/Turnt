@@ -7,7 +7,11 @@ import {useDispatch} from 'react-redux';
 import {QueryKey, queryKey} from '../../api/api';
 import {ITurn} from '../../models/turn';
 import {setPosition} from '../../redux/playlistSheetSlice';
-import {setActiveSlice, setIndex} from '../../redux/videoListSlice';
+import {
+  setActiveSlice,
+  setActiveTurn,
+  setIndex,
+} from '../../redux/videoListSlice';
 import theme from '../../theme';
 import SkeletonFlashList from '../List/SkeletonFlashList';
 import PlaylistItem from './PlaylistItem';
@@ -47,10 +51,10 @@ export default function SavedSongList({data, queryKeyRefresh}: Props) {
     }
   };
 
-  const onPressPlaylistItem = (turn_id: string, index: number) => {
+  const onPressPlaylistItem = (index: number) => {
+    queryClient.setQueryData([queryKey.playlistSheet], data);
     dispatch(setPosition('FullScreen'));
     dispatch(setActiveSlice('playlistSlice'));
-    queryClient.setQueryData([queryKey.playlistSheet], data);
     dispatch(setIndex(index));
   };
 

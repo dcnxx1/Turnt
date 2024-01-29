@@ -8,31 +8,22 @@ const playlistSheetSlice = createSlice({
     position: 'Hidden' as PlaylistSheetState,
   },
   reducers: {
-    setPosition: (state, {payload}: PayloadAction<PlaylistSheetState>) => {
-      switch (payload) {
-        case 'FullScreen': {
-          return {
-            ...state,
-            position: 'FullScreen',
-          };
-        }
-        case 'Hidden': {
-          return {
-            ...state,
-            position: 'Hidden',
-          };
-        }
-        case 'Partial': {
-          return {
-            ...state,
-            position: 'Partial',
-          };
-        }
-      }
+    setPosition: (
+      state,
+      {payload}: PayloadAction<PlaylistSheetState | number>,
+    ) => {
+      return {
+        ...state,
+        position:
+          payload === 'FullScreen'
+            ? 'FullScreen'
+            : payload === 'Hidden'
+            ? 'Hidden'
+            : 'Partial',
+      };
     },
   },
 });
-
 export const {setPosition} = playlistSheetSlice.actions;
 
 export default playlistSheetSlice.reducer;

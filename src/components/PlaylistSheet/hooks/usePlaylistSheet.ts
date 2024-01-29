@@ -4,7 +4,8 @@ import {RootState} from '../../../redux/store';
 import {BottomSheetMethods} from '@gorhom/bottom-sheet/lib/typescript/types';
 import {useEffect, useRef} from 'react';
 import {setPosition} from '../../../redux/playlistSheetSlice';
-import { debounce, throttle } from 'lodash';
+import {debounce, throttle} from 'lodash';
+import {setActiveSlice} from '../../../redux/videoListSlice';
 
 export default function usePlaylistSheet(): [
   ref: React.RefObject<BottomSheetMethods>,
@@ -15,13 +16,16 @@ export default function usePlaylistSheet(): [
     (state: RootState) => state.playlistSheetSlice.position,
   );
   const dispatch = useDispatch();
-
+  const isActivePlaylistSlice = useSelector(
+    (state: RootState) => state.playlistSlice.isActive,
+  );
   const onChangeBottomSheetPosition = (index: number) => {
     if (index === 0) {
       dispatch(setPosition('Partial'));
       return;
     }
     if (index === 1) {
+    
       dispatch(setPosition('FullScreen'));
       return;
     }
@@ -29,7 +33,7 @@ export default function usePlaylistSheet(): [
       dispatch(setPosition('Hidden'));
       return;
     }
-  }
+  };
 
   useEffect(() => {
     if (ref) {

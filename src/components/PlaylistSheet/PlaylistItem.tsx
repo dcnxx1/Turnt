@@ -11,7 +11,7 @@ import {RootState} from '../../redux/store';
 
 type Props = {
   duration: number;
-  onPress: (turn_id: string, index: number) => void;
+  onPress: (index: number, turn_id: ITurn['turn_id']) => void;
   cover: string;
   id: ITurn['turn_id'];
   title: string;
@@ -31,7 +31,7 @@ export default function PlaylistItem({
   );
   return (
     <Pressable
-      onPress={() => onPress(id, index)}
+      onPress={() => onPress(index, id)}
       style={[
         Style.container,
         {

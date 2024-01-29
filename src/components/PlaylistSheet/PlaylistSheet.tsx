@@ -38,6 +38,7 @@ export default function PlaylistSheet({animatedPosition}: Props) {
   const PlaylistSheetHandle = useCallback(() => {
     return <SheetHandle animatedPosition={animatedPosition} />;
   }, [animatedPosition]);
+
   return (
     <BottomSheet
       ref={ref}
@@ -52,7 +53,7 @@ export default function PlaylistSheet({animatedPosition}: Props) {
       <PlaylistVideoManager data={data.data ?? []} />
       <MediaController
         collapseAnimationEnabled={true}
-        tabHeight={0}
+        tabHeight={1}
         firstSnapPoint={FIRST_SNAP_POINT_MEDIACONTROLLER}
       />
     </BottomSheet>
