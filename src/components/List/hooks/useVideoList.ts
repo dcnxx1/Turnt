@@ -9,6 +9,7 @@ import {useDispatch} from 'react-redux';
 import {ITurn} from '../../../models/turn';
 import {
   setActiveTurn,
+  setActiveVideo,
   setIndex,
   setIsPlaying,
 } from '../../../redux/videoListSlice';
@@ -27,9 +28,9 @@ const VIDEO_BECAME_ACTIVE_AT_PERCENT = 95;
 export default function useVideoList(): VideoListHookReturnType {
   const setGlobalActiveTurn = useActiveTurnStore(state => state.setActiveTurn);
   const dispatch = useDispatch();
-
+  
   const onViewableItemsChanged = useRef(
-    (info: {viewableItems: ViewToken[]; changed: ViewToken[]}) => {
+    async (info: {viewableItems: ViewToken[]; changed: ViewToken[]}) => {
       if (
         info.viewableItems.length &&
         info.viewableItems[0].index !== undefined
@@ -38,11 +39,16 @@ export default function useVideoList(): VideoListHookReturnType {
 
         if (item !== null) {
           const currentActiveTurn = item as ITurn;
+          dispatch(
+            setActiveVideo({
+              turn_id: currentActiveTurn.turn_id,
+              duration: currentActiveTurn.duration,
+            }),
+          );
 
-          dispatch(setActiveTurn(currentActiveTurn));
           setGlobalActiveTurn(currentActiveTurn);
 
-          TrackPlayer.load(turnToTrackMapper(currentActiveTurn));
+          await TrackPlayer.load(turnToTrackMapper(currentActiveTurn));
         }
         if (index !== null) {
           dispatch(setIndex(index));

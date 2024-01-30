@@ -6,10 +6,10 @@ import {Dimensions} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {QueryKey, queryKey} from '../../api/api';
 import {ITurn} from '../../models/turn';
-import {setPosition} from '../../redux/playlistSheetSlice';
+import {setNewPosition, setPosition} from '../../redux/playlistSheetSlice';
 import {
   setActiveSlice,
-  setActiveTurn,
+  setActiveVideo,
   setIndex,
 } from '../../redux/videoListSlice';
 import theme from '../../theme';
@@ -52,10 +52,14 @@ export default function SavedSongList({data, queryKeyRefresh}: Props) {
   };
 
   const onPressPlaylistItem = (index: number) => {
-    queryClient.setQueryData([queryKey.playlistSheet], data);
-    dispatch(setPosition('FullScreen'));
     dispatch(setActiveSlice('playlistSlice'));
-    dispatch(setIndex(index));
+    dispatch(
+      setNewPosition({
+        bottomSheetPosition: 'FullScreen',
+        scrollToIndex: index,
+        data: queryKeyRefresh,
+      }),
+    );
   };
 
   const renderItem: ListRenderItem<ITurn> = ({item, index}) => {

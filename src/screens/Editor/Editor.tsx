@@ -49,7 +49,7 @@ export default function Editor(): JSX.Element {
               }),
               queryClient.invalidateQueries({queryKey: [queryKey.feed]}),
             ]).then(res => {
-              navigation.navigate('HomeScreen');
+              navigation.navigate('HomeStack');
             });
           }
         },

@@ -3,7 +3,6 @@ import {ReactNode, useEffect} from 'react';
 import RNBootSplash from 'react-native-bootsplash';
 import {Navigation} from '../nav';
 import useInitalizeApp from './useInitializeApp';
-import LottieView from 'lottie-react-native';
 
 type Props = {
   children: ReactNode;

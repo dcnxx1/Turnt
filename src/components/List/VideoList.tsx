@@ -5,8 +5,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {ITurn} from '../../models/turn';
 import {setPosition} from '../../redux/playlistSheetSlice';
 import {RootState} from '../../redux/store';
-import {increment, setActiveSlice} from '../../redux/videoListSlice';
-import {useActiveTurnStore} from '../../store';
+import {setActiveSlice} from '../../redux/videoListSlice';
 import withSyncMediaController from '../MediaController/withSyncMediaController';
 import VideoPlayer from '../Video/VideoPlayer';
 import useVideoList from './hooks/useVideoList';
@@ -48,18 +47,12 @@ export default function VideoList({data}: Props) {
     );
   };
 
-  const onScrollBeginDrag = useCallback(() => {
-    if (isActive) return;
-    dispatch(setActiveSlice('homeSlice'));
-    dispatch(setPosition('Hidden'));
-    dispatch(increment());
-  }, [dispatch, isActive, index]);
-
+ 
   return (
     <FlashList
       extraData={data}
       bounces={false}
-      onScrollBeginDrag={onScrollBeginDrag}
+
       data={data}
       ref={flashListRef}
       renderItem={renderItem}

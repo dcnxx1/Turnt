@@ -7,7 +7,7 @@ import RNAnimated, {
   useAnimatedStyle,
   useDerivedValue,
 } from 'react-native-reanimated';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   decrement,
   increment,
@@ -26,6 +26,7 @@ import TimelineSliderBar from './TimelineSliderBar';
 import {FIRST_SNAP_POINT_MEDIACONTROLLER} from '../../PlaylistSheet/PlaylistSheet';
 import {MAX_SNAP_POINT} from '../MediaController';
 import {useRef} from 'react';
+import {RootState} from '../../../redux/store';
 const SCREEN_HEIGHT = Dimensions.get('screen').height;
 type Props = {
   animatedPosition: SharedValue<number>;
@@ -37,6 +38,7 @@ export default function MediaControllerView({
   collapseAnimationEnabled,
 }: Props) {
   const {activeTurn} = useActiveTurnStore();
+ 
   const dispatch = useDispatch();
   const timer = useRef<NodeJS.Timeout>();
 
@@ -56,7 +58,7 @@ export default function MediaControllerView({
     return {
       opacity: interpolate(
         animatedPosition.value,
- 
+
         [
           SCREEN_HEIGHT - FIRST_SNAP_POINT_MEDIACONTROLLER,
           SCREEN_HEIGHT - MAX_SNAP_POINT,

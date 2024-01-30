@@ -1,5 +1,8 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {setPosition} from '../playlistSheetSlice';
+import playlistSheetSlice, {
+  setPosition,
+  setNewPosition,
+} from '../playlistSheetSlice';
 import * as actions from '../videoListSlice';
 import {initialState} from './homeSlice';
 
@@ -51,6 +54,17 @@ const playlistSlice = createSlice({
     builder.addCase(actions.setActiveTurn, (state, action) => {
       if (state.isActive) {
         state.activeTurn = action.payload;
+      }
+    });
+    builder.addCase(actions.setActiveVideo, (state, {payload}) => {
+      if (state.activeVideoId !== payload.turn_id) {
+        state.activeVideoId = payload.turn_id;
+        state.duration = payload.duration;
+      }
+    });
+    builder.addCase(setNewPosition, (state, action) => {
+      if (state.isActive) {
+        state.index = action.payload.scrollToIndex;
       }
     });
   },

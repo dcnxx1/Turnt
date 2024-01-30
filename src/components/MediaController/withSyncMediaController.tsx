@@ -12,6 +12,7 @@ import {RootState} from '../../redux/store';
 import {
   increment,
   setActiveSlice,
+  setActiveVideo,
   setIsPlaying,
   togglePlaying,
 } from '../../redux/videoListSlice';
@@ -42,14 +43,16 @@ export default function withSyncMediaController(
     cover: ITurn['cover'];
   }) => {
     const ref = useRef<Video>(null);
-    const activeTurn = useSelector((state: RootState) => state[id].activeTurn);
-    const isVideoOnScreen = activeTurn.turn_id === videoId;
+
+    const {activeVideoId, duration} = useSelector(
+      (state: RootState) => state[id],
+    );
+    const isVideoOnScreen = activeVideoId === videoId;
     const isPlaying = useSelector((state: RootState) => state[id].isPlaying);
     const {seekTo, setSeekTo, isSeeking} = useSeek();
     const setProgress = useVideoStore(state => state.setProgress);
     const dispatch = useDispatch();
     const homeSlice = useSelector((state: RootState) => state.homeSlice);
-
 
     useEffect(() => {
       if (ref.current) {
@@ -83,6 +86,12 @@ export default function withSyncMediaController(
         if (homeSlice.isActive === false) {
           dispatch(setActiveSlice('homeSlice'));
           dispatch(setPosition('Hidden'));
+          dispatch(
+            setActiveVideo({
+              turn_id: activeVideoId,
+              duration,
+            }),
+          );
           dispatch(togglePlaying());
         }
       }
@@ -91,14 +100,14 @@ export default function withSyncMediaController(
 
     const onEnd = () => {
       const progress = useVideoStore.getState().progress;
-      if (progress >= activeTurn.duration) {
+      if (progress >= duration) {
         dispatch(increment());
       }
     };
 
-    return  (
+    return (
       <VideoPausedOverlay
-        paused={activeTurn.turn_id === videoId && !isPlaying}
+        paused={activeVideoId === videoId && !isPlaying}
         onPress={onPressVideoPausedOverlay}>
         <View
           style={{
@@ -115,10 +124,10 @@ export default function withSyncMediaController(
           ) : null}
           <VideoPlayer
             ref={ref}
-            onEnd={activeTurn.turn_id === videoId ? onEnd : undefined}
-            onProgress={activeTurn.turn_id === videoId ? onProgress : undefined}
+            onEnd={activeVideoId === videoId ? onEnd : undefined}
+            onProgress={activeVideoId === videoId ? onProgress : undefined}
             source={useCDN(TURN_KEY + source)}
-            paused={activeTurn.turn_id === videoId ? !isPlaying : true}
+            paused={activeVideoId === videoId ? !isPlaying : true}
             style={{
               height: type !== 'Audio' ? Dimensions.get('screen').height : 0,
               width: '100%',

@@ -4,28 +4,22 @@ import {RootState} from '../../../redux/store';
 import {BottomSheetMethods} from '@gorhom/bottom-sheet/lib/typescript/types';
 import {useEffect, useRef} from 'react';
 import {setPosition} from '../../../redux/playlistSheetSlice';
-import {debounce, throttle} from 'lodash';
-import {setActiveSlice} from '../../../redux/videoListSlice';
 
 export default function usePlaylistSheet(): [
   ref: React.RefObject<BottomSheetMethods>,
   onChangeBottomSheetPosition: (index: number) => void,
 ] {
   const ref = useRef<BottomSheetMethods>(null);
-  const position = useSelector(
-    (state: RootState) => state.playlistSheetSlice.position,
-  );
+ 
   const dispatch = useDispatch();
-  const isActivePlaylistSlice = useSelector(
-    (state: RootState) => state.playlistSlice.isActive,
-  );
+  const playlistSheetSlice = useSelector((state: RootState) => state.playlistSheetSlice);
+
   const onChangeBottomSheetPosition = (index: number) => {
     if (index === 0) {
       dispatch(setPosition('Partial'));
       return;
     }
     if (index === 1) {
-    
       dispatch(setPosition('FullScreen'));
       return;
     }
@@ -37,7 +31,7 @@ export default function usePlaylistSheet(): [
 
   useEffect(() => {
     if (ref) {
-      switch (position) {
+      switch (playlistSheetSlice.bottomSheetPosition) {
         case 'FullScreen': {
           ref.current?.snapToIndex(1);
           break;
@@ -56,7 +50,7 @@ export default function usePlaylistSheet(): [
         }
       }
     }
-  }, [ref, position]);
+  }, [ref, playlistSheetSlice.bottomSheetPosition]);
 
   return [ref, onChangeBottomSheetPosition];
 }

@@ -14,7 +14,7 @@ import {
   setupTrackPlayer,
 } from './boot';
 import getMyUploadsByUserId from '../api/myUploads';
-import {setActiveTurn} from '../redux/videoListSlice';
+import {setActiveTurn, setActiveVideo} from '../redux/videoListSlice';
 
 export default function useInitalizeApp(): [boolean, string | undefined] {
   const queryClient = useQueryClient();
@@ -52,7 +52,13 @@ export default function useInitalizeApp(): [boolean, string | undefined] {
         if (feed) {
           const firstActiveTurn = feed[0];
           useActiveTurnStore.getState().setActiveTurn(firstActiveTurn);
-          dispatch(setActiveTurn(firstActiveTurn));
+
+          dispatch(
+            setActiveVideo({
+              turn_id: firstActiveTurn.turn_id,
+              duration: firstActiveTurn.duration,
+            }),
+          );
           addTrackPlayerTracks(feed);
         }
         setInitialRoute('HomeStack');

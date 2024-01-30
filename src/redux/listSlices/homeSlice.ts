@@ -3,10 +3,12 @@ import {ITurn} from '../../models/turn';
 import * as actions from '../videoListSlice';
 
 export const initialState = {
-  index: -1,
+  index: 0,
   isPlaying: false,
   isActive: false,
   activeTurn: {} as ITurn,
+  activeVideoId: '' as ITurn['turn_id'],
+  duration: 0 as ITurn['duration'],
 };
 
 const homeSlice = createSlice({
@@ -16,6 +18,8 @@ const homeSlice = createSlice({
     isPlaying: false,
     isActive: true,
     activeTurn: {} as ITurn,
+    activeVideoId: '' as ITurn['turn_id'],
+    duration: 0 as ITurn['duration'],
   },
   reducers: {},
   extraReducers: builder => {
@@ -32,6 +36,7 @@ const homeSlice = createSlice({
     });
     builder.addCase(actions.setIndex, (state, action) => {
       if (state.isActive) {
+        console.log('Setting index to :>>', action.payload);
         state.index = action.payload;
       }
     });
@@ -59,6 +64,10 @@ const homeSlice = createSlice({
       if (state.isActive) {
         state.activeTurn = action.payload;
       }
+    });
+    builder.addCase(actions.setActiveVideo, (state, {payload}) => {
+      state.activeVideoId = payload.turn_id;
+      state.duration = payload.duration;
     });
   },
 });

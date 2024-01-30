@@ -42,7 +42,7 @@ function HomeStackNavigator() {
 
   return (
     <HomeStack.Navigator
-      detachInactiveScreens={false}
+      detachInactiveScreens={true}
       tabBar={props => <Tabbar {...props} />}
       screenOptions={{
         headerShown: false,
@@ -91,6 +91,7 @@ function EditorStackNavigator() {
       screenOptions={{
         ...screenOptions,
       }}
+      detachInactiveScreens={true}
       initialRouteName={RootNavNames.EditorStack}>
       <EditorStack.Screen
         component={FileSelectScreen}
