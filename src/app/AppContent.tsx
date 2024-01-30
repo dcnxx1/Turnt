@@ -1,4 +1,4 @@
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, ParamListBase} from '@react-navigation/native';
 import {ReactNode, useEffect} from 'react';
 import RNBootSplash from 'react-native-bootsplash';
 import {Navigation} from '../nav';
@@ -21,8 +21,10 @@ const AppContent = () => {
     return null;
   }
 
+  const onNavigationStateChange = () => {};
+
   return (
-    <NavigationContainer>
+    <NavigationContainer onStateChange={onNavigationStateChange}>
       <Navigation initialRoute={initialRoute} />
     </NavigationContainer>
   );

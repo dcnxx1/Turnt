@@ -151,7 +151,6 @@ export default function useGenerateThumbnails(
               };
             }),
           ]);
-          console.log(thumbnails);
         } else {
           generateDefaultThumbnails();
         }
@@ -161,20 +160,27 @@ export default function useGenerateThumbnails(
     } finally {
       setIsLoading(false);
     }
-  }, [filePath, isLoading, thumbnails]);
+  }, [filePath, isLoading, thumbnails, generateFramesCommand]);
 
   useEffect(() => {
     async function generate() {
-      if (fileType === 'Audio') {
-        if (!coverImage.length) {
-          generateDefaultThumbnails();
+      try {
+        if (fileType === 'Audio') {
+          if (!coverImage.length) {
+            generateDefaultThumbnails();
+            return;
+          }
+          generateCoverThumbnails();
           return;
         }
-        generateCoverThumbnails();
-        return;
+  
+        await generateVideoThumbnails();
+      } catch (err) {
+        console.log(
+          'src.screens.Editor.hooks.useGenerateThumbnails.useEffect.generate :>',
+          err,
+        );
       }
-
-      await generateVideoThumbnails();
     }
     generate();
   }, [coverImage]);

@@ -154,6 +154,8 @@ export const deleteThumbnailContent = async () => {
         RNFS.unlink(path);
       });
     }
-    return
-  } catch (err) {}
+    return;
+  } catch (err) {
+    console.log('src/helpers/deleteThumbnailContent :>', err);
+  }
 };

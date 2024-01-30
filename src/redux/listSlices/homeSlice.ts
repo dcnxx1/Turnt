@@ -69,6 +69,11 @@ const homeSlice = createSlice({
       state.activeVideoId = payload.turn_id;
       state.duration = payload.duration;
     });
+    builder.addCase(actions.disableSlices, (state, action) => {
+      if (state.isActive) {
+        state.isActive = false;
+      }
+    });
   },
 });
 

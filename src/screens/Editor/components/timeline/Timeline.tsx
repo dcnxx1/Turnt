@@ -7,6 +7,7 @@ import useGenerateThumbnails, {
 } from '../../hooks/useGenerateThumbnails';
 import {VideoCoverColor, useComponentSize} from '../../utils';
 import TimelineSlider from './TimelineSlider';
+import {Text} from 'react-native-paper';
 type Props = {
   duration: number;
   filePath: string;
@@ -43,7 +44,7 @@ export default function Timeline({
   useEffect(() => {
     console.log('thumbnails :>>', thumbnails);
   }, [thumbnails]);
-  return (
+  return !isLoading ? (
     <View onLayout={onLayout} style={Style.container}>
       <View>
         <ImageTimelineRow thumbnails={thumbnails} />
@@ -55,6 +56,8 @@ export default function Timeline({
         />
       </View>
     </View>
+  ) : (
+    <Text>Is loading!</Text>
   );
 }
 

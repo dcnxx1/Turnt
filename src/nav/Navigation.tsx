@@ -1,11 +1,8 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {useNavigation} from '@react-navigation/native';
 import {
   StackNavigationOptions,
-  StackNavigationProp,
   createStackNavigator,
 } from '@react-navigation/stack';
-import {useLayoutEffect} from 'react';
 import {PaperProvider} from 'react-native-paper';
 import Tabbar from '../components/Tabbar/Tabbar';
 import {
@@ -18,7 +15,12 @@ import {
 import AccountSetupScreen from '../screens/AccountSetup/AccountSetupScreen';
 import AuthScreen from '../screens/Auth/AuthScreen';
 import useLocalProfile from '../store/useLocalProfile';
-import {AccountSetupParams, EditorParams, HomeParams} from './navparams';
+import {
+  AccountSetupParams,
+  EditorParams,
+  HomeParams,
+  RootParams,
+} from './navparams';
 import {NavScreenNames, RootNavNames} from './types';
 
 const HomeStack = createBottomTabNavigator<HomeParams>();
@@ -32,17 +34,17 @@ const screenOptions: StackNavigationOptions = {
 };
 
 function HomeStackNavigator() {
-  const navigation = useNavigation<StackNavigationProp<HomeParams>>();
-  // otherwise the  skeletonFlashlists will reset idk why.
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      detachPreviousScreen: false,
-    });
-  }, [navigation]);
+  // const navigation = useNavigation<StackNavigationProp<HomeParams>>();
+  // // otherwise the  skeletonFlashlists will reset idk why.
+  // useLayoutEffect(() => {
+  //   navigation.setOptions({
+  //     detachPreviousScreen: false,
+  //   });
+  // }, [navigation]);
 
   return (
     <HomeStack.Navigator
-      detachInactiveScreens={true}
+      detachInactiveScreens={false}
       tabBar={props => <Tabbar {...props} />}
       screenOptions={{
         headerShown: false,
@@ -79,20 +81,12 @@ function SetupScreenStackNavigator() {
 }
 
 function EditorStackNavigator() {
-  const navigation = useNavigation<StackNavigationProp<EditorParams>>();
-  // otherwise the  skeletonFlashlists will reset idk why.
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      detachPreviousScreen: false,
-    });
-  }, [navigation]);
   return (
     <EditorStack.Navigator
       screenOptions={{
         ...screenOptions,
       }}
-      detachInactiveScreens={true}
-      initialRouteName={RootNavNames.EditorStack}>
+      initialRouteName={NavScreenNames.FileSelectScreen}>
       <EditorStack.Screen
         component={FileSelectScreen}
         name={NavScreenNames.FileSelectScreen}

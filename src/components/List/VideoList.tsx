@@ -21,15 +21,14 @@ export default function VideoList({data}: Props) {
   const flashListRef = useRef<FlashList<ITurn> | null>(null);
   const [keyExtractor, viewabilityConfigCallbackPairs] = useVideoList();
 
-  const dispatch = useDispatch();
   useEffect(() => {
-    if (isActive) {
-      if (flashListRef.current) {
-        flashListRef.current.scrollToIndex({
-          animated: true,
-          index: index,
-        });
-      }
+    if (!isActive) return;
+
+    if (flashListRef.current) {
+      flashListRef.current.scrollToIndex({
+        animated: true,
+        index: index,
+      });
     }
   }, [flashListRef, index, data, isActive]);
 
@@ -47,12 +46,10 @@ export default function VideoList({data}: Props) {
     );
   };
 
- 
   return (
     <FlashList
       extraData={data}
       bounces={false}
-
       data={data}
       ref={flashListRef}
       renderItem={renderItem}

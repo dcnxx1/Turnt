@@ -60,7 +60,6 @@ export default function OnBoardScreen() {
     <SkeletonFlashList
       decelerationRate={'fast'}
       snapToAlignment={'start'}
-      snapToStart
       showsHorizontalScrollIndicator={false}
       disableIntervalMomentum
       keyExtractor={keyExtractor}

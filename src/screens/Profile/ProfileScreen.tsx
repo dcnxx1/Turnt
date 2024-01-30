@@ -16,6 +16,7 @@ import {
   useMyUploadsQuery,
 } from '../../shared/hooks/useQueryData';
 import useLocalProfile from '../../store/useLocalProfile';
+import {NavScreenNames, RootNavNames} from '../../nav/types';
 
 export default function ProfileScreen() {
   const remoteProfile = useMyRemoteProfile();
@@ -29,7 +30,7 @@ export default function ProfileScreen() {
   );
 
   const onPressUpload = () => {
-    navigation.navigate('EditorStack');
+    navigation.navigate(RootNavNames.EditorStack);
   };
 
   return (

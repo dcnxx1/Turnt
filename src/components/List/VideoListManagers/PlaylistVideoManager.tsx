@@ -40,10 +40,10 @@ export default function PlaylistVideoManager({data}: Props) {
         index: index,
       });
     }
-  }, [index, data]);
+  }, [index, data, isActive]);
 
   useEffect(() => {
-    if(!isActive) return
+    if (!isActive) return;
     setActiveTurn(data[index]);
     dispatch(
       setActiveVideo({
@@ -75,7 +75,6 @@ export default function PlaylistVideoManager({data}: Props) {
       keyExtractor={keyExtractor}
       snapToAlignment="start"
       bounces={false}
-      
       snapToInterval={Dimensions.get('screen').height}
       viewabilityConfigCallbackPairs={viewablityConfigCallbackPairs.current}
       decelerationRate={'fast'}

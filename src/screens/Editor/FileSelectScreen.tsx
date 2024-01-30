@@ -2,8 +2,6 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {StyleSheet, Text} from 'react-native';
 import {Button} from 'react-native-paper';
-import {SkeletonScreen} from '../../components';
-import {withLinearGradient} from '../../components/Screen/SkeletonScreen';
 import {millisToSeconds} from '../../helpers';
 import {EditorParams} from '../../nav/navparams';
 
@@ -16,7 +14,6 @@ import {
   getMp3File,
   getVideoFile,
 } from './utils';
-const LinearGradientScreen = withLinearGradient(SkeletonScreen);
 
 type EditorParamsPath = EditorParams['EditorScreen'];
 
@@ -59,7 +56,6 @@ export default function FileSelectScreen() {
         mime: videoFile.mime,
         defaultCoverColor,
       };
-
       navigateToEditorScreen(params);
     }
   };

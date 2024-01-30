@@ -66,6 +66,11 @@ const playlistSlice = createSlice({
       if (state.isActive) {
         state.index = action.payload.scrollToIndex;
       }
+    })
+    builder.addCase(actions.disableSlices, (state, action) => {
+        if(state.isActive){
+          state.isActive = false
+        }
     });
   },
 });

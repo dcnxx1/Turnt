@@ -9,7 +9,6 @@ export type AccountSetupParams = {
     code: string;
     role: Role;
   };
-  HomeScreen: undefined;
 };
 
 export type HomeParams = {
@@ -19,8 +18,14 @@ export type HomeParams = {
   EditorStack: undefined;
 };
 
-export type EditorParams = {
+export type RootParams = {
+  SetupStack: undefined;
   EditorStack: undefined;
+  HomeStack: undefined;
+  AuthStack: undefined;
+};
+
+export type EditorParams = {
   FileSelectScreen: undefined;
   EditorScreen: {
     filePath: string;
@@ -29,5 +34,5 @@ export type EditorParams = {
     mime: string;
     defaultCoverColor: VideoCoverColor;
   };
-  HomeStack: undefined;
+  HomeScreen: undefined;
 };

@@ -19,6 +19,7 @@ const videoListSlice = createSlice({
       _,
       {payload}: PayloadAction<Pick<ITurn, 'duration' | 'turn_id'>>,
     ) => {},
+    disableSlices: _ => {},
   },
 });
 
@@ -31,6 +32,7 @@ export const {
   setActiveSlice,
   setActiveTurn,
   setActiveVideo,
+  disableSlices
 } = videoListSlice.actions;
 
 export default videoListSlice;

@@ -1,4 +1,4 @@
-import { ParamListBase } from "@react-navigation/native";
+
 
 export enum NavScreenNames {
   HomeScreen = 'HomeScreen',

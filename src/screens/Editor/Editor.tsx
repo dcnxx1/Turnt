@@ -9,12 +9,12 @@ import {deleteThumbnailContent} from '../../helpers';
 import {FileType, Genre} from '../../models/turn';
 import {EditorParams} from '../../nav/navparams';
 
+import {queryKey} from '../../api/api';
 import {useActiveTurnStore} from '../../store';
+import useLocalProfile from '../../store/useLocalProfile';
 import theme from '../../theme';
 import EditorScreen, {EditorFormValuesType} from './EditorScreen';
 import useCreateTurn from './hooks/useCreateTurn';
-import useLocalProfile from '../../store/useLocalProfile';
-import {queryKey} from '../../api/api';
 const LinearGradientScreen = withLinearGradient(SkeletonScreen);
 
 export default function Editor(): JSX.Element {
@@ -25,7 +25,6 @@ export default function Editor(): JSX.Element {
   const navigation = useNavigation<StackNavigationProp<EditorParams>>();
   const {setActiveTurn} = useActiveTurnStore();
   const me = useLocalProfile();
-
   const onPressSubmitWithoutErrors = (fieldValues: EditorFormValuesType) => {
     createTurnMutation(
       {
@@ -49,7 +48,7 @@ export default function Editor(): JSX.Element {
               }),
               queryClient.invalidateQueries({queryKey: [queryKey.feed]}),
             ]).then(res => {
-              navigation.navigate('HomeStack');
+              navigation.navigate('HomeScreen')
             });
           }
         },
@@ -64,7 +63,7 @@ export default function Editor(): JSX.Element {
   useEffect(() => {
     const beforeRemoveListener = navigation.addListener(
       'beforeRemove',
-      async () => {
+      async e => {
         await deleteThumbnailContent();
         navigation.navigate('FileSelectScreen');
       },
