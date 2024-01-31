@@ -28,7 +28,7 @@ export function useMyPlaylistQuery() {
   return useQuery({
     queryKey: [queryKey.playlist],
     queryFn: async () => await getPlaylistByUserId(me.user?.user_id ?? ''),
-    staleTime: TEN_SECONDS,
+    staleTime: FIVE_MINUTES,
     initialData: queryClient.getQueryData([queryKey.playlist]),
   });
 }
@@ -39,7 +39,7 @@ export function useMyUploadsQuery() {
   return useQuery({
     queryKey: [queryKey.myUploads],
     queryFn: async () => await getMyUploadsByUserId(me.user?.user_id ?? ''),
-    staleTime: TEN_SECONDS,
+    staleTime: FIVE_MINUTES,
     initialData: queryClient.getQueryData([queryKey.myUploads]),
   });
 }

@@ -1,11 +1,10 @@
 import {FlashList, ListRenderItem} from '@shopify/flash-list';
-import {useCallback, useEffect, useRef} from 'react';
+
+import {memo, useCallback, useEffect, useRef} from 'react';
 import {Dimensions} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {ITurn} from '../../models/turn';
-import {setPosition} from '../../redux/playlistSheetSlice';
 import {RootState} from '../../redux/store';
-import {setActiveSlice} from '../../redux/videoListSlice';
 import withSyncMediaController from '../MediaController/withSyncMediaController';
 import VideoPlayer from '../Video/VideoPlayer';
 import useVideoList from './hooks/useVideoList';
@@ -16,7 +15,7 @@ type Props = {
 
 const VideoSyncMediaController = withSyncMediaController(VideoPlayer);
 
-export default function VideoList({data}: Props) {
+function VideoList({data}: Props) {
   const {index, isActive} = useSelector((state: RootState) => state.homeSlice);
   const flashListRef = useRef<FlashList<ITurn> | null>(null);
   const [keyExtractor, viewabilityConfigCallbackPairs] = useVideoList();
@@ -26,34 +25,46 @@ export default function VideoList({data}: Props) {
 
     if (flashListRef.current) {
       flashListRef.current.scrollToIndex({
-        animated: true,
         index: index,
       });
     }
   }, [flashListRef, index, data, isActive]);
 
-  const renderItem: ListRenderItem<ITurn> = ({
-    item: {turn_id, source, type, cover},
-  }) => {
-    return (
-      <VideoSyncMediaController
-        cover={cover}
-        type={type}
-        id={'homeSlice'}
-        videoId={turn_id}
-        source={source}
-      />
-    );
-  };
+  const renderItem: ListRenderItem<ITurn> = useCallback(
+    ({item: {turn_id, source, type, cover}}) => {
+      return (
+        <VideoSyncMediaController
+          cover={cover}
+          type={type}
+          id={'homeSlice'}
+          videoId={turn_id}
+          source={source}
+        />
+      );
+    },
+    [data],
+  );
+
+  useEffect(() => {
+    console.log({index});
+  }, [index]);
 
   return (
     <FlashList
-      extraData={data}
       bounces={false}
       data={data}
+      horizontal={false}
       ref={flashListRef}
       renderItem={renderItem}
       keyExtractor={keyExtractor}
+      initialScrollIndex={0}
+      removeClippedSubviews
+      maintainVisibleContentPosition={{
+        minIndexForVisible: 0,
+      }}
+      onScrollToTop={() => console.log('scrolling to top :>>')}
+      onScroll={() => console.log('Scrolllllling........')}
+      scrollsToTop={false}
       snapToAlignment="start"
       disableIntervalMomentum
       snapToInterval={Dimensions.get('screen').height}
@@ -67,3 +78,5 @@ export default function VideoList({data}: Props) {
     />
   );
 }
+
+export default memo(VideoList);

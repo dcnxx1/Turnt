@@ -1,4 +1,4 @@
-import {useRef} from 'react';
+import {useCallback, useEffect, useRef, useState} from 'react';
 import {
   ViewToken,
   ViewabilityConfig,
@@ -15,6 +15,9 @@ import {
 } from '../../../redux/videoListSlice';
 import {useActiveTurnStore} from '../../../store';
 import {turnToTrackMapper} from '../../../utils';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {HomeParams} from '../../../nav/navparams';
 
 type VideoListHookReturnType = [
   keyExtractor: (item: ITurn) => string,
@@ -28,9 +31,9 @@ const VIDEO_BECAME_ACTIVE_AT_PERCENT = 95;
 export default function useVideoList(): VideoListHookReturnType {
   const setGlobalActiveTurn = useActiveTurnStore(state => state.setActiveTurn);
   const dispatch = useDispatch();
-  
+
   const onViewableItemsChanged = useRef(
-    async (info: {viewableItems: ViewToken[]; changed: ViewToken[]}) => {
+    (info: {viewableItems: ViewToken[]; changed: ViewToken[]}) => {
       if (
         info.viewableItems.length &&
         info.viewableItems[0].index !== undefined
@@ -48,7 +51,7 @@ export default function useVideoList(): VideoListHookReturnType {
 
           setGlobalActiveTurn(currentActiveTurn);
 
-          await TrackPlayer.load(turnToTrackMapper(currentActiveTurn));
+          TrackPlayer.load(turnToTrackMapper(currentActiveTurn));
         }
         if (index !== null) {
           dispatch(setIndex(index));
@@ -69,9 +72,9 @@ export default function useVideoList(): VideoListHookReturnType {
       },
     ],
   );
-  const keyExtractor = (item: ITurn) => {
-    return item.turn_id;
-  };
+  const keyExtractor = useCallback((item: ITurn) => {
+    return String(item.turn_id);
+  }, []);
 
   return [keyExtractor, viewablityConfigCallbackPairs];
 }

@@ -62,7 +62,7 @@ export default function FileSelectScreen() {
 
   const onPressGoBack = () => {
     // restoreTrackPlayerCapabilities();
-    navigation.goBack();
+    navigation.navigate('HomeScreen');
   };
 
   const header = (

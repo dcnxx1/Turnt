@@ -8,7 +8,7 @@ import {TimelineDimensions} from './components/timeline/Timeline';
 import {useCallback, useState} from 'react';
 import {Blue, Brown, Red, Purple, Pink, Green, Orange} from '../Editor/covers';
 
-const defaultThumbnailsArray = [Blue, Brown, Red, Purple, Pink, Green, Orange];
+
 
 function errorAlertWithCallback<T>(cb: () => T | void) {
   Alert.alert('Oeps', 'Er is iets mis gegaan', [
@@ -51,6 +51,7 @@ export async function getMp3File(): Promise<
 
 export async function getVideoFile(): Promise<Video | undefined> {
   try {
+    
     const videoFile = await ImageCropPicker.openPicker({
       mediaType: 'video',
       loadingLabelText: 'Ophalen...',
