@@ -34,8 +34,8 @@ export default function PlaylistSheet({animatedPosition}: Props) {
     [],
   );
   const [ref, onChangeBottomSheetPosition] = usePlaylistSheet();
-  const isPlaying = useSelector((state: RootState) => state.playlistSlice.isPlaying)
-  console.log("isPLaying :>>", isPlaying)
+  
+
   const PlaylistSheetHandle = useCallback(() => {
     return <SheetHandle animatedPosition={animatedPosition} />;
   }, [animatedPosition]);

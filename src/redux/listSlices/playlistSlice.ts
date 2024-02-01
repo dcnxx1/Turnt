@@ -1,8 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
-import playlistSheetSlice, {
-  setPosition,
-  setNewPosition,
-} from '../playlistSheetSlice';
+import {setNewPosition, setPosition} from '../playlistSheetSlice';
 import * as actions from '../videoListSlice';
 import {initialState} from './homeSlice';
 
@@ -14,6 +11,7 @@ const playlistSlice = createSlice({
     builder.addCase(actions.increment, (state, action) => {
       if (state.isActive) {
         state.index++;
+        console.log('isActiveLSice :>>', state.isActive);
       }
     });
     builder.addCase(actions.decrement, state => {
@@ -36,16 +34,12 @@ const playlistSlice = createSlice({
         state.isPlaying = action.payload;
       }
     });
-    builder.addCase(setPosition, (state, action) => {
-      if (action.payload !== 'Hidden') {
-        if (state.isActive === false) {
-          (state.isActive = true), (state.isPlaying = true);
-        }
-      }
-    });
+
     builder.addCase(actions.setActiveSlice, (state, payload) => {
+      console.log('setActiveSLice hit :>');
       if (payload.payload === 'playlistSlice') {
         (state.isActive = true), (state.isPlaying = true);
+        console.log('activatingPlaylistSlice :>>', state.isActive);
       } else {
         state.isActive = false;
         state.isPlaying = false;
@@ -57,20 +51,21 @@ const playlistSlice = createSlice({
       }
     });
     builder.addCase(actions.setActiveVideo, (state, {payload}) => {
-      if (state.activeVideoId !== payload.turn_id) {
-        state.activeVideoId = payload.turn_id;
-        state.duration = payload.duration;
+      if (state.isActive) {
+        if (state.activeVideoId !== payload.turn_id) {
+          state.activeVideoId = payload.turn_id;
+          state.duration = payload.duration;
+        }
       }
     });
     builder.addCase(setNewPosition, (state, action) => {
       if (state.isActive) {
         state.index = action.payload.scrollToIndex;
       }
-    })
+    });
     builder.addCase(actions.disableSlices, (state, action) => {
-        if(state.isActive){
-          state.isActive = false
-        }
+      state.isActive = false;
+      state.isPlaying = false
     });
   },
 });

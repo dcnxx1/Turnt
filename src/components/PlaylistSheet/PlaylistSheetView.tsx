@@ -1,9 +1,13 @@
 import {useSelector} from 'react-redux';
-import {useMyPlaylistQuery, useMyUploadsQuery} from '../../shared/hooks/useQueryData';
-import PlaylistVideoManager from '../List/VideoListManagers/PlaylistVideoManager';
+import {RootState} from '../../redux/store';
+import {
+  useMyPlaylistQuery,
+  useMyUploadsQuery,
+} from '../../shared/hooks/useQueryData';
+
 import MediaController from '../MediaController/MediaController';
 import {FIRST_SNAP_POINT_MEDIACONTROLLER} from './PlaylistSheet';
-import {RootState} from '../../redux/store';
+import {useEffect} from 'react';
 
 type Props = {};
 
@@ -11,13 +15,15 @@ export default function PlaylistSheetView({}: Props) {
   const playlistSheetSlice = useSelector(
     (state: RootState) => state.playlistSheetSlice,
   );
+
+  
   const playlist = useMyPlaylistQuery();
   const myUploads = useMyUploadsQuery();
-  const data = playlistSheetSlice.data === 'playlist' ? playlist : myUploads
-  
+  const data = playlistSheetSlice.data === 'playlist' ? playlist : myUploads;
+
   return (
     <>
-      <PlaylistVideoManager data={data.data ?? []} />
+      
       <MediaController
         collapseAnimationEnabled
         tabHeight={1}

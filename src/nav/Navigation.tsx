@@ -2,14 +2,11 @@ import {
   BottomTabBarProps,
   createBottomTabNavigator,
 } from '@react-navigation/bottom-tabs';
-import {useNavigation} from '@react-navigation/native';
 import {
   StackNavigationOptions,
-  StackNavigationProp,
-  createStackNavigator,
+  createStackNavigator
 } from '@react-navigation/stack';
-import {useLayoutEffect} from 'react';
-import {PaperProvider} from 'react-native-paper';
+import { PaperProvider } from 'react-native-paper';
 import Tabbar from '../components/Tabbar/Tabbar';
 import {
   Editor,
@@ -21,8 +18,8 @@ import {
 import AccountSetupScreen from '../screens/AccountSetup/AccountSetupScreen';
 import AuthScreen from '../screens/Auth/AuthScreen';
 import useLocalProfile from '../store/useLocalProfile';
-import {AccountSetupParams, EditorParams, HomeParams} from './navparams';
-import {NavScreenNames, RootNavNames} from './types';
+import { AccountSetupParams, EditorParams, HomeParams } from './navparams';
+import { NavScreenNames, RootNavNames } from './types';
 
 const HomeStack = createBottomTabNavigator<HomeParams>();
 const RootStack = createStackNavigator();
@@ -38,20 +35,13 @@ type TabbarProps = {
   [P in keyof BottomTabBarProps]: BottomTabBarProps[P];
 };
 
-const BottomBar = (props: TabbarProps) => {
-  return <Tabbar {...props} />;
-};
-
 function HomeStackNavigator() {
-
-
   return (
     <HomeStack.Navigator
       detachInactiveScreens={false}
-      tabBar={BottomBar}
+      tabBar={props => <Tabbar {...props} />}
       screenOptions={{
         headerShown: false,
-
       }}
       initialRouteName={NavScreenNames.HomeScreen}>
       <HomeStack.Screen component={Home} name={NavScreenNames.HomeScreen} />
@@ -86,7 +76,12 @@ function SetupScreenStackNavigator() {
 
 function EditorStackNavigator() {
   return (
-    <EditorStack.Navigator initialRouteName={NavScreenNames.FileSelectScreen}>
+    <EditorStack.Navigator
+      screenOptions={{
+        ...screenOptions,
+        detachPreviousScreen: false,
+      }}
+      initialRouteName={NavScreenNames.FileSelectScreen}>
       <EditorStack.Screen
         component={FileSelectScreen}
         name={NavScreenNames.FileSelectScreen}
@@ -113,6 +108,7 @@ export default function Navigation({initialRoute}: Props) {
         initialRouteName={initialRoute}>
         {me.user?.user_id ? (
           <RootStack.Screen
+            options={{}}
             name={RootNavNames.HomeStack}
             component={HomeStackNavigator}
           />
@@ -124,7 +120,7 @@ export default function Navigation({initialRoute}: Props) {
         )}
 
         <RootStack.Screen
-          options={screenOptions}
+          options={{...screenOptions, detachPreviousScreen: false}}
           name={RootNavNames.EditorStack}
           component={EditorStackNavigator}
         />

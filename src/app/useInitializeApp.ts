@@ -1,26 +1,25 @@
-import {useQueryClient} from '@tanstack/react-query';
-import {DependencyList, useEffect, useState} from 'react';
-import {useDispatch} from 'react-redux';
-import {queryKey} from '../api/api';
-import {getFeed} from '../api/collection';
-import {getPlaylistByUserId} from '../api/playlist';
-import {getProfile} from '../api/profile';
-import {ITurn} from '../models/turn';
-import {RootNavs} from '../nav/types';
-import {useActiveTurnStore} from '../store';
+import { useQueryClient } from '@tanstack/react-query';
+import { DependencyList, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { queryKey } from '../api/api';
+import { getFeed } from '../api/collection';
+import getMyUploadsByUserId from '../api/myUploads';
+import { getPlaylistByUserId } from '../api/playlist';
+import { getProfile } from '../api/profile';
+import { RootNavs } from '../nav/types';
+import { setActiveVideo } from '../redux/videoListSlice';
+import { useActiveTurnStore } from '../store';
 import {
   addTrackPlayerTracks,
   getLocalUserProfile,
   setupTrackPlayer,
 } from './boot';
-import getMyUploadsByUserId from '../api/myUploads';
-import {setActiveTurn, setActiveVideo} from '../redux/videoListSlice';
 
 export default function useInitalizeApp(): [boolean, string | undefined] {
   const queryClient = useQueryClient();
   const [isInitializing, setInitializing] = useState(true);
   const [initialRoute, setInitialRoute] = useState<RootNavs>();
-
+ 
   const dispatch = useDispatch();
   async function initialize() {
     try {

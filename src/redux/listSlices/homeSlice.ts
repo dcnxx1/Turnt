@@ -25,7 +25,6 @@ const homeSlice = createSlice({
   extraReducers: builder => {
     builder.addCase(actions.increment, (state, action) => {
       if (state.isActive) {
-        
         state.index++;
       }
     });
@@ -37,7 +36,6 @@ const homeSlice = createSlice({
     });
     builder.addCase(actions.setIndex, (state, action) => {
       if (state.isActive) {
-        console.log("SetIndex called")
         state.index = action.payload;
       }
     });
@@ -71,9 +69,8 @@ const homeSlice = createSlice({
       state.duration = payload.duration;
     });
     builder.addCase(actions.disableSlices, (state, action) => {
-      if (state.isActive) {
-        state.isActive = false;
-      }
+      state.isActive = false;
+      state.isPlaying = false;
     });
   },
 });

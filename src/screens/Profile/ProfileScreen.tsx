@@ -28,7 +28,12 @@ export default function ProfileScreen() {
   );
 
   const onPressUpload = () => {
-    navigation.push('EditorStack');
+    console.log('passing the next to EditorStack :>>', {
+      activeSlice: isPlaylistSliceActive ? 'playlistSlice' : 'homeSlice',
+    });
+    navigation.push('EditorStack', {
+      activeSlice: isPlaylistSliceActive ? 'playlistSlice' : 'homeSlice',
+    });
   };
 
   return (

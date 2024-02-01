@@ -1,9 +1,9 @@
-import {useNavigation} from '@react-navigation/native';
+import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {StyleSheet, Text} from 'react-native';
 import {Button} from 'react-native-paper';
 import {millisToSeconds} from '../../helpers';
-import {EditorParams} from '../../nav/navparams';
+import {EditorParams, HomeParams} from '../../nav/navparams';
 
 import GenericScreen from '../../components/Screen/GenericScreen';
 import theme from '../../theme';
@@ -14,15 +14,21 @@ import {
   getMp3File,
   getVideoFile,
 } from './utils';
+import {useEffect} from 'react';
 
 type EditorParamsPath = EditorParams['EditorScreen'];
 
 export default function FileSelectScreen() {
   const navigation = useNavigation<StackNavigationProp<EditorParams>>();
   const defaultCoverColor: VideoCoverColor = chooseDefaultCoverImage();
+  const activeSlice = useRoute<RouteProp<EditorParams>>();
+
+  useEffect(() => {
+    console.log({activeSlice});
+  }, [activeSlice]);
 
   const navigateToEditorScreen = (params: EditorParams['EditorScreen']) => {
-    navigation.navigate('EditorScreen', params);
+    navigation.push('EditorScreen', params);
   };
 
   const onPressSelectAudio = async () => {
@@ -62,7 +68,7 @@ export default function FileSelectScreen() {
 
   const onPressGoBack = () => {
     // restoreTrackPlayerCapabilities();
-    navigation.navigate('HomeScreen');
+    navigation.goBack();
   };
 
   const header = (

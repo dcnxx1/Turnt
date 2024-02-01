@@ -1,11 +1,12 @@
 import {StyleSheet} from 'react-native';
-import VideoList from '../../components/List/VideoList';
+
 import GenericScreen from '../../components/Screen/GenericScreen';
 import {useFeedQuery} from '../../shared/hooks/useQueryData';
 import {useEffect, useLayoutEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {HomeParams} from '../../nav/navparams';
+import {Text} from 'react-native-paper';
 
 export type TestData = {
   source: string;
@@ -16,8 +17,7 @@ function HomeScreen(): JSX.Element {
   const {data: turns} = useFeedQuery();
   const navigation = useNavigation<StackNavigationProp<HomeParams>>();
 
-  
-  const content = turns && <VideoList data={turns} />;
+  const content = <Text>Starting over</Text>;
   return <GenericScreen style={Style.container} content={content} />;
 }
 
