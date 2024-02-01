@@ -52,14 +52,7 @@ export default function SavedSongList({data, queryKeyRefresh}: Props) {
   };
 
   const onPressPlaylistItem = (index: number) => {
-    dispatch(setActiveSlice('playlistSlice'));
-    dispatch(
-      setNewPosition({
-        bottomSheetPosition: 'FullScreen',
-        scrollToIndex: index,
-        data: queryKeyRefresh,
-      }),
-    );
+   
   };
 
   const renderItem: ListRenderItem<ITurn> = ({item, index}) => {

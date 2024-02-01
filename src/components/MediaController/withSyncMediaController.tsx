@@ -44,11 +44,9 @@ export default function withSyncMediaController(
   }) => {
     const ref = useRef<Video>(null);
 
-    const {activeVideoId, duration} = useSelector(
-      (state: RootState) => state[id],
-    );
-    const isVideoOnScreen = activeVideoId === videoId;
-    const isPlaying = useSelector((state: RootState) => state[id].isPlaying);
+  
+  
+   
     const {seekTo, setSeekTo, isSeeking} = useSeek();
     const setProgress = useVideoStore(state => state.setProgress);
     const dispatch = useDispatch();
@@ -60,12 +58,10 @@ export default function withSyncMediaController(
     }, [seekTo, ref]);
 
     useEffect(() => {
-      if (isVideoOnScreen && !isPlaying) {
-        dispatch(setIsPlaying(true));
-      }
+    
       setProgress(0);
       setSeekTo(0);
-    }, [isVideoOnScreen]);
+    }, []);
 
     const onProgress = async ({currentTime}: OnProgressData) => {
       if (isSeeking) return;
@@ -80,34 +76,13 @@ export default function withSyncMediaController(
       }
     });
 
-    const onPressVideoPausedOverlay = () => {
-      if (id === 'homeSlice') {
-        if (homeSlice.isActive === false) {
-          dispatch(setActiveSlice('homeSlice'));
-          dispatch(setPosition('Hidden'));
-          dispatch(
-            setActiveVideo({
-              turn_id: activeVideoId,
-              duration,
-            }),
-          );
-          dispatch(togglePlaying());
-        }
-      }
-      dispatch(togglePlaying());
-    };
-
     const onEnd = () => {
       const progress = useVideoStore.getState().progress;
-      if (progress >= duration) {
-        dispatch(increment());
-      }
+      
     };
 
     return (
-      <VideoPausedOverlay
-        paused={activeVideoId === videoId && !isPlaying}
-        onPress={onPressVideoPausedOverlay}>
+    
         <View
           style={{
             position: 'relative',
@@ -123,17 +98,17 @@ export default function withSyncMediaController(
           ) : null}
           <VideoPlayer
             ref={ref}
-            onEnd={activeVideoId === videoId ? onEnd : undefined}
-            onProgress={activeVideoId === videoId ? onProgress : undefined}
+           paused={true}
+           
             source={useCDN(TURN_KEY + source)}
-            paused={activeVideoId === videoId ? !isPlaying : true}
+          
             style={{
               height: type !== 'Audio' ? Dimensions.get('screen').height : 0,
               width: '100%',
             }}
           />
         </View>
-      </VideoPausedOverlay>
+
     );
   };
 }

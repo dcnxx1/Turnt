@@ -22,9 +22,7 @@ const AppContent = () => {
     useRef<NavigationContainerRef<ReactNavigation.RootParamList>>(null);
   const dispatch = useDispatch();
   const activeSliceRef = useRef<'playlistSlice' | 'homeSlice'>();
-  const activeSlice = useSelector(
-    (state: RootState) => state.homeSlice.isActive,
-  );
+
   useEffect(() => {
     if (!isInitializing && initialRoute) {
       RNBootSplash.hide({fade: true});
@@ -47,8 +45,7 @@ const AppContent = () => {
       previousRouteName === 'ProfileScreen' &&
       currentRouteName === 'FileSelectScreen'
     ) {
-      activeSliceRef.current = activeSlice ? 'homeSlice' : 'playlistSlice';
-      console.log("activeSliceRef :>>", activeSliceRef.current)
+      console.log('activeSliceRef :>>', activeSliceRef.current);
       dispatch(disableSlices());
     }
     if (

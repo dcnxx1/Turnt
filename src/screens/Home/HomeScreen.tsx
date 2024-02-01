@@ -1,8 +1,6 @@
 import {StyleSheet} from 'react-native';
-
 import GenericScreen from '../../components/Screen/GenericScreen';
 import {useFeedQuery} from '../../shared/hooks/useQueryData';
-import {useEffect, useLayoutEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {HomeParams} from '../../nav/navparams';

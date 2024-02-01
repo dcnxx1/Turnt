@@ -15,18 +15,16 @@ export const MINIPLAYER_HEIGHT = Dimensions.get('screen').height * 0.07;
 export default function MiniPlayer() {
   const {activeTurn} = useActiveTurnStore();
   const {progress} = useVideoStore();
-  const isPlaying = useSelector(
-    (state: RootState) => state.playlistSlice.isPlaying,
-  );
+ 
 
   const dispatch = useDispatch();
   const onPressForward = () => {
-    dispatch(increment());
+
   };
 
   const onPressPlayPauseToggle = () => {
 
-    dispatch(togglePlaying());
+
   };
 
   return (
@@ -47,7 +45,7 @@ export default function MiniPlayer() {
           style={Style.metaButtons}
           useButtons={[
             {
-              type: isPlaying ? 'Pause' : 'Play',
+              type: true ? 'Pause' : 'Play',
               onPress: onPressPlayPauseToggle,
               size: 25,
             },

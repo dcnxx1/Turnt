@@ -23,18 +23,7 @@ export default function ProfileScreen() {
   const myUploadsData = useMyUploadsQuery();
   const navigation = useNavigation<StackNavigationProp<HomeParams>>();
 
-  const isPlaylistSliceActive = useSelector(
-    (state: RootState) => state.playlistSlice.isActive,
-  );
-
-  const onPressUpload = () => {
-    console.log('passing the next to EditorStack :>>', {
-      activeSlice: isPlaylistSliceActive ? 'playlistSlice' : 'homeSlice',
-    });
-    navigation.push('EditorStack', {
-      activeSlice: isPlaylistSliceActive ? 'playlistSlice' : 'homeSlice',
-    });
-  };
+  const onPressUpload = () => {};
 
   return (
     <>
@@ -48,11 +37,7 @@ export default function ProfileScreen() {
           <Text style={Style.text}>Uploaden</Text>
         </Pressable>
       )}
-      <Tab
-        style={{paddingBottom: isPlaylistSliceActive ? MINIPLAYER_HEIGHT : 0}}
-        playlist={myPlaylistData}
-        myUploads={myUploadsData}
-      />
+      <Tab playlist={myPlaylistData} myUploads={myUploadsData} />
     </>
   );
 }
