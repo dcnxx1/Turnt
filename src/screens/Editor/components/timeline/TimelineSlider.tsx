@@ -1,5 +1,5 @@
 import {SliderProps} from '@miblanchard/react-native-slider';
-import MediaControllerSlider from '../../../../components/MediaController/components/MediaControllerSlider';
+import MediaControllerSlider from '../../../../components/MediaController/MediaControllerSlider';
 import {TURN_IMPRESSION_TIME} from '../../../../constants';
 import SliderHandle from './HandleSlider';
 import {TimelineDimensions} from './Timeline';

@@ -9,13 +9,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useCDN} from '../../api/api';
 import {ITurn} from '../../models/turn';
 import {RootState} from '../../redux/store';
-import {
-  increment,
-  setActiveSlice,
-  setActiveVideo,
-  setIsPlaying,
-  togglePlaying,
-} from '../../redux/videoListSlice';
+
 import {COVER_KEY, TURN_KEY} from '../../s3';
 import {useSeek, useVideoStore} from '../../store';
 import ImageBlurBackground from '../Images/ImageBlurBackground';
@@ -44,13 +38,10 @@ export default function withSyncMediaController(
   }) => {
     const ref = useRef<Video>(null);
 
-  
-  
-   
     const {seekTo, setSeekTo, isSeeking} = useSeek();
     const setProgress = useVideoStore(state => state.setProgress);
     const dispatch = useDispatch();
-    const homeSlice = useSelector((state: RootState) => state.homeSlice);
+
     useEffect(() => {
       if (ref.current) {
         ref.current.seek(seekTo);
@@ -58,7 +49,6 @@ export default function withSyncMediaController(
     }, [seekTo, ref]);
 
     useEffect(() => {
-    
       setProgress(0);
       setSeekTo(0);
     }, []);
@@ -78,37 +68,32 @@ export default function withSyncMediaController(
 
     const onEnd = () => {
       const progress = useVideoStore.getState().progress;
-      
     };
 
     return (
-    
-        <View
-          style={{
-            position: 'relative',
-          }}>
-          {type === 'Audio' ? (
-            <ImageBlurBackground
-              source={{uri: useCDN(COVER_KEY + cover)}}
-              style={{
-                position: 'absolute',
-                height: Dimensions.get('screen').height,
-              }}
-            />
-          ) : null}
-          <VideoPlayer
-            ref={ref}
-           paused={true}
-           
-            source={useCDN(TURN_KEY + source)}
-          
+      <View
+        style={{
+          position: 'relative',
+        }}>
+        {type === 'Audio' ? (
+          <ImageBlurBackground
+            source={{uri: useCDN(COVER_KEY + cover)}}
             style={{
-              height: type !== 'Audio' ? Dimensions.get('screen').height : 0,
-              width: '100%',
+              position: 'absolute',
+              height: Dimensions.get('screen').height,
             }}
           />
-        </View>
-
+        ) : null}
+        <VideoPlayer
+          ref={ref}
+          paused={true}
+          source={useCDN(TURN_KEY + source)}
+          style={{
+            height: type !== 'Audio' ? Dimensions.get('screen').height : 0,
+            width: '100%',
+          }}
+        />
+      </View>
     );
   };
 }

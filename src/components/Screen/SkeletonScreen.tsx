@@ -36,9 +36,9 @@ function SkeletonScreen({
   };
   return (
     <Flex style={optionalPadding}>
-      {header && <SectionScreen style={headerStyle} children={header} />}
+      {header && <SectionScreen style={headerStyle} right={undefined} />}
       <View style={[contentStyle, , Style.container]}>{content}</View>
-      {footer && <SectionScreen style={footerStyle} children={footer} />}
+      {footer && <SectionScreen style={footerStyle} right={undefined} />}
     </Flex>
   );
 }

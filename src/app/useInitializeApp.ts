@@ -7,7 +7,7 @@ import getMyUploadsByUserId from '../api/myUploads';
 import {getPlaylistByUserId} from '../api/playlist';
 import {getProfile} from '../api/profile';
 import {RootNavs} from '../nav/types';
-import {setActiveVideo} from '../redux/videoListSlice';
+
 import {useActiveTurnStore} from '../store';
 import {
   addTrackPlayerTracks,

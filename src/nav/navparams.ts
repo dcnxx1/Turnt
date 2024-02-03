@@ -26,9 +26,7 @@ export type RootParams = {
 };
 
 export type EditorParams = {
-  FileSelectScreen: {
-    activeSlice: 'playlistSlice' | 'homeSlice';
-  };
+  FileSelectScreen: undefined;
   EditorScreen: {
     filePath: string;
     duration: number | null;

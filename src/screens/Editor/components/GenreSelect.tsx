@@ -1,8 +1,8 @@
-import {Text} from 'react-native-paper';
-import {Flex} from '../../../components';
+import { Text } from 'react-native-paper';
+import { Flex } from '../../../components';
 
-import {Pressable, StyleSheet, View} from 'react-native';
-import {Genre} from '../../../models/turn';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { Genre } from '../../../models/turn';
 import theme from '../../../theme';
 
 type Props = {

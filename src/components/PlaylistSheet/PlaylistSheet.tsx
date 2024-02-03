@@ -1,21 +1,14 @@
 import BottomSheet from '@gorhom/bottom-sheet';
-import {useCallback, useMemo} from 'react';
-import {Dimensions, StyleSheet} from 'react-native';
-import {SharedValue} from 'react-native-reanimated';
+import { useCallback, useMemo } from 'react';
+import { Dimensions, StyleSheet } from 'react-native';
+import { SharedValue } from 'react-native-reanimated';
 import theme from '../../theme';
 
-import {MINIPLAYER_HEIGHT} from './components/Miniplayer';
+import { MINIPLAYER_HEIGHT } from './components/Miniplayer';
 import SheetHandle from './components/PlaylistSheetHandle';
-import {animatedConfig} from './config';
+import { animatedConfig } from './config';
 import usePlaylistSheet from './hooks/usePlaylistSheet';
 
-import {useSelector} from 'react-redux';
-import {RootState} from '../../redux/store';
-import {
-  useMyPlaylistQuery,
-  useMyUploadsQuery,
-} from '../../shared/hooks/useQueryData';
-import MediaController from '../MediaController/MediaController';
 import PlaylistSheetView from './PlaylistSheetView';
 
 type Props = {

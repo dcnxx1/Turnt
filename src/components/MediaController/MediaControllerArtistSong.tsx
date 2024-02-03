@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {Text} from 'react-native-paper';
-import {ITurn} from '../../../models/turn';
+import {ITurn} from '../../models/turn';
 
 type Props = {
   artist: string;

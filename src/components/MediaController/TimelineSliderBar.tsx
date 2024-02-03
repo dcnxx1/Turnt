@@ -1,18 +1,13 @@
-import {Dimensions, StyleSheet} from 'react-native';
-import {Text} from 'react-native-paper';
-import {secondsToDisplayTime} from '../../../helpers';
-import {ITurn} from '../../../models/turn';
-import {useSeek, useVideoStore} from '../../../store';
-import Flex from '../../Misc/Flex';
-import MediaControllerSlider from './MediaControllerSlider';
-import {
-  SharedValue,
-  interpolate,
-  useAnimatedStyle,
+import { Dimensions, StyleSheet } from 'react-native';
+import { Text } from 'react-native-paper';
+import RNAnimated, {
+  SharedValue
 } from 'react-native-reanimated';
-import {FIRST_SNAP_POINT_MEDIACONTROLLER} from '../../PlaylistSheet/PlaylistSheet';
-import {MAX_SNAP_POINT} from '../MediaController';
-import RNAnimated from 'react-native-reanimated';
+import { secondsToDisplayTime } from '../../helpers';
+import { ITurn } from '../../models/turn';
+import { useSeek, useVideoStore } from '../../store';
+import Flex from '../Misc/Flex';
+import MediaControllerSlider from './MediaControllerSlider';
 type Props = {
   videoDuration: ITurn['duration'];
   title: ITurn['title'];

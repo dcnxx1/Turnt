@@ -6,7 +6,7 @@ import {ReactNode, useEffect, useRef} from 'react';
 import RNBootSplash from 'react-native-bootsplash';
 import {useDispatch} from 'react-redux';
 import {Navigation} from '../nav';
-import {disableSlices, setActiveSlice} from '../redux/videoListSlice';
+
 import useInitalizeApp from './useInitializeApp';
 
 type Props = {
@@ -44,14 +44,14 @@ const AppContent = () => {
       currentRouteName === 'FileSelectScreen'
     ) {
       // console.log('activeSliceRef :>>', activeSliceRef.current);
-      dispatch(disableSlices());
+  
     }
     if (
       previousRouteName === 'FileSelectScreen' &&
       currentRouteName === 'ProfileScreen'
     ) {
       if (activeSliceRef.current) {
-        dispatch(setActiveSlice(activeSliceRef.current));
+     
       }
     }
     routeNameRef.current = currentRouteName;

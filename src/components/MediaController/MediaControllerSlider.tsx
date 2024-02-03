@@ -1,7 +1,7 @@
 import {Slider} from '@miblanchard/react-native-slider';
 import {useState} from 'react';
-import {sliderStyle} from '../configs';
-import {useSeek} from '../../../store';
+import {sliderStyle} from './configs';
+import {useSeek} from '../../store';
 
 type SliderProps = {
   videoProgress: number;

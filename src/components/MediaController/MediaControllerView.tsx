@@ -1,23 +1,17 @@
-import {BlurView} from '@react-native-community/blur';
-import {debounce} from 'lodash';
-import {Dimensions, StyleSheet, View} from 'react-native';
+import { BlurView } from '@react-native-community/blur';
+import { debounce } from 'lodash';
+import { Dimensions, StyleSheet, View } from 'react-native';
 import RNAnimated, {
   SharedValue,
   interpolate,
   useAnimatedStyle,
 } from 'react-native-reanimated';
-import {useDispatch} from 'react-redux';
-import useActiveSlice from '../../../redux/useActiveSlice';
-import {
-  decrement,
-  increment,
-  togglePlaying,
-} from '../../../redux/videoListSlice';
-import {useActiveTurnStore} from '../../../store';
-import Flex from '../../Misc/Flex';
-import {FIRST_SNAP_POINT_MEDIACONTROLLER} from '../../PlaylistSheet/PlaylistSheet';
-import {MAX_SNAP_POINT} from '../MediaController';
-import {blurViewConfig} from '../configs';
+import { useDispatch } from 'react-redux';
+
+import { useActiveTurnStore } from '../../store';
+import Flex from '../Misc/Flex';
+import { FIRST_SNAP_POINT_MEDIACONTROLLER } from '../PlaylistSheet/PlaylistSheet';
+import { MAX_SNAP_POINT } from './MediaController';
 import MediaControllerArtistSong from './MediaControllerArtistSong';
 import {
   PlayNextButton,
@@ -25,7 +19,7 @@ import {
   TogglePlayPauseButton,
 } from './MediaControllerButtons';
 import TimelineSliderBar from './TimelineSliderBar';
-import { useEffect } from 'react';
+import { blurViewConfig } from './configs';
 const SCREEN_HEIGHT = Dimensions.get('screen').height;
 type Props = {
   animatedPosition: SharedValue<number>;
@@ -38,24 +32,13 @@ export default function MediaControllerView({
 }: Props) {
   const {activeTurn} = useActiveTurnStore();
   const dispatch = useDispatch();
-  const [activeSlice] = useActiveSlice();
-  const onPressTogglePlayPause = () => {
-    dispatch(togglePlaying());
-  };
 
-  useEffect(() => {
-    console.log({
-      activeSlice
-    })
-  },[activeSlice])
+  const onPressTogglePlayPause = () => {};
+
   // TODO: Check whether to use debounce or throttle..
-  const onPressNext = debounce(() => {
-    dispatch(increment());
-  }, 50);
+  const onPressNext = debounce(() => {}, 50);
 
-  const onPressPrevious = debounce(() => {
-    dispatch(decrement());
-  }, 50);
+  const onPressPrevious = debounce(() => {}, 50);
 
   const interpolateCollapseAnimation = useAnimatedStyle(() => {
     return {
@@ -75,10 +58,7 @@ export default function MediaControllerView({
     <BlurView style={Style.blurView} {...blurViewConfig}>
       <View style={Style.content}>
         <View style={Style.mediaController}>
-          <MediaControllerArtistSong
-            artist={'someone'}
-            title={String(activeSlice.title)}
-          />
+          <MediaControllerArtistSong artist={'someone'} title={String('')} />
         </View>
         <RNAnimated.View
           style={[
@@ -88,7 +68,7 @@ export default function MediaControllerView({
           <Flex style={Style.timelineSideBarContainer}>
             <TimelineSliderBar
               animatedPosition={animatedPosition}
-              title={activeSlice.title}
+              title={''}
               videoDuration={activeTurn && activeTurn.duration}
             />
           </Flex>

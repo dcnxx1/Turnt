@@ -1,9 +1,8 @@
-import {StyleSheet} from 'react-native';
-import {Text} from 'react-native-paper';
-import {Flex} from '../../../components';
+import { StyleSheet } from 'react-native';
+import { Text } from 'react-native-paper';
+import { Flex } from '../../../components';
 import EditableImage from '../../../components/Images/EditableImage';
-import {VideoCoverColor} from '../utils';
-import * as covers from '../../../assets/covers';
+import { VideoCoverColor } from '../utils';
 type Props = {
   value: string;
   onChange: (value: string) => void;

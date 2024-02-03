@@ -1,16 +1,12 @@
-import {useDispatch, useSelector} from 'react-redux';
-import {RootState} from '../../redux/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
 import {
   useMyPlaylistQuery,
   useMyUploadsQuery,
 } from '../../shared/hooks/useQueryData';
 
-import MediaController from '../MediaController/MediaController';
-import {FIRST_SNAP_POINT_MEDIACONTROLLER} from './PlaylistSheet';
-import {useEffect} from 'react';
-import {FlashList, ViewToken} from '@shopify/flash-list';
-import {Dimensions, Text, View} from 'react-native';
-import {setActiveVideo, setIndex} from '../../redux/videoListSlice';
+import { FlashList } from '@shopify/flash-list';
+import { Dimensions, Text, View } from 'react-native';
 
 type Props = {};
 const data = [
@@ -49,27 +45,6 @@ export default function PlaylistSheetView({}: Props) {
   // const data = playlistSheetSlice.data === 'playlist' ? playlist : myUploads;
   const dispatch = useDispatch();
 
-  const onViewableItemsChanged = ({
-    viewableItems,
-  }: {
-    viewableItems: ViewToken[];
-  }) => {
-    if (viewableItems.length && viewableItems[0].index !== undefined) {
-      const {item, index} = viewableItems[0];
-
-      item !== null &&
-        dispatch(
-          setActiveVideo({
-            turn_id: item.title,
-            duration: item.duration,
-          }),
-        );
-      if (index !== null) {
-        dispatch(setIndex(index));
-      }
-    }
-  };
-
   return (
     <>
       <FlashList
@@ -79,10 +54,6 @@ export default function PlaylistSheetView({}: Props) {
           width: Dimensions.get('screen').width,
           height: Dimensions.get('screen').height,
         }}
-        viewabilityConfig={{
-          itemVisiblePercentThreshold: 40,
-        }}
-        onViewableItemsChanged={onViewableItemsChanged}
         automaticallyAdjustContentInsets={false}
         automaticallyAdjustsScrollIndicatorInsets={false}
         automaticallyAdjustKeyboardInsets={false}
@@ -103,11 +74,11 @@ export default function PlaylistSheetView({}: Props) {
           </View>
         )}
       />
-      <MediaController
+      {/* <MediaController
         collapseAnimationEnabled
         tabHeight={1}
         firstSnapPoint={FIRST_SNAP_POINT_MEDIACONTROLLER}
-      />
+      /> */}
     </>
   );
 }

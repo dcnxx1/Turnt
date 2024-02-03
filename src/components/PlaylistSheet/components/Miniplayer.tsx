@@ -22,12 +22,12 @@ export default function MiniPlayer() {
   return (
     <View style={Style.container}>
       <Image
-        source={{uri: useCDN(COVER_KEY + activeTurn.cover)}}
+        source={{uri: useCDN(COVER_KEY + '')}}
         style={Style.coverImage}
       />
       <View style={[Style.metaItem, Style.metaTextContainer]}>
         <Text>Artist Name!</Text>
-        <Text>{activeTurn.title}</Text>
+        <Text>{''}</Text>
       </View>
       <View style={[Style.metaItem, Style.metaProgress]}>
         <Text>{secondsToDisplayTime(progress)}</Text>

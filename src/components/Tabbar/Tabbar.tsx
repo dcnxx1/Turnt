@@ -1,8 +1,8 @@
-import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
-import { useState } from 'react';
-import { LayoutChangeEvent } from 'react-native';
-import { useSharedValue } from 'react-native-reanimated';
-import MediaController from '../MediaController/MediaController';
+import {BottomTabBarProps} from '@react-navigation/bottom-tabs';
+import {useState} from 'react';
+import {LayoutChangeEvent} from 'react-native';
+import {useSharedValue} from 'react-native-reanimated';
+import {MediaController} from '../MediaController';
 import PlaylistSheet from '../PlaylistSheet/PlaylistSheet';
 import BottomTab from './BottomTab';
 
@@ -23,11 +23,11 @@ export default function Tabbar(props: TabbarProps) {
 
   return (
     <>
-      <MediaController
+      {/* <MediaController
         collapseAnimationEnabled={true}
         firstSnapPoint={'5%'}
         tabHeight={tabHeight}
-      />
+      /> */}
 
       <PlaylistSheet animatedPosition={animatedPosition} />
       <BottomTab

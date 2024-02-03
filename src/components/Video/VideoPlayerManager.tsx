@@ -1,6 +1,6 @@
 import {Pressable, StyleSheet} from 'react-native';
 import {ITurn} from '../../models/turn';
-import {useVideoListContext} from '../../shared/context/VideoListContext';
+
 import withSyncMediaController from '../MediaController/withSyncMediaController';
 import VideoPlayer from './VideoPlayer';
 
@@ -14,7 +14,7 @@ const VideoSyncController = withSyncMediaController(VideoPlayer);
 export default function VideoPlayerManager({videoId, source}: Props) {
   return (
     <Pressable>
-      <VideoSyncController isVideoOnScreen={true} source={source} />
+ 
     </Pressable>
   );
 }

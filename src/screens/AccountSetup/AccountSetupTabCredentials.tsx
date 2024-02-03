@@ -38,7 +38,12 @@ export default function AccountSetupTabCredentials({
           render={({field: {onChange, value}}) => {
             return (
               <>
-                <EditableImage source={value} setPath={onChange} />
+                <EditableImage
+                  defaultCover={require('../../assets/covers/cover_brown_default.png')}
+                  source={value}
+                  isAvatar={true}
+                  setSource={onChange}
+                />
                 <Text style={Style.textStyle}>
                   {errors.avatar ? errors.avatar.message : ''}
                 </Text>

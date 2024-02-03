@@ -1,20 +1,18 @@
 import {
   ContentStyle,
   FlashList,
-  ListRenderItem,
   FlashListProps,
+  ListRenderItem,
   ViewToken,
 } from '@shopify/flash-list';
-import {forwardRef} from 'react';
+import { forwardRef } from 'react';
 import {
   Dimensions,
   LayoutChangeEvent,
-  View,
   ViewabilityConfig,
-  ViewabilityConfigCallbackPairs,
+  ViewabilityConfigCallbackPairs
 } from 'react-native';
-import {Text} from 'react-native-paper';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const screenWidth = Dimensions.get('screen').width;
 const screenHeight = Dimensions.get('screen').height;

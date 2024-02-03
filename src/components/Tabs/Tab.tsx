@@ -1,7 +1,7 @@
-import {useNavigation} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {UseQueryResult, useQueryClient} from '@tanstack/react-query';
-import {useRef, useState} from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { UseQueryResult } from '@tanstack/react-query';
+import { useRef, useState } from 'react';
 import {
   NativeSyntheticEvent,
   StyleProp,
@@ -10,18 +10,13 @@ import {
   ViewStyle,
 } from 'react-native';
 import PagerView from 'react-native-pager-view';
-import {
-  FadeIn,
-  default as RNAnimated,
-  useSharedValue,
-} from 'react-native-reanimated';
-import {queryKey} from '../../api/api';
-import {ITurn} from '../../models/turn';
-import {HomeParams} from '../../nav/navparams';
+import { FadeIn, default as RNAnimated } from 'react-native-reanimated';
+import { queryKey } from '../../api/api';
+import { ITurn } from '../../models/turn';
+import { HomeParams } from '../../nav/navparams';
 import useLocalProfile from '../../store/useLocalProfile';
 import FallbackMessage from '../Error/FallbackMessage';
 import SavedSongList from '../PlaylistSheet/SavedSongList';
-import {useActiveTurnStore} from '../../store';
 
 type Props = {
   playlist: UseQueryResult<ITurn[] | undefined, Error>;

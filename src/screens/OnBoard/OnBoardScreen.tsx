@@ -1,8 +1,7 @@
-import {ListRenderItem} from '@shopify/flash-list';
+import {FlashList, ListRenderItem} from '@shopify/flash-list';
 import React from 'react';
 import {Dimensions, Image, StyleSheet} from 'react-native';
 import {Flex, SkeletonScreen} from '../../components';
-import SkeletonFlashList from '../../components/List/SkeletonFlashList';
 import {withLinearGradient} from '../../components/Screen/SkeletonScreen';
 import {IOnBoardProps, onBoardingText} from '../../constants';
 import theme from '../../theme';
@@ -57,11 +56,9 @@ export default function OnBoardScreen() {
   };
 
   const content = (
-    <SkeletonFlashList
+    <FlashList
       decelerationRate={'fast'}
       snapToAlignment={'start'}
-      showsHorizontalScrollIndicator={false}
-      disableIntervalMomentum
       keyExtractor={keyExtractor}
       data={onBoardingText}
       renderItem={renderItem}

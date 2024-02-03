@@ -1,5 +1,5 @@
 import {useMemo} from 'react';
-import MediaControllerView from './components/MediaControllerView';
+import MediaControllerView from './MediaControllerView';
 import {bottomSheetConfig} from './configs';
 import BottomSheet from '@gorhom/bottom-sheet';
 import {useSharedValue} from 'react-native-reanimated';
