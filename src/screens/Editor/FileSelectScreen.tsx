@@ -1,11 +1,12 @@
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {StyleSheet, Text} from 'react-native';
+import {launchImageLibrary} from 'react-native-image-picker';
 import {Button} from 'react-native-paper';
-import {millisToSeconds} from '../../helpers';
-import {EditorParams, HomeParams} from '../../nav/navparams';
-
 import GenericScreen from '../../components/Screen/GenericScreen';
+import {askPermission, millisToSeconds} from '../../helpers';
+import {EditorParams} from '../../nav/navparams';
+
 import theme from '../../theme';
 import {getAudioDuration} from './hooks/useGenerateThumbnails';
 import {
@@ -14,7 +15,6 @@ import {
   getMp3File,
   getVideoFile,
 } from './utils';
-import {useEffect} from 'react';
 
 type EditorParamsPath = EditorParams['EditorScreen'];
 
@@ -23,13 +23,7 @@ export default function FileSelectScreen() {
   const defaultCoverColor: VideoCoverColor = chooseDefaultCoverImage();
   const activeSlice = useRoute<RouteProp<EditorParams>>();
 
-  useEffect(() => {
-    console.log({activeSlice});
-  }, [activeSlice]);
-
-  const navigateToEditorScreen = (params: EditorParams['EditorScreen']) => {
-    navigation.push('EditorScreen', params);
-  };
+  const navigateToEditorScreen = (params: EditorParams['EditorScreen']) => {};
 
   const onPressSelectAudio = async () => {
     try {
@@ -53,17 +47,26 @@ export default function FileSelectScreen() {
   };
 
   const onPressSelectVideo = async () => {
-    const videoFile = await getVideoFile();
-    if (videoFile) {
-      const params: EditorParamsPath = {
-        filePath: videoFile.path,
-        duration: millisToSeconds(videoFile.duration ?? 0),
-        fileType: 'Video',
-        mime: videoFile.mime,
-        defaultCoverColor,
-      };
-      navigateToEditorScreen(params);
+    const permission = await askPermission('ios.permission.PHOTO_LIBRARY');
+    if (permission === 'granted') {
+      const image = await launchImageLibrary({
+        mediaType: 'video',
+        formatAsMp4: true,
+        presentationStyle: 'formSheet',
+        videoQuality: 'high',
+      });
     }
+
+    // const videoFile = await getVideoFile();
+    // if (videoFile) {
+    //   const params: EditorParamsPath = {
+    //     filePath: videoFile.path,
+    //     duration: millisToSeconds(videoFile.duration ?? 0),
+    //     fileType: 'Video',
+    //     mime: videoFile.mime,
+    //     defaultCoverColor,
+    //   };
+    //   navigateToEditorScreen(params);
   };
 
   const onPressGoBack = () => {

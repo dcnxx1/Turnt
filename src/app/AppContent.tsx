@@ -1,15 +1,13 @@
 import {
   NavigationContainer,
   NavigationContainerRef,
-  ParamListBase,
 } from '@react-navigation/native';
 import {ReactNode, useEffect, useRef} from 'react';
 import RNBootSplash from 'react-native-bootsplash';
+import {useDispatch} from 'react-redux';
 import {Navigation} from '../nav';
-import useInitalizeApp from './useInitializeApp';
-import {useDispatch, useSelector} from 'react-redux';
 import {disableSlices, setActiveSlice} from '../redux/videoListSlice';
-import {RootState} from '../redux/store';
+import useInitalizeApp from './useInitializeApp';
 
 type Props = {
   children: ReactNode;
@@ -45,7 +43,7 @@ const AppContent = () => {
       previousRouteName === 'ProfileScreen' &&
       currentRouteName === 'FileSelectScreen'
     ) {
-      console.log('activeSliceRef :>>', activeSliceRef.current);
+      // console.log('activeSliceRef :>>', activeSliceRef.current);
       dispatch(disableSlices());
     }
     if (

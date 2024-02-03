@@ -1,7 +1,7 @@
 import {useLayout} from '@react-native-community/hooks';
 import {FlashList, ListRenderItem} from '@shopify/flash-list';
 import {useQueryClient} from '@tanstack/react-query';
-import {useRef, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {Dimensions} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {QueryKey, queryKey} from '../../api/api';
@@ -15,6 +15,7 @@ import {
 import theme from '../../theme';
 import SkeletonFlashList from '../List/SkeletonFlashList';
 import PlaylistItem from './PlaylistItem';
+import useActiveSlice from '../../redux/useActiveSlice';
 
 type Props = {
   data: ITurn[];
@@ -37,6 +38,13 @@ export default function SavedSongList({data, queryKeyRefresh}: Props) {
   const flashListLayout = useLayout();
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
+  const [activeSlice] = useActiveSlice();
+
+  useEffect(() => {
+    console.log({
+      activeSlice,
+    });
+  }, [activeSlice]);
 
   const onPullToRefresh = async () => {
     try {
@@ -52,7 +60,8 @@ export default function SavedSongList({data, queryKeyRefresh}: Props) {
   };
 
   const onPressPlaylistItem = (index: number) => {
-   
+    dispatch(setPosition('FullScreen'))
+    dispatch(setActiveSlice('playlistSlice'));
   };
 
   const renderItem: ListRenderItem<ITurn> = ({item, index}) => {

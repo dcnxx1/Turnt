@@ -1,21 +1,47 @@
-import {useNavigation} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import {Pressable, StyleSheet} from 'react-native';
-import {Text} from 'react-native-paper';
-import {useSelector} from 'react-redux';
-import {useCDN} from '../../api/api';
-import {AvatarWithUsername} from '../../components/Images/Avatar';
-import {MINIPLAYER_HEIGHT} from '../../components/PlaylistSheet/components/Miniplayer';
+import { Pressable, StyleSheet } from 'react-native';
+import { Text } from 'react-native-paper';
+import { useCDN } from '../../api/api';
+import { AvatarWithUsername } from '../../components/Images/Avatar';
 import Tab from '../../components/Tabs/Tab';
-import {HomeParams} from '../../nav/navparams';
-import {RootState} from '../../redux/store';
+import { HomeParams } from '../../nav/navparams';
 import {
   useMyPlaylistQuery,
   useMyRemoteProfile,
   useMyUploadsQuery,
 } from '../../shared/hooks/useQueryData';
+
 import useLocalProfile from '../../store/useLocalProfile';
+
+const data = [
+  {
+    id: 1,
+    text: 'hoi',
+  },
+  {
+    id: 2,
+    text: 'hoi',
+  },
+  {
+    id: 3,
+    text: 'hoi',
+  },
+  {
+    id: 4,
+    text: 'hoi',
+  },
+  {
+    id: 5,
+    text: 'hoi',
+  },
+  {
+    id: 6,
+    text: 'hoi',
+  },
+];
+
 export default function ProfileScreen() {
   const remoteProfile = useMyRemoteProfile();
   const me = useLocalProfile();
@@ -23,7 +49,9 @@ export default function ProfileScreen() {
   const myUploadsData = useMyUploadsQuery();
   const navigation = useNavigation<StackNavigationProp<HomeParams>>();
 
-  const onPressUpload = () => {};
+  const onPressUpload = () => {
+    navigation.push('EditorStack');
+  };
 
   return (
     <>

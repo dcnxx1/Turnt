@@ -5,9 +5,9 @@ import RNAnimated, {
   SharedValue,
   interpolate,
   useAnimatedStyle,
-  useDerivedValue,
 } from 'react-native-reanimated';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
+import useActiveSlice from '../../../redux/useActiveSlice';
 import {
   decrement,
   increment,
@@ -15,6 +15,8 @@ import {
 } from '../../../redux/videoListSlice';
 import {useActiveTurnStore} from '../../../store';
 import Flex from '../../Misc/Flex';
+import {FIRST_SNAP_POINT_MEDIACONTROLLER} from '../../PlaylistSheet/PlaylistSheet';
+import {MAX_SNAP_POINT} from '../MediaController';
 import {blurViewConfig} from '../configs';
 import MediaControllerArtistSong from './MediaControllerArtistSong';
 import {
@@ -23,10 +25,7 @@ import {
   TogglePlayPauseButton,
 } from './MediaControllerButtons';
 import TimelineSliderBar from './TimelineSliderBar';
-import {FIRST_SNAP_POINT_MEDIACONTROLLER} from '../../PlaylistSheet/PlaylistSheet';
-import {MAX_SNAP_POINT} from '../MediaController';
-import {useRef} from 'react';
-import {RootState} from '../../../redux/store';
+import { useEffect } from 'react';
 const SCREEN_HEIGHT = Dimensions.get('screen').height;
 type Props = {
   animatedPosition: SharedValue<number>;
@@ -38,13 +37,17 @@ export default function MediaControllerView({
   collapseAnimationEnabled,
 }: Props) {
   const {activeTurn} = useActiveTurnStore();
- 
   const dispatch = useDispatch();
-  const timer = useRef<NodeJS.Timeout>();
-
+  const [activeSlice] = useActiveSlice();
   const onPressTogglePlayPause = () => {
     dispatch(togglePlaying());
   };
+
+  useEffect(() => {
+    console.log({
+      activeSlice
+    })
+  },[activeSlice])
   // TODO: Check whether to use debounce or throttle..
   const onPressNext = debounce(() => {
     dispatch(increment());
@@ -74,7 +77,7 @@ export default function MediaControllerView({
         <View style={Style.mediaController}>
           <MediaControllerArtistSong
             artist={'someone'}
-            title={activeTurn && activeTurn.title}
+            title={String(activeSlice.title)}
           />
         </View>
         <RNAnimated.View
@@ -85,7 +88,7 @@ export default function MediaControllerView({
           <Flex style={Style.timelineSideBarContainer}>
             <TimelineSliderBar
               animatedPosition={animatedPosition}
-              title={activeTurn && activeTurn.title}
+              title={activeSlice.title}
               videoDuration={activeTurn && activeTurn.duration}
             />
           </Flex>

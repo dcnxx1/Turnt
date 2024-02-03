@@ -6,12 +6,11 @@ import AppContent from './AppContent';
 import ErrorBoundary from 'react-native-error-boundary';
 import {View} from 'react-native';
 import {Text} from 'react-native-paper';
-import {enableFreeze} from 'react-native-screens';
+import {enableFreeze, enableScreens} from 'react-native-screens';
 const queryClient = new QueryClient();
 
 export default function App() {
   const [isErrorVisible, setisErrorVisible] = useState(false);
-
   return (
     <ErrorBoundary
       onError={err => console.log('onError occured :>>', err)}

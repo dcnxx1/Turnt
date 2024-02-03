@@ -2,29 +2,35 @@ import {
   BottomTabBarProps,
   createBottomTabNavigator,
 } from '@react-navigation/bottom-tabs';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {
   StackNavigationOptions,
-  createStackNavigator
+  StackNavigationProp,
+  createStackNavigator,
 } from '@react-navigation/stack';
-import { PaperProvider } from 'react-native-paper';
+import {PaperProvider} from 'react-native-paper';
 import Tabbar from '../components/Tabbar/Tabbar';
 import {
   Editor,
   FileSelectScreen,
-  Home,
+  HomeScreen,
   OnBoardScreen,
-  Profile,
+  ProfileScreen,
 } from '../screens';
 import AccountSetupScreen from '../screens/AccountSetup/AccountSetupScreen';
 import AuthScreen from '../screens/Auth/AuthScreen';
 import useLocalProfile from '../store/useLocalProfile';
-import { AccountSetupParams, EditorParams, HomeParams } from './navparams';
-import { NavScreenNames, RootNavNames } from './types';
+import {AccountSetupParams, EditorParams, HomeParams} from './navparams';
+import {NavScreenNames, RootNavNames} from './types';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import {useNavigation} from '@react-navigation/native';
+import {useLayout} from '@react-native-community/hooks';
+import {useLayoutEffect} from 'react';
 
 const HomeStack = createBottomTabNavigator<HomeParams>();
 const RootStack = createStackNavigator();
 const SetupStack = createStackNavigator<AccountSetupParams>();
-const EditorStack = createStackNavigator<EditorParams>();
+const EditorStack = createNativeStackNavigator<EditorParams>();
 
 const screenOptions: StackNavigationOptions = {
   headerShown: false,
@@ -34,24 +40,6 @@ const screenOptions: StackNavigationOptions = {
 type TabbarProps = {
   [P in keyof BottomTabBarProps]: BottomTabBarProps[P];
 };
-
-function HomeStackNavigator() {
-  return (
-    <HomeStack.Navigator
-      detachInactiveScreens={false}
-      tabBar={props => <Tabbar {...props} />}
-      screenOptions={{
-        headerShown: false,
-      }}
-      initialRouteName={NavScreenNames.HomeScreen}>
-      <HomeStack.Screen component={Home} name={NavScreenNames.HomeScreen} />
-      <HomeStack.Screen
-        component={Profile}
-        name={NavScreenNames.ProfileScreen}
-      />
-    </HomeStack.Navigator>
-  );
-}
 
 function SetupScreenStackNavigator() {
   return (
@@ -78,19 +66,42 @@ function EditorStackNavigator() {
   return (
     <EditorStack.Navigator
       screenOptions={{
-        ...screenOptions,
-        detachPreviousScreen: false,
+        headerShown: false,
       }}
       initialRouteName={NavScreenNames.FileSelectScreen}>
       <EditorStack.Screen
+        options={{}}
         component={FileSelectScreen}
         name={NavScreenNames.FileSelectScreen}
       />
       <EditorStack.Screen
+        options={{}}
         component={Editor}
         name={NavScreenNames.EditorScreen}
       />
     </EditorStack.Navigator>
+  );
+}
+
+function HomeStackNavigator() {
+  return (
+    <HomeStack.Navigator
+      detachInactiveScreens={false}
+      tabBar={props => <Tabbar {...props} />}
+      screenOptions={{
+        headerShown: false,
+      }}
+      initialRouteName={NavScreenNames.HomeScreen}>
+      <HomeStack.Screen
+        options={{}}
+        component={HomeScreen}
+        name={NavScreenNames.HomeScreen}
+      />
+      <HomeStack.Screen
+        component={ProfileScreen}
+        name={NavScreenNames.ProfileScreen}
+      />
+    </HomeStack.Navigator>
   );
 }
 
@@ -104,11 +115,13 @@ export default function Navigation({initialRoute}: Props) {
   return (
     <PaperProvider>
       <RootStack.Navigator
-        screenOptions={{...screenOptions}}
+        screenOptions={{
+          gestureEnabled: true,
+          headerShown: false,
+        }}
         initialRouteName={initialRoute}>
         {me.user?.user_id ? (
           <RootStack.Screen
-            options={{}}
             name={RootNavNames.HomeStack}
             component={HomeStackNavigator}
           />
@@ -120,7 +133,6 @@ export default function Navigation({initialRoute}: Props) {
         )}
 
         <RootStack.Screen
-          options={{...screenOptions, detachPreviousScreen: false}}
           name={RootNavNames.EditorStack}
           component={EditorStackNavigator}
         />

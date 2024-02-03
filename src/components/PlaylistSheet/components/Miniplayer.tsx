@@ -1,10 +1,8 @@
 import {Dimensions, Image, StyleSheet, View} from 'react-native';
 import {Text} from 'react-native-paper';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {useCDN} from '../../../api/api';
 import {secondsToDisplayTime} from '../../../helpers';
-import {RootState} from '../../../redux/store';
-import {increment, togglePlaying} from '../../../redux/videoListSlice';
 import {COVER_KEY} from '../../../s3';
 import VideoPlayerButtonController from '../../../screens/Editor/components/videoManager/VideoPlayerButtonController';
 import {useActiveTurnStore, useVideoStore} from '../../../store';
@@ -15,17 +13,11 @@ export const MINIPLAYER_HEIGHT = Dimensions.get('screen').height * 0.07;
 export default function MiniPlayer() {
   const {activeTurn} = useActiveTurnStore();
   const {progress} = useVideoStore();
- 
 
   const dispatch = useDispatch();
-  const onPressForward = () => {
+  const onPressForward = () => {};
 
-  };
-
-  const onPressPlayPauseToggle = () => {
-
-
-  };
+  const onPressPlayPauseToggle = () => {};
 
   return (
     <View style={Style.container}>

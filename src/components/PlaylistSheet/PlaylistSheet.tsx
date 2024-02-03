@@ -3,7 +3,7 @@ import {useCallback, useMemo} from 'react';
 import {Dimensions, StyleSheet} from 'react-native';
 import {SharedValue} from 'react-native-reanimated';
 import theme from '../../theme';
-import PlaylistVideoManager from '../List/VideoListManagers/PlaylistVideoManager';
+
 import {MINIPLAYER_HEIGHT} from './components/Miniplayer';
 import SheetHandle from './components/PlaylistSheetHandle';
 import {animatedConfig} from './config';

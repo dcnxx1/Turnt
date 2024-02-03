@@ -1,20 +1,19 @@
-import {PayloadAction, createSlice} from '@reduxjs/toolkit';
-import {ITurn} from '../models/turn';
-
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { ITurn } from '../models/turn';
 const videoListSlice = createSlice({
   name: 'videoListSlice',
   initialState: {},
   reducers: {
     increment: state => {},
     decrement: () => {},
-    setIndex: (_, {payload}: PayloadAction<number>) => {},
+    setIndex: (state, {payload}: PayloadAction<number>) => {},
     setIsPlaying: (state, {payload}: PayloadAction<boolean>) => {},
     togglePlaying: () => {},
     setActiveSlice: (
       state,
       {payload}: PayloadAction<'playlistSlice' | 'homeSlice'>,
     ) => {},
-    setActiveTurn: (_, {payload}: PayloadAction<ITurn>) => {},
+    setActiveTurn: (state, {payload}: PayloadAction<ITurn>) => {},
     setActiveVideo: (
       _,
       {payload}: PayloadAction<Pick<ITurn, 'duration' | 'turn_id'>>,
@@ -32,7 +31,7 @@ export const {
   setActiveSlice,
   setActiveTurn,
   setActiveVideo,
-  disableSlices
+  disableSlices,
 } = videoListSlice.actions;
 
 export default videoListSlice;

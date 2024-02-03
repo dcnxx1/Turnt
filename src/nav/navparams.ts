@@ -15,9 +15,7 @@ export type HomeParams = {
   HomeScreen: undefined;
   Home: undefined;
   ProfileScreen: undefined;
-  EditorStack: {
-    
-  }
+  EditorStack: undefined;
 };
 
 export type RootParams = {
@@ -38,8 +36,6 @@ export type EditorParams = {
     mime: string;
     defaultCoverColor: VideoCoverColor;
   };
-  ProfileScreen: {
-    activeSlice: 'playlistSlice' | 'homeSlice';
-  };
+
   HomeScreen: undefined;
 };
