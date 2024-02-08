@@ -216,7 +216,7 @@ const Style = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   button: {
-    widht: '90%',
+    width: '90%',
     backgroundColor: 'white',
   },
   textStyle: {
