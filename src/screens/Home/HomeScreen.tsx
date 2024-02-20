@@ -5,12 +5,12 @@ import GenericScreen from '../../components/Screen/GenericScreen';
 import {ITurn} from '../../models/turn';
 import {useFeedQuery} from '../../shared/hooks/useQueryData';
 import {Text} from 'react-native-paper';
+import VideoList from '../../components/List/VideoList';
 
 function HomeScreen(): JSX.Element {
   const {data: turns} = useFeedQuery();
 
-  const ref = useRef<FlashList<ITurn>>(null);
-  const content = <Text>Text</Text>;
+  const content = <VideoList data={turns ?? []} />;
   return <GenericScreen style={Style.container} content={content} />;
 }
 

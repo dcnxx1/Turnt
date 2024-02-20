@@ -14,12 +14,13 @@ import {
   getLocalUserProfile,
   setupTrackPlayer,
 } from './boot';
+import {initializeSlice} from '../redux/listSlices/videoManagementSlice';
 
 export default function useInitalizeApp(): [boolean, string | undefined] {
   const queryClient = useQueryClient();
   const [isInitializing, setInitializing] = useState(true);
   const [initialRoute, setInitialRoute] = useState<RootNavs>();
-
+  const dispatch = useDispatch();
   async function initialize() {
     try {
       const me = getLocalUserProfile();
@@ -50,7 +51,18 @@ export default function useInitalizeApp(): [boolean, string | undefined] {
         if (feed) {
           const firstActiveTurn = feed[0];
           useActiveTurnStore.getState().setActiveTurn(firstActiveTurn);
-
+          dispatch(
+            initializeSlice({
+              activeVideo: {
+                video_id: firstActiveTurn.turn_id,
+                duration: firstActiveTurn.duration,
+              },
+              listIndex: 0,
+              initializeSlice: 'homeVideoSlice',
+              isActive: true,
+              isPlaying: true,
+            }),
+          );
           addTrackPlayerTracks(feed);
         }
         setInitialRoute('HomeStack');

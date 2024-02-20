@@ -16,7 +16,7 @@ const videoManagementSlice = createSlice({
     ) => {},
     incrementListIndex: () => {},
     decrementListIndex: () => {},
-    setListIndex: (_, {payload}: PayloadAction<PayloadSetListIndex>) => {},
+    setListIndex: (_, {payload}: PayloadAction<number>) => {},
     toggleVideoIsPlaying: () => {},
     setIsPlayingVideo: (
       _,

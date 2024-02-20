@@ -1,17 +1,17 @@
-import { BlurView } from '@react-native-community/blur';
-import { debounce } from 'lodash';
-import { Dimensions, StyleSheet, View } from 'react-native';
+import {BlurView} from '@react-native-community/blur';
+import {debounce} from 'lodash';
+import {Dimensions, StyleSheet, View} from 'react-native';
 import RNAnimated, {
   SharedValue,
   interpolate,
   useAnimatedStyle,
 } from 'react-native-reanimated';
-import { useDispatch } from 'react-redux';
+import {useDispatch} from 'react-redux';
 
-import { useActiveTurnStore } from '../../store';
+import {useActiveTurnStore} from '../../store';
 import Flex from '../Misc/Flex';
-import { FIRST_SNAP_POINT_MEDIACONTROLLER } from '../PlaylistSheet/PlaylistSheet';
-import { MAX_SNAP_POINT } from './MediaController';
+import {FIRST_SNAP_POINT_MEDIACONTROLLER} from '../PlaylistSheet/PlaylistSheet';
+import {MAX_SNAP_POINT} from './MediaController';
 import MediaControllerArtistSong from './MediaControllerArtistSong';
 import {
   PlayNextButton,
@@ -19,7 +19,12 @@ import {
   TogglePlayPauseButton,
 } from './MediaControllerButtons';
 import TimelineSliderBar from './TimelineSliderBar';
-import { blurViewConfig } from './configs';
+import {blurViewConfig} from './configs';
+import {
+  decrementListIndex,
+  incrementListIndex,
+  toggleVideoIsPlaying,
+} from '../../redux/listSlices/videoManagementSlice';
 const SCREEN_HEIGHT = Dimensions.get('screen').height;
 type Props = {
   animatedPosition: SharedValue<number>;
@@ -33,12 +38,18 @@ export default function MediaControllerView({
   const {activeTurn} = useActiveTurnStore();
   const dispatch = useDispatch();
 
-  const onPressTogglePlayPause = () => {};
+  const onPressTogglePlayPause = () => {
+    dispatch(toggleVideoIsPlaying());
+  };
 
   // TODO: Check whether to use debounce or throttle..
-  const onPressNext = debounce(() => {}, 50);
+  const onPressNext = debounce(() => {
+    dispatch(incrementListIndex());
+  }, 50);
 
-  const onPressPrevious = debounce(() => {}, 50);
+  const onPressPrevious = debounce(() => {
+    dispatch(decrementListIndex());
+  }, 50);
 
   const interpolateCollapseAnimation = useAnimatedStyle(() => {
     return {

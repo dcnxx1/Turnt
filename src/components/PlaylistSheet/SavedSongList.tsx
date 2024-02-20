@@ -1,15 +1,17 @@
-import { useLayout } from '@react-native-community/hooks';
-import { FlashList, ListRenderItem } from '@shopify/flash-list';
-import { useQueryClient } from '@tanstack/react-query';
-import { useRef, useState } from 'react';
-import { Dimensions } from 'react-native';
-import { useDispatch } from 'react-redux';
-import { QueryKey } from '../../api/api';
-import { ITurn } from '../../models/turn';
+import {useLayout} from '@react-native-community/hooks';
+import {FlashList, ListRenderItem} from '@shopify/flash-list';
+import {useQueryClient} from '@tanstack/react-query';
+import {useRef, useState} from 'react';
+import {Dimensions} from 'react-native';
+import {useDispatch} from 'react-redux';
+import {QueryKey} from '../../api/api';
+import {ITurn} from '../../models/turn';
 
 import theme from '../../theme';
 import SkeletonFlashList from '../List/SkeletonFlashList';
 import PlaylistItem from './SavedSongListItem';
+import {setNewPosition, setPosition} from '../../redux/playlistSheetSlice';
+import {initializeSlice} from '../../redux/listSlices/videoManagementSlice';
 
 type Props = {
   data: ITurn[];
@@ -33,7 +35,6 @@ export default function SavedSongList({data, queryKeyRefresh}: Props) {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
 
-
   const onPullToRefresh = async () => {
     try {
       setRefreshing(true);
@@ -47,7 +48,25 @@ export default function SavedSongList({data, queryKeyRefresh}: Props) {
     }
   };
 
-  const onPressPlaylistItem = (index: number) => {
+  const onPressPlaylistItem = (
+    index: number,
+    turn_id: string,
+    duration: number,
+  ) => {
+    dispatch(
+      initializeSlice({
+        initializeSlice: 'playlistVideoSlice',
+        isActive: true,
+        isPlaying: true,
+        listIndex: index,
+        activeVideo: {
+          video_id: turn_id,
+          duration: duration,
+        },
+      }),
+    );
+
+    dispatch(setPosition('FullScreen'));
   };
 
   const renderItem: ListRenderItem<ITurn> = ({item, index}) => {

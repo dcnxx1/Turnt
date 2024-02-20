@@ -16,6 +16,7 @@ import ImageBlurBackground from '../Images/ImageBlurBackground';
 import VideoPausedOverlay from '../Screen/VideoPausedOverlay';
 import {VideoPlayerProps} from '../Video/VideoPlayer';
 import {setPosition} from '../../redux/playlistSheetSlice';
+import useActiveSlice from '../../redux/useActiveSlice';
 
 const TrackPlayerEvents: Event[] = [Event.RemoteSeek];
 
@@ -29,14 +30,26 @@ export default function withSyncMediaController(
     videoId,
     id,
     type,
+    impressionSource,
+    impressionStartAt,
     cover,
   }: Omit<VideoPlayerProps, 'onProgress' | 'paused'> & {
     videoId: ITurn['turn_id'];
-    id: 'playlistSlice' | 'homeSlice';
+    impressionSource: ITurn['impressionSource'];
+    impressionStartAt: ITurn['impressionStartAt'];
+    id: 'playlistVideoSlice' | 'homeVideoSlice';
     type: ITurn['type'];
     cover: ITurn['cover'];
   }) => {
     const ref = useRef<Video>(null);
+    const activeVideoId = useSelector(
+      (state: RootState) => state[id].activeVideo,
+    );
+    const isPlaying = useSelector((state: RootState) => state[id].isPlaying);
+    const isVideoOnScreen = videoId === activeVideoId.video_id;
+    useEffect(() => {
+      isVideoOnScreen && console.log({isVideoOnScreen});
+    }, [isVideoOnScreen]);
 
     const {seekTo, setSeekTo, isSeeking} = useSeek();
     const setProgress = useVideoStore(state => state.setProgress);
@@ -44,9 +57,9 @@ export default function withSyncMediaController(
 
     useEffect(() => {
       if (ref.current) {
-        ref.current.seek(seekTo);
+        isVideoOnScreen && ref.current.seek(seekTo);
       }
-    }, [seekTo, ref]);
+    }, [seekTo, ref, isVideoOnScreen]);
 
     useEffect(() => {
       setProgress(0);
@@ -58,7 +71,7 @@ export default function withSyncMediaController(
       setProgress(currentTime);
       await TrackPlayer.seekTo(currentTime);
     };
-
+    isVideoOnScreen && console.log({isVideoOnScreen, videoId});
     useTrackPlayerEvents(TrackPlayerEvents, ev => {
       if (ev.type === Event.RemoteSeek) {
         ref.current?.seek(ev.position);
@@ -86,7 +99,8 @@ export default function withSyncMediaController(
         ) : null}
         <VideoPlayer
           ref={ref}
-          paused={true}
+          onProgress={onProgress}
+          paused={videoId === activeVideoId.video_id ? isPlaying : true}
           source={useCDN(TURN_KEY + source)}
           style={{
             height: type !== 'Audio' ? Dimensions.get('screen').height : 0,

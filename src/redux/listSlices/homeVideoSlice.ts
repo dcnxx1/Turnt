@@ -1,4 +1,4 @@
-import {createSlice} from '@reduxjs/toolkit';
+import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 import {
   decrementListIndex,
   disableAllSlices,
@@ -10,6 +10,7 @@ import {
   toggleVideoIsPlaying,
 } from './videoManagementSlice';
 import {VideoSlice} from './videoSliceTypes';
+
 export const initialState = {
   isActive: false,
   isPlaying: false,
@@ -27,9 +28,13 @@ const homeSlice = createSlice({
   extraReducers: builder => {
     builder.addCase(initializeSlice, (state, {payload}) => {
       if (payload.initializeSlice === VideoSlice.HomeSlice) {
-        state = payload;
+       
+        state.isPlaying = payload.isPlaying;
+        state.isActive = payload.isActive;
+        (state.listIndex = payload.listIndex),
+          (state.activeVideo = payload.activeVideo);
       } else {
-        state.isActive = false;
+        console.log('NOT initializing videoSliceHome!');
       }
     });
     builder.addCase(incrementListIndex, state => {
@@ -42,9 +47,9 @@ const homeSlice = createSlice({
         state.listIndex--;
       }
     });
-    builder.addCase(setListIndex, (state, {payload: {index}}) => {
+    builder.addCase(setListIndex, (state, {payload}: PayloadAction<number>) => {
       if (state.isActive) {
-        state.listIndex = index;
+        state.listIndex = payload;
       }
     });
     builder.addCase(toggleVideoIsPlaying, state => {
@@ -61,7 +66,10 @@ const homeSlice = createSlice({
       setActiveVideo,
       (state, {payload: {video_id, duration}}) => {
         if (state.isActive) {
+          console.log('setting active video to :>>', video_id, duration);
           state.activeVideo = {video_id, duration};
+        } else {
+          console.log('not active, aint gonna do shit');
         }
       },
     );

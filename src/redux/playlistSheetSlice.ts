@@ -25,10 +25,19 @@ const playlistSheetSlice = createSlice({
             : 'Partial',
       };
     },
-    setNewPosition: (state, action) => {
-      state.bottomSheetPosition = action.payload.bottomSheetPosition;
-      (state.scrollToIndex = action.payload.scrollToIndex),
-        (state.data = action.payload.data);
+    setNewPosition: (
+      state,
+      {
+        payload,
+      }: PayloadAction<{
+        bottomSheetPosition: PlaylistSheetState;
+        scrollToIndex: number;
+        data: 'myUploads' | 'playlist';
+      }>,
+    ) => {
+      state.bottomSheetPosition = payload.bottomSheetPosition;
+      (state.scrollToIndex = payload.scrollToIndex),
+        (state.data = payload.data);
     },
   },
 });

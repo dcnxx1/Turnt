@@ -18,6 +18,7 @@ const playlistSlice = createSlice({
   reducers: {},
   extraReducers: builder => {
     builder.addCase(initializeSlice, (state, {payload}) => {
+      console.log("payload :>>", payload)
       if (payload.initializeSlice === VideoSlice.PlaylistSlice) {
         state = payload;
       } else {

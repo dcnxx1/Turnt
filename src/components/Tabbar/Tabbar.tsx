@@ -23,11 +23,11 @@ export default function Tabbar(props: TabbarProps) {
 
   return (
     <>
-      {/* <MediaController
+      <MediaController
         collapseAnimationEnabled={true}
         firstSnapPoint={'5%'}
         tabHeight={tabHeight}
-      /> */}
+      />
 
       <PlaylistSheet animatedPosition={animatedPosition} />
       <BottomTab
