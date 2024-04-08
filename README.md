@@ -1,8 +1,11 @@
-<img align="center" src="https://raw.githubusercontent.com/dcnxx1/Turnt/master/bootsplash_logo%403x.png" width="60%" />
+<p align="center">
+<img  src="https://raw.githubusercontent.com/dcnxx1/Turnt/master/bootsplash_logo%403x.png" width="60%" />
+   
+</p>
 
 # Turnt - Ontdek muziek in slechts 30 seconden!
 
-<p float="center">
+<p align="center">
    <img src="https://raw.githubusercontent.com/dcnxx1/Turnt/master/DemoHomescreen.png" width="30%"/>
    <img src="https://raw.githubusercontent.com/dcnxx1/Turnt/master/DemoPlaylist.png" width="30%" />
    <img src="https://raw.githubusercontent.com/dcnxx1/Turnt/master/DemoUpload.png" width="30%" />
