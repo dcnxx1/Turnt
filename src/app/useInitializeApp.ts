@@ -84,21 +84,4 @@ export default function useInitalizeApp(): [boolean, string | undefined] {
   return [isInitializing, initialRoute];
 }
 
-export function useInitialize(promise: () => unknown, deps?: DependencyList) {
-  const [error, setError] = useState<unknown>();
 
-  useEffect(() => {
-    async function initialize() {
-      try {
-        promise();
-      } catch (e) {
-        setError(e);
-      }
-    }
-    initialize();
-  }, deps ?? []);
-
-  if (error) {
-    throw error;
-  }
-}
